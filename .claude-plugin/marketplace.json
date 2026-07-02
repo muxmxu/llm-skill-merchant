@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "llm-skill-merchant",
+  "description": "Cross-machine skill marketplace: role-scoped plugins for human-AI research collaboration.",
+  "owner": {
+    "name": "llm-skill-merchant maintainers"
+  },
+  "plugins": [
+    {
+      "name": "human-ai-code-agent-kit",
+      "description": "AI Code Agent side of the human-AI research collaboration model <suit-for-code-agent>: doc-contract-driven skills for experiment lifecycle (exp), evaluation (eval), compute operations (ops), and implementation workflow (impl).",
+      "author": {
+        "name": "llm-skill-merchant maintainers"
+      },
+      "source": "./plugins/human-ai-code-agent-kit"
+    }
+  ]
+}

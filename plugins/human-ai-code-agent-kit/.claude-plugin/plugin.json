@@ -1,0 +1,8 @@
+{
+  "name": "human-ai-code-agent-kit",
+  "description": "AI Code Agent side of the human-AI research collaboration model <suit-for-code-agent>: doc-contract-driven skills for experiment lifecycle (exp), evaluation (eval), compute/VM operations (ops), and implementation workflow (impl). Skills are generic across projects; all project-specific facts live in each repo's runbook docs (EXPERIMENTS.md, EVALUATION.md, OPERATIONS.md, development rules). Port to a new project with /exp init, /eval init, etc.",
+  "version": "1.0.0",
+  "author": {
+    "name": "llm-skill-merchant maintainers"
+  }
+}
