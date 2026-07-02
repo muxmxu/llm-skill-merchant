@@ -1,0 +1,8 @@
+{
+  "name": "human-ai-research-assistant-kit",
+  "description": "AI Research Assistant side of the human-AI research collaboration model <suit-for-ai-research-assistant>: the thinking/writing/translation layer between informal human research and implementation-facing artifacts. One kit skill with seven modes — research discussion (sparring), research log writing (incl. braindump-to-log protocol), decision/progress notes, code-agent tasks, technical references, literature survey fan-out, academic presentation writing. Register discipline, evidence labels, and derivation-chain information safety built in.",
+  "version": "1.0.0",
+  "author": {
+    "name": "llm-skill-merchant maintainers"
+  }
+}

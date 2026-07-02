@@ -1,0 +1,8 @@
+{
+  "name": "multi-agent-discussion",
+  "description": "Multi-Agent Discussion Protocol <suit-for-ai-research-assistant>: file-based structured debate between multiple AI agents and the human (each agent writes its own *_said.md under agents-human-discussion/{topic}-{date}/, free to read others, converges into final.md on the human's request). Role-neutral in practice — any participating agent follows it as a research-thinking peer; tagged assistant-side because debate is research-discussion work, not implementation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "llm-skill-merchant maintainers"
+  }
+}

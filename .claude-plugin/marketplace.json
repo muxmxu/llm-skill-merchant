@@ -13,6 +13,22 @@
         "name": "llm-skill-merchant maintainers"
       },
       "source": "./plugins/human-ai-code-agent-kit"
+    },
+    {
+      "name": "human-ai-research-assistant-kit",
+      "description": "AI Research Assistant side of the human-AI research collaboration model <suit-for-ai-research-assistant>: seven-mode kit for research discussion (sparring), research logs (incl. braindump-to-log protocol), decision notes, code-agent tasks, technical references, literature survey fan-out, and academic presentation writing.",
+      "author": {
+        "name": "llm-skill-merchant maintainers"
+      },
+      "source": "./plugins/human-ai-research-assistant-kit"
+    },
+    {
+      "name": "multi-agent-discussion",
+      "description": "Multi-Agent Discussion Protocol <suit-for-ai-research-assistant>: file-based structured debate between multiple AI agents and the human, converging into final.md under the human's arbitration.",
+      "author": {
+        "name": "llm-skill-merchant maintainers"
+      },
+      "source": "./plugins/multi-agent-discussion"
     }
   ]
 }
