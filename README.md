@@ -1,50 +1,31 @@
 # llm-skill-merchant
 
-Personal Claude Code plugin marketplace (private). One repository, many plugins,
-so skills built on any of my machines can be consolidated and reused everywhere.
+**The central hub for every Claude Code skill I build.** Cross-machine,
+cross-machine: any skill created on any of my machines lands here as (part of)
+a plugin; every machine consumes from here. One repository = one source of
+truth — no more per-machine skill drift.
 
-## Layout
+## How it works
+
+This repo is a Claude Code **plugin marketplace** (`.claude-plugin/
+marketplace.json`). It can hold any number of plugins; each plugin can hold
+any number of skills:
 
 ```
 .claude-plugin/marketplace.json   marketplace manifest (name: llm-skill-merchant)
 plugins/<plugin-name>/            one directory per plugin
   .claude-plugin/plugin.json
-  skills/<skill-name>/SKILL.md    multi-skill plugins
+  skills/<skill-name>/SKILL.md    one directory per skill
+  references/, assets/            optional shared material
 ```
 
-## Role taxonomy
-
-Plugins here are scoped to a role in the 3-role human-AI research collaboration
-model (Human Researcher / AI Research Assistant / AI Code Agent). Each plugin
-declares its role with a literal tag in its `plugin.json` description and in
-every `SKILL.md` description:
-
-| Tag | Role | Typical skills |
-|---|---|---|
-| `<suit-for-code-agent>` | AI Code Agent | experiment launch/monitoring, evaluation, compute ops, implementation workflow |
-| `<suit-for-ai-research-assistant>` | AI Research Assistant | research logs, decision notes, references, task authoring, literature work |
-
-A skill tagged for one role must not silently take over the other role's
-duties; see `plugins/human-ai-code-agent-kit/references/roles.md`.
-
-## Plugins
-
-- **human-ai-code-agent-kit** `<suit-for-code-agent>` — doc-contract-driven
-  operational skills: `exp` (experiment lifecycle), `eval` (evaluation),
-  `ops` (compute/VM lifecycle), `impl` (implementation workflow). Project
-  facts live in each project's own runbook docs; port to a new project with
-  `/exp init`, `/eval init`, etc.
-
-## Registering this marketplace
-
-On a machine that should **consume** the plugins (uses git/ssh credentials for
-the private repo):
+## Consuming (any machine)
 
 ```bash
-claude plugin marketplace add <owner>/llm-skill-merchant
+claude plugin marketplace add <owner>/llm-skill-merchant   # uses git/ssh credentials
 ```
 
-Then enable plugins at user level in `~/.claude/settings.json`:
+Then enable the plugins you want, at user level (`~/.claude/settings.json`):
 
 ```json
 {
@@ -54,22 +35,49 @@ Then enable plugins at user level in `~/.claude/settings.json`:
 }
 ```
 
-Updates: third-party marketplaces do not auto-update by default — run
-`/plugin marketplace update llm-skill-merchant` (or set `autoUpdate: true`;
-background auto-update of a private repo needs `GITHUB_TOKEN`).
+Pulling updates: `/plugin marketplace update llm-skill-merchant` (third-party
+marketplaces don't auto-update by default; background auto-update of a private
+repo would need `GITHUB_TOKEN`).
 
-On the machine where you **develop** the plugins, register the local clone as
-a directory source instead (instant iteration, no push needed):
+## Developing (the machine where you edit skills)
+
+Register the local clone as a **directory source** instead — edits take effect
+on the next session, no push needed:
 
 ```bash
 claude plugin marketplace add <path-to-local-clone>
 ```
 
-⚠️ Do not register both the directory source and the GitHub source on the same
-machine — the marketplace name collides. Remove one before adding the other.
+⚠️ Never register both the directory source and the GitHub source on the same
+machine — the marketplace name collides. Remove one before adding the other
+(`/plugin` → Marketplaces).
 
-## Adding a plugin
+## Adding a new skill or plugin
 
-1. Create `plugins/<name>/` with `.claude-plugin/plugin.json` and `skills/`.
-2. Append an entry to `.claude-plugin/marketplace.json` (`source: "./plugins/<name>"`).
-3. `claude plugin validate .` from the repo root, then commit and push.
+1. New skill in an existing plugin: add `plugins/<plugin>/skills/<name>/SKILL.md`.
+2. New plugin: create `plugins/<name>/` with `.claude-plugin/plugin.json` +
+   `skills/`, and append an entry to `.claude-plugin/marketplace.json`
+   (`"source": "./plugins/<name>"`).
+3. `claude plugin validate .` from the repo root → commit → push.
+4. Other machines pick it up via `/plugin marketplace update llm-skill-merchant`.
+
+## Plugin catalog
+
+| Plugin | Tag | Skills | Purpose |
+|---|---|---|---|
+| `human-ai-code-agent-kit` | `<suit-for-code-agent>` | `exp`, `eval`, `ops`, `impl` | AI-Code-Agent-side research operations: experiment lifecycle, evaluation, compute/VM ops, implementation workflow. Doc-contract-driven — project facts live in each repo's runbooks (`EXPERIMENTS.md`, `EVALUATION.md`, `OPERATIONS.md`, dev rules); port to a new project with `/exp init`, `/eval init`. |
+| *(planned)* research-assistant-side kit | `<suit-for-ai-research-assistant>` | — | Research writing/investigation workflows (being built by a separate agent; will migrate in from another machine). |
+
+## Conventions
+
+- **Role tags** (for plugins in the human-AI research collaboration family):
+  `<suit-for-code-agent>` / `<suit-for-ai-research-assistant>` in the plugin
+  description and every SKILL.md description, so the two sides never blur
+  (protocol: `plugins/human-ai-code-agent-kit/references/roles.md`). Plugins
+  outside that family (e.g. machine-maintenance utilities) need no role tag.
+- **Generic over specific**: skills should carry workflow logic only; facts
+  that vary per project belong in per-project docs the skill reads (the
+  doc-contract pattern). A skill you can't reuse on the next project probably
+  wants splitting into skill + doc.
+- English for skill/plugin content (portable); commit messages without
+  AI-attribution lines.
