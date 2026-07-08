@@ -69,6 +69,14 @@ Use these labels when helpful:
 
 Do not present unsupported hypotheses as facts.
 
+## Memory Layering
+
+Research memory lives in three layers. Keep them separate:
+
+1. **Research facts → the research log.** Experiment results, decisions, interpretations, failed routes. Human-owned, the single source of truth.
+2. **Project-progress index → the Brief file.** An AI-maintained digest of current research state (recent logs, paper status) at the conventional path `tmp/latest-brief.md` under the workspace root. The AI generates and refreshes it; the human never hand-writes it; any AI in the workspace may read it. It is dynamic state and therefore does NOT belong in `RESEARCH-CONTEXT.md` (the static resource map — see `references/research-context.md`).
+3. **The AI's own memory → working habits only.** Corrections, preferences, workflow conventions. Never store research facts there: a research fact that exists only in one AI's private memory is invisible to the human and to the other AIs, and will be lost.
+
 ## Handling Missing Information
 
 If missing information blocks correctness, ask the smallest set of questions. If missing information is not blocking, mark assumptions explicitly and continue.

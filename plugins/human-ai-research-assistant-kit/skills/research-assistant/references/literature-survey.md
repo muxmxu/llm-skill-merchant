@@ -3,8 +3,10 @@
 Use when the human asks to survey a topic, dig prior work, or build a reading list — typically via fan-out sub-agents, or via an external deep-research tool (see "Deep-research prompt generation"). Three deliverable types, all or some per request:
 
 1. **Survey synthesis** — convergent findings, delivered in chat and/or folded into a research log section.
-2. **Per-paper review notes** — written into the vault's `ai-survey-notes/` (NOT `human-read/`, which is reserved for the human's own reading).
+2. **Per-paper review notes** — written into the AI-survey notes directory declared in RESEARCH-CONTEXT.md `## Literature` (NOT the human-read notes directory, which is reserved for the human's own reading).
 3. **Deep-research prompt** — a self-contained prompt for ChatGPT Deep Research or similar.
+
+Path resolution: every workspace location this mode writes to (notes dir, PDF dir, dashboard) comes from RESEARCH-CONTEXT.md `## Literature` — contract and resolution rules in `references/research-context.md`. Doc missing → offer init; do not guess.
 
 ## Search discipline (academic rules — apply to every agent and every prompt)
 
@@ -12,7 +14,7 @@ Use when the human asks to survey a topic, dig prior work, or build a reading li
 2. **Verify venue and year from the paper itself** (PDF header / official venue page), never from search snippets or secondary citations.
 3. **Read before claiming**: every number, equation, or recipe detail in a note must come from the PDF actually read. If a paper is paywalled or unreadable, mark the entry LOW-CONFIDENCE and do not cite implementation details from it.
 4. **Originals over surveys**: claims cite the original paper; survey papers are for mapping the field only.
-5. **Dedupe first**: before writing a note, check the Zotero library, `human-read/`, and `ai-survey-notes/` for an existing entry; update rather than duplicate.
+5. **Dedupe first**: before writing a note, check the reference-manager library and both note directories (AI-survey and human-read, per RESEARCH-CONTEXT.md `## Literature`) for an existing entry; update rather than duplicate.
 6. **Negative results are first-class**: reported failures, instabilities, and "we switched away from X because" findings are explicitly in scope and often the most valuable output.
 7. **Convergence rule**: a synthesis claim may be called "convergent" only with ≥ 2 independent sources; otherwise attribute it to its single source.
 8. **Lineage tracing**: for methods, note what the field later replaced them with and why — a method's abandonment history is evidence.
@@ -21,7 +23,7 @@ Use when the human asks to survey a topic, dig prior work, or build a reading li
 
 ## Per-paper note format
 
-- Location: vault `ai-survey-notes/<YYYY-MM>/<YYYY - Title>.md` (filename: year, " - ", title with ":" replaced by " - ").
+- Location: the AI-survey notes directory from RESEARCH-CONTEXT.md `## Literature`, in a `<YYYY-MM>/` subfolder; filename `<YYYY - Title>.md` (year, " - ", title with ":" replaced by " - ").
 - Frontmatter (reference-manager import contract — dashboards depend on these fields):
 
 ```yaml
@@ -45,10 +47,10 @@ tags:
 ---
 ```
 
-- Body sections (match the human's human-read style): Abstract callout (verbatim) → `#### Summary` (核心问题 / 方法（配方细节）/ 实验与关键数字) → `#### 杂谈 + 思考 + 批判` (genuine critique + relevance to the current project) → `#### Relation` (link the project note and sibling reviews).
+- Body sections (match the human's own paper-review note style): Abstract callout (verbatim) → `#### Summary` (核心问题 / 方法（配方细节）/ 实验与关键数字) → `#### 杂谈 + 思考 + 批判` (genuine critique + relevance to the current project) → `#### Relation` (link the project note and sibling reviews).
 - Writing rules: Chinese plain short sentences; expand abbreviations at first use; math in LaTeX `$...$`; no metaphor pile-ups; no AI attribution inside the note body.
-- PDFs: download to the project's `reference/<topic>/` with naming `YYYY-Venue-Author-Keyword-<arxivId>.pdf`; `pdf_link` points there.
-- Dashboard: `ai-survey-notes TOC.md` (dataview) picks notes up automatically if the frontmatter contract is respected.
+- PDFs: download to the PDF storage directory from RESEARCH-CONTEXT.md `## Literature` (topic-subfoldered) with naming `YYYY-Venue-Author-Keyword-<arxivId>.pdf`; `pdf_link` points there.
+- Dashboard: the notes dashboard declared in RESEARCH-CONTEXT.md `## Literature` picks notes up automatically if the frontmatter contract is respected.
 
 ## Citing ai-survey papers in research logs
 
