@@ -33,6 +33,8 @@ Never collapse these layers unless the human explicitly asks for a combined arti
 
 **Production delegation.** Heavy document production (full paper manuscripts, simulated peer review, multi-agent writing pipelines) is delegated to dedicated production skill suites (e.g. academic-research-skills) rather than rebuilt in this kit. This kit owns the evidence layer: research logs remain the source of truth, it prepares the evidence pack going in, and it checks the returned product against the log under the subset rule (`references/shared-collaboration-rules.md`).
 
+**Execution closure (dispatch).** The chain above ends at artifacts. When the human asks for the tasks to actually be *executed*, the assistant carries them through the dispatch pipeline — review gate → delivery bus → code-agent endpoint → supervision → results back to the human — per `references/task-dispatch.md`. The executing session's counterpart contract is `references/code-agent-execution.md`. Endpoints, the bus repo, and the nudge token are workspace facts and live in `RESEARCH-CONTEXT.md` (`## Dispatch & code agents`, optional section). This closes the loop: Log → Progress → Task → impl/eval/exp → results → next Log.
+
 The skill has eight modes — two dialogic, the rest artifact-producing:
 
 1. Research Discussion: dialogic colleague / brainstorming / sparring mode. Produces better thinking, not a document. Upstream of the other four.
@@ -75,6 +77,11 @@ Load the relevant reference file for the selected mode:
 - `references/reference-writing.md`
 - `references/literature-survey.md` (heavy Workflow-orchestrated pipeline: reusable scripts + protocol skeleton in `assets/literature-survey/`)
 - `references/academic-presentation-writing.md`
+
+Not modes, loaded on demand:
+
+- `references/task-dispatch.md` — when the human asks to dispatch a task batch to a code agent and supervise it to completion (assistant side).
+- `references/code-agent-execution.md` — the executor-side contract; point the executing code-agent session at it.
 
 Always apply `references/shared-collaboration-rules.md`.
 

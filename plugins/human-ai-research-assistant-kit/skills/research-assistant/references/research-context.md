@@ -52,6 +52,23 @@ Extra sections are allowed anywhere and are ignored unless a mode needs them.
 Content inside each section is free-form prose, paths, and commands — the
 skill reads it, it does not parse it mechanically.
 
+## Optional sections
+
+```
+## Dispatch & code agents
+```
+
+Required only by the dispatch protocol (`task-dispatch.md` /
+`code-agent-execution.md`); other modes ignore it. It must name: the
+**delivery bus** (the git repo task batches and completion reports travel
+through, with its remote), the **endpoints** (each executing code-agent
+session: transport — e.g. remote tmux over SSH, or local sub-agent —
+address/session name, and which model/harness runs there), the **nudge
+token** (the single string a foreign session may write to resume a stalled
+endpoint; everything else is read-only), and a pointer to the execution
+workspace conventions (batch dir naming, branch naming). Dispatch requested
+but the section missing → ask the human; never improvise endpoints.
+
 ## Section semantics
 
 - **Workspace overview** — what this research project is, in a paragraph, and
