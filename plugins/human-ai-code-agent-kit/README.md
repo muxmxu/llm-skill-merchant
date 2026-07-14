@@ -40,7 +40,7 @@ Run the `init` subcommand in the new repo:
 
 - **exp** — `init | launch | status | watch | stop | registry`
 - **eval** — `init | run | compare | report`
-- **ops** — `init | start | connect | deploy | launch | watch | sync | release | status | cost-check`
+- **ops** — `init | start | connect | deploy | launch | watch | sync | release | incident | status | cost-check`
 - **impl** — `init | task | check`
 
 ## Safety philosophy
@@ -50,3 +50,5 @@ references): explicit confirmation before launching runs, starting billing, or
 any state change; kill only PID-file-owned processes; never a billing-leaking
 VM stop; operators never modify numerical behavior. The skills are operators
 (exception: `impl`, which implements — under the project's rules doc).
+Incidents are handled freeze-first: execute the runbook's playbook as written
+or freeze and report — never improvise recovery paths mid-incident.

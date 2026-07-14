@@ -5,8 +5,9 @@ Optional marker (recognized, never required):
 
 Operations runbooks are short, hand-maintained, and evolve with the tooling —
 so this contract requires NO fixed headings. Instead, the doc must answer the
-nine capabilities below **somewhere** in its text. The skill reads the whole
-doc and maps subcommands to content; heading names are irrelevant.
+capabilities below (1–9 required, 10 optional) **somewhere** in its text. The
+skill reads the whole doc and maps subcommands to content; heading names are
+irrelevant.
 
 ## Capability checklist
 
@@ -24,6 +25,12 @@ doc and maps subcommands to content; heading names are irrelevant.
 8. **Release + verification** — the teardown procedure AND the command that
    verifies the released/billing state.
 9. **Status / cost query** — read-only commands for power/billing state.
+10. **Incident playbooks** *(optional but recommended)* — symptom-keyed
+    decision trees for degraded modes (machine unreachable, connections
+    blocked, provider errors), each with its FORBIDDEN-actions list first.
+    Absent → the `incident` subcommand's freeze-and-report default applies;
+    after any real incident, offer to add the missing playbook (with the
+    facts measured during the incident) so the next one is covered.
 
 ## Gap handling
 

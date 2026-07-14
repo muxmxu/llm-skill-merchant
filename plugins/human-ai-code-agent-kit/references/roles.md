@@ -115,6 +115,12 @@ Operations procedures, cost discipline, and hard rules live in the project's
 operations runbook (e.g. `OPERATIONS.md`); read it before any operations task,
 and treat its hard rules as binding.
 
+Posture for operations: routine operations want a fast, procedural executor
+that follows the runbook literally — execution needs lookup, not creativity.
+Stronger or more exploratory agent configurations engage only to diagnose
+failures the runbook's playbooks do not cover, and they hand back a proposal
+rather than taking over execution.
+
 ## 9. Style for code-agent-facing output
 
 Operational, compact, explicit about scope and non-goals, precise about paths

@@ -1,7 +1,7 @@
 {
   "name": "human-ai-code-agent-kit",
   "description": "AI Code Agent side of the human-AI research collaboration model <suit-for-code-agent>: doc-contract-driven skills for experiment lifecycle (exp), evaluation (eval), compute/VM operations (ops), and implementation workflow (impl), plus a read-only codebase-snapshot investigation report (codebase-snapshot). The doc-contract skills are generic across projects; all project-specific facts live in each repo's runbook docs (EXPERIMENTS.md, EVALUATION.md, OPERATIONS.md, development rules). Port to a new project with /exp init, /eval init, etc. codebase-snapshot needs no runbook.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "llm-skill-merchant maintainers"
   }

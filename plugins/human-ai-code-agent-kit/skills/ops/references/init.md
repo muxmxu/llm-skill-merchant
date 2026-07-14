@@ -10,14 +10,16 @@ not rewrite it without explicit confirmation.
    line or user-approved gap-filling appends.
 2. **Explore.** Look for cloud/cluster tooling: provider CLIs in scripts,
    `*.env` files naming resources, ssh configs, sync scripts, watchdog/cron
-   tooling, CI deploy jobs. Identify which of the nine capabilities
+   tooling, CI deploy jobs. Identify which of the required capabilities 1–9
    (`contract.md`) the repo already implements in scripts.
 3. **Interview** for what scripts can't say: cost model and discipline,
    forbidden operations, who else uses the machine, watchdog policy,
-   session-end expectations.
+   session-end expectations, and incident expectations (what to do when the
+   machine is unreachable; what is forbidden mid-incident; which operations
+   always need human sign-off).
 4. **Draft** from `../assets/OPERATIONS.template.md`: the template's headings
-   mirror the nine capabilities but are advisory — reorganize freely as long
-   as every capability is answered. Hard rules (forbidden commands,
+   mirror the capabilities but are advisory — reorganize freely as long
+   as every required capability is answered. Hard rules (forbidden commands,
    session-end invariant) must be stated as rules, not prose asides.
 5. **Review gate** → write → suggest committing.
 6. **Smoke.** Run the doc's status/cost query (read-only) to prove

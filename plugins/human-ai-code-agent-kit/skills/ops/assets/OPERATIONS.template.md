@@ -1,9 +1,9 @@
 <!-- runbook-contract: ops v1 (loose) -->
 # Operations Runbook
 
-<!-- Loose contract: headings below are ADVISORY — reorganize freely, but the
-     nine capabilities (see the ops skill's contract.md) must all be answered
-     somewhere in this doc. State hard rules as rules. -->
+<!-- Loose contract: headings below are ADVISORY — reorganize freely, but
+     capabilities 1-9 (see the ops skill's contract.md; 10 is optional) must
+     all be answered somewhere in this doc. State hard rules as rules. -->
 
 ## Cost & release discipline
 
@@ -36,3 +36,12 @@
 
 <!-- Read-only commands for power/billing state and anything else that
      answers "is this costing money right now?". -->
+
+## Incident playbooks (optional)
+
+<!-- Symptom-keyed decision trees for degraded modes (machine unreachable,
+     connections blocked, provider errors) — FORBIDDEN actions FIRST (e.g.
+     port/endpoint hopping, firewall edits), then the steps, with measured
+     facts inline. Also list here the high-risk operations that always need
+     human sign-off. Without this section the ops skill's incident mode
+     defaults to freeze-and-report. -->
