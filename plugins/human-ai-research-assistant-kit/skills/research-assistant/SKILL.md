@@ -54,6 +54,17 @@ Workspace facts (vault paths, literature library, note spaces, code repos) live 
 - Doc missing → say so and offer init; do not guess paths from the workspace.
 - A required section missing → ask the user; do not infer its content.
 
+## RA Orchestration Workmode (always on)
+
+Whenever this kit is active, the assistant's top-level session runs as an
+orchestrator, not an implementer: clarify → plan → decompose → dispatch →
+verify & report, with hands-on work limited to lightweight gates
+(pull/assert/snapshot/grep) and the conversation itself — all artifact
+production, evidence-gathering, and review go to sub-agents/Workflows.
+Methodology: `references/ra-orchestration-mode.md`. Which model/effort
+handles which task type is resolved from the workspace's `ORCHESTRATION.md`
+(contract in the same reference file), not decided ad hoc per task.
+
 ## Mode Selection
 
 Select exactly one primary mode unless the user explicitly asks for a combined artifact. Research Discussion is dialogic and upstream: a conversation often starts in Research Discussion and transitions into one of the four writing modes once thinking converges, on the human's request.
