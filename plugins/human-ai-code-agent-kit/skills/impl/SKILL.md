@@ -17,6 +17,15 @@ names it). Loose contract: read the whole doc (plus CLAUDE.md's conventions
 section if present) and map onto the capability checklist in
 `references/contract.md`. Doc missing → offer `impl init`.
 
+## Orchestration for large tasks
+
+A `task` that is large enough to decompose (a full implementation, a
+migration, a large evaluation sweep) can run in **Code Orchestration Mode**:
+the executing session becomes an orchestrator — decompose into per-module
+units, dispatch implementation, verify each module independently, then a
+single integration pass and one completion report. Small, clearly scoped
+tasks stay single-thread as usual. See `references/code-orchestration-mode.md`.
+
 ## Safety red lines (non-negotiable)
 
 1. **Scope is the task's, not yours.** No speculative refactors, no drive-by
