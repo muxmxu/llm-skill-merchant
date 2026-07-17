@@ -49,6 +49,19 @@ output format, and the model/effort it should run at. Nothing is left
 implicit. The better the prompt, the further down the model-cost ladder
 tier-1 can safely delegate.
 
+Before any dispatch goes out, tier-1 works through a **bound-facts
+checklist** for the task: enumerate, item by item, every fact the task's
+correctness depends on — the exact run or checkpoint (path or ID), the
+dataset and its version, config-file paths, model and tool versions, the
+target environment identifier — and for each one either pin a precise value
+or name exactly where the sub-agent is to obtain it (which file to read,
+which command to run). An item that is neither pinned nor sourced is
+unresolved, and an unresolved item blocks the dispatch. This is not
+paperwork: a sub-agent missing a bound fact does not stop to ask for it — it
+improvises, adopts whatever on disk looks close, and drifts further off with
+every step. The fact has to arrive in the prompt, or the task has to
+genuinely not need it.
+
 A sub-agent should never need to ask tier-1 a clarifying question mid-task —
 if it would, the prompt was underspecified and should be fixed, not patched
 over in a follow-up message. Sub-agents never inherit tier-1's own model:
@@ -73,6 +86,74 @@ rounds goes to the human to arbitrate rather than looping further. Any task
 that touches tabular or numeric data leaves a **re-runnable trace** (a
 script plus its source path), not just a pasted number, so the human or a
 future sub-agent can independently reproduce it.
+
+Phase 4's two halves are ordered, never interleaved: the outcome reaches the
+human only after the adversarial check has finished. Do not emit a running
+commentary while verification is still in progress, and never announce a
+result before it has been checked — verify, then report.
+
+## Human intervention and channel selection
+
+A human supervising a run must be able to correct it mid-flight. The failure
+this guards against is concrete: a binding fact that was clear in the main
+conversation ("use the checkpoint from *this* run, that version") never
+reaches the sub-agent, which then improvises and drifts further off with
+every step. How reachable an in-flight job is depends entirely on the channel
+it was dispatched through, so tier-1 chooses the channel with
+interruptibility in mind, not cost alone.
+
+**Channel interruptibility tiers**, most reachable first:
+
+- **Directly interruptible** — the human can enter the execution session
+  itself (for example an attachable, long-lived terminal session) and type
+  into it directly. For a session outside the bus dispatch contract this
+  corrects the work in place; for a bus-governed endpoint the typing triggers
+  a reversible safe pause only, and the binding correction still travels the
+  bus (see the reconciliation note below).
+- **Relay-interruptible** — the human speaks into the main conversation and
+  tier-1 immediately forwards the correction to the in-flight agent; reach is
+  one hop away and depends on tier-1 staying responsive.
+- **Non-interruptible in flight** — a scripted orchestration pipeline that,
+  once launched, accepts no mid-run input: the only correction path is to stop
+  the whole run, fix it, and resume.
+
+**Bus-governed endpoints and direct typing.** Reachability is layered, and
+where a job runs on an endpoint bound by the bus dispatch contract
+(`task-dispatch.md`) — whether or not it is a tmux session — that contract
+governs what counts as a binding instruction and overrides the picture above.
+On the executor side, text a human types straight into such a session is
+`unverified`: its effect is to trigger a reversible safe pause — a feature,
+not a defect: you type, it stops — never to change the work in place. The
+binding correction must travel the bus: a new revision, re-dispatched under
+the `DISPATCH` grammar and taken up at a safe boundary, per `task-dispatch.md`
+Stage 4's revision/supersede flow. The full "attach and type to correct the
+work in place" reading of the *directly interruptible* tier applies only to a
+session that is **not** under the bus dispatch contract.
+
+**Channel selection.** A task of the kind a human is likely to correct
+mid-flight — its bound-facts checklist is not yet complete, or it is
+exploratory, or it is a first-time-through run — must not go into a
+non-interruptible channel; it goes to an interruptible one. A
+non-interruptible channel is reserved for mechanical, bulk work whose bound
+facts are fully closed and whose acceptance criteria are unambiguous, and even
+then its entrance passes the bound-facts checklist first — two gates, not one.
+
+**In-flight intervention protocol.** A human interjection mid-run is a
+first-class event, not an interruption to be worked around. Tier-1 runs a
+fixed sequence: (a) size the blast radius — which in-flight tasks the
+correction touches; (b) propagate it through each affected job's channel — a
+correction work-order into a directly interruptible session, except that a
+bus-governed endpoint takes the binding correction as a new bus revision
+(Stage 4) while direct typing only safe-pauses it; an immediate forward into
+a relay-interruptible one; a stop-fix-resume for a non-interruptible one;
+(c) record the correction into the log or decision
+record, so it is durable and does not live only in the conversation.
+
+**Non-blocking discipline.** Tier-1 never sits in a synchronous blocking wait:
+every dispatch is backgrounded and the main conversation stays open to
+interruption at all times. The moment tier-1 blocks, the human's entire
+intervention channel goes dead — a blocked orchestrator can neither receive a
+correction nor propagate one.
 
 ## `ORCHESTRATION.md` contract
 
@@ -194,3 +275,19 @@ intuition, trust this list.
 4. Workflow scripts cannot call `Date.now()` or `Math.random()` (it breaks
    resume-safety across replays). Pass timestamps or random seeds in via
    `args` instead of generating them inside the script.
+5. Channel-to-tool mapping for the "Human intervention and channel
+   selection" rules above: a tmux or remote terminal session is directly
+   reachable (the **Directly interruptible** tier) — on a bus-governed
+   endpoint, typing into it triggers a reversible safe pause only, and the
+   binding correction still travels the bus as a new revision, not the typed
+   text (see the reconciliation note in that section); outside the bus
+   dispatch contract, typing into the session corrects the work in place; a
+   backgrounded `Agent` sub-agent is
+   **relay-interruptible** (the human speaks in the main conversation, tier-1
+   forwards with `SendMessage`); a Workflow is **non-interruptible in
+   flight** — once running it takes no input, and the only correction path is
+   `TaskStop` → fix the script or `args` → `resumeFromRunId`. Apply the
+   channel-selection rule accordingly: keep human-correctable work (open
+   bound-facts checklist, exploratory, first-time-through) off Workflows and
+   on sub-agents or terminal sessions; reserve Workflows for bound-facts-closed
+   mechanical batches.
