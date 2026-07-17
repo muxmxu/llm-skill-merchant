@@ -22,10 +22,22 @@ somewhere; the skill reads holistically.
    explicit sanction (e.g. numerics), and the verification expected when
    near them.
 7. **Task artifact conventions** — where implementation tasks come from and
-   their expected structure (ties into roles.md §2).
+   their expected structure, plus how direct authenticated maintenance or
+   implementation instructions are identified (ties into roles.md §2).
+8. **Generated and implicit writes** — lockfiles, generated outputs, caches,
+   snapshots, shared metadata, and other paths commands may rewrite.
+9. **Repository-wide mutators** — formatters, generators, migrations, or build
+   steps that must be serialized across otherwise independent modules.
+10. **Exclusive resources** — ports, databases, fixtures, build caches,
+    devices, and directories that require locks during parallel work.
+11. **Parallel validation boundaries** — checks safe to run concurrently,
+    checks that mutate shared state, and the required final-tree/end-to-end
+    validation after all writers stop.
 
 ## Gap handling
 
 Missing capability → name it, ask, and offer to append the answer to the doc
 with approval. `check` reports "no rule found" for capabilities the doc
-doesn't cover rather than inventing rules.
+doesn't cover rather than inventing rules. If a missing capability makes
+parallel execution unsafe, serialize the affected work or keep it
+single-threaded until the project defines the boundary.

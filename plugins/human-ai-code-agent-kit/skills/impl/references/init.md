@@ -11,9 +11,11 @@ as-is — init must not rewrite it without explicit confirmation.
    test locations, commit-message history (`git log --oneline -30`),
    CI config, linter configs, agent-instruction files.
 3. **Interview** for policy the repo can't show: protected zones, commit
-   style rules, environment mandates, task-artifact conventions.
+   style rules, environment mandates, task/direct-instruction conventions,
+   generated/implicit writes, repository-wide mutators, exclusive resources,
+   and parallel validation boundaries.
 4. **Draft** from `../assets/DEVELOPMENT.template.md` (headings advisory —
-   the seven capabilities in `contract.md` must be answered).
+   the eleven capabilities in `contract.md` must be answered).
 5. **Review gate** → write → suggest committing.
 6. **Smoke.** Run `impl check` against the current working tree using the
    new doc; the report should be actionable, not vacuous.
