@@ -2,17 +2,21 @@
 
 ## Metadata
 - task_id: `YYYY-MM-DD_<snake_case_title>`
+- revision: `1`
 - stage: `Stage I | II | III`
-- status: `active | in_progress | blocked | completed`
+- status: `active`
 - owner: `code_agent`
-- parent_decision: `progress/YYYY-MM-DD_<decision_dir>/decision.md`
+- parent_authority_kind: `log | progress | decision | human_instruction`
+- parent_authority_ref: `progress/YYYY-MM-DD_<decision_dir>/decision.md | <short description of the authenticated instruction>`
+- supersedes: `task_id@revision | none`
 
 ## Objective
 <One sentence. What the agent must achieve, not how.>
 
 ## Context
-<2–5 sentences of relevant background. Link prior progress entries as
-`progress/YYYY-MM-DD_<dir>/`. Do NOT re-explain things the agent can read from
+<2–5 sentences of relevant background. Link the parent authority — prior
+progress entries as `progress/YYYY-MM-DD_<dir>/`, or the authenticated
+instruction being cited. Do NOT re-explain things the agent can read from
 the linked refs.>
 
 ## Scope

@@ -24,7 +24,7 @@ Collect these before producing the final task:
 |---|---|---|
 | Task objective | yes | one sentence: what the agent must achieve |
 | Stage | yes | user/project-defined stage, if applicable |
-| Parent decision/progress | yes | path or title of originating decision/progress |
+| Parent authority | yes | kind (`log`/`progress`/`decision`/`human_instruction`) + exact path or short description; research chain for research-direction or claim-changing work, an authenticated direct human instruction for ordinary maintenance/read-only/operations |
 | Reference files | yes | files the agent must read, priority order |
 | In-scope items | yes | concrete bullets |
 | Out-of-scope items | yes | concrete bullets |
@@ -43,7 +43,7 @@ Optional but preferred:
 
 Before writing, verify these if not already explicit:
 
-1. Primary parent decision or progress entry.
+1. Primary parent authority: a decision/progress entry for research-direction or claim-changing work, or an authenticated direct human instruction for ordinary maintenance/read-only/operations work.
 2. Reference priority order.
 3. Scope boundary.
 4. Deliverable paths.
@@ -75,16 +75,19 @@ Use this exact structure:
 
 ## Metadata
 - task_id: `YYYY-MM-DD_<snake_case_title>`
+- revision: `1`
 - stage: `<Stage I | Stage II | Stage III | project-defined stage>`
 - status: `active`
 - owner: `code_agent`
-- parent_decision: `<path-or-title>`
+- parent_authority_kind: `<log | progress | decision | human_instruction>`
+- parent_authority_ref: `<exact path | short description of the authenticated instruction>`
+- supersedes: `<task_id@revision | none>`
 
 ## Objective
 <One sentence. What the agent must achieve, not how.>
 
 ## Context
-<2-5 sentences of relevant background. Link prior progress entries or references. Do not re-explain material that the agent can read from linked refs.>
+<2-5 sentences of relevant background. Link the parent authority or references. Do not re-explain material that the agent can read from linked refs.>
 
 ## Scope
 **In scope**
@@ -141,8 +144,10 @@ Objective, checkable conditions. Every item must be verifiable from the delivera
 3. Deliverables must be exact paths. Avoid vague deliverables like "write a report".
 4. Acceptance criteria must be verifiable from deliverables alone.
 5. Procedure steps must be ordered and atomic. Each step should produce a file, finding, log, patch, test result, or explicit decision.
-6. Use `status: active` on creation unless the user says otherwise.
-7. Every task must link to a parent decision/progress. If none exists, ask whether to create one first or use a named parent decision.
+6. Use `status: active` on creation. It is immutable task metadata, not a runtime state field; runtime state transitions belong only in the acknowledgement record (defined in `code-agent-execution.md`), never in the task artifact itself.
+7. Every task must record its parent authority (`parent_authority_kind` + `parent_authority_ref`). Research-direction, evaluation-meaning, or claim-changing work requires the current Log → Progress/Decision → Task chain. Only ordinary maintenance, read-only investigation, and operations tasks may cite an authenticated `human_instruction` directly; do not fabricate a research log to justify one of these tasks. If no parent authority exists, ask whether to create one first or name the authenticated instruction being cited.
 8. It is allowed to prescribe exact implementation details, formulas, interface behavior, or required wording when the human explicitly wants the code agent to follow that design. If implementation details are not human-mandated, state goals and constraints without over-controlling the code agent.
 9. Do not hide human-mandated constraints as suggestions. Mark them as constraints or acceptance criteria.
 10. No extra commentary inside the markdown artifact.
+11. Keep the task artifact dispatch-agnostic. Do not put transport, delivery, acknowledgement, report, result-signal, or gate mechanics inside the task file — those are defined in `task-dispatch.md`.
+12. Never edit a dispatched task to add runtime status, acknowledgement, or results after the fact. If the task's content must change, create a new revision that supersedes the prior one (`supersedes` in Metadata); do not mutate a task that has already been sent to a code agent.

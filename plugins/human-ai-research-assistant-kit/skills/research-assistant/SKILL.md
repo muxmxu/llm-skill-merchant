@@ -29,11 +29,11 @@ Research Log   → human-facing       → source-of-thinking         (preserve u
    └─► Academic Presentation → external-audience-facing → source-of-talk (audience-ready slides: outline, per-slide content, diagram specs)
 ```
 
-Never collapse these layers unless the human explicitly asks for a combined artifact. When deriving one artifact from another, preserve the correct audience and abstraction level.
+Never collapse these layers for research-direction or claim-changing work unless the human explicitly asks for a combined artifact. When deriving one artifact from another, preserve the correct audience and abstraction level.
 
 **Production delegation.** Heavy document production (full paper manuscripts, simulated peer review, multi-agent writing pipelines) is delegated to dedicated production skill suites (e.g. academic-research-skills) rather than rebuilt in this kit. This kit owns the evidence layer: research logs remain the source of truth, it prepares the evidence pack going in, and it checks the returned product against the log under the subset rule (`references/shared-collaboration-rules.md`).
 
-**Execution closure (dispatch).** The chain above ends at artifacts. When the human asks for the tasks to actually be *executed*, the assistant carries them through the dispatch pipeline — review gate → delivery bus → code-agent endpoint → supervision → results back to the human — per `references/task-dispatch.md`. The executing session's counterpart contract is `references/code-agent-execution.md`. Endpoints, the bus repo, and the nudge token are workspace facts and live in `RESEARCH-CONTEXT.md` (`## Dispatch & code agents`, optional section). This closes the loop: Log → Progress → Task → impl/eval/exp → results → next Log.
+**Execution closure (dispatch).** The chain above ends at artifacts. When the human asks for the tasks to actually be *executed*, the assistant carries them through the dispatch pipeline — review gate → delivery bus → code-agent endpoint → supervision → results back to the human — per `references/task-dispatch.md`. The executing session's counterpart contract is `references/code-agent-execution.md`. Endpoints, the bus repo, and the nudge token are workspace facts and live in `RESEARCH-CONTEXT.md` (`## Dispatch & code agents`, optional section). Research-direction or claim-changing work closes the loop through Log → Progress → Task → impl/eval/exp → results → next Log. Ordinary maintenance, read-only investigation, and operations tasks may instead carry an authenticated direct human instruction straight into dispatch; they do not need a fabricated research log to justify execution.
 
 The skill has eight modes — two dialogic, the rest artifact-producing:
 
