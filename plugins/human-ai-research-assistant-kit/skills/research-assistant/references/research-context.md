@@ -60,14 +60,22 @@ skill reads it, it does not parse it mechanically.
 
 Required only by the dispatch protocol (`task-dispatch.md` /
 `code-agent-execution.md`); other modes ignore it. It must name: the
-**delivery bus** (the git repo task batches and completion reports travel
-through, with its remote), the **endpoints** (each executing code-agent
-session: transport — e.g. remote tmux over SSH, or local sub-agent —
-address/session name, and which model/harness runs there), the **nudge
-token** (the single string a foreign session may write to resume a stalled
-endpoint; everything else is read-only), and a pointer to the execution
-workspace conventions (batch dir naming, branch naming). Dispatch requested
-but the section missing → ask the human; never improvise endpoints.
+**contracts** (paths to `task-dispatch.md` and `code-agent-execution.md` as
+used in this workspace), the **delivery modes** (the git repo bus task
+batches and completion reports travel through, with its remote — a bus is
+the default when configured, but it is not mandatory for a direct transport
+explicitly approved by authenticated human authority; if such a direct
+transport is used, name it and its allowed roots/APIs), the **endpoints**
+(each executing code-agent session: transport — e.g. remote tmux over SSH,
+or local sub-agent — address/session name, and which model/harness runs
+there), the **authentication** channels (which conversation turns or
+message sources count as an authenticated human instruction for approving
+dispatch and overrides), the **nudge token** (the single string a foreign
+session may write to resume a stalled endpoint; everything else is
+read-only), and a pointer to the execution workspace conventions (batch dir
+naming, branch naming). Dispatch requested but the section or a required
+field is missing → ask the human; never improvise endpoints, transport, or
+authority.
 
 ## Section semantics
 

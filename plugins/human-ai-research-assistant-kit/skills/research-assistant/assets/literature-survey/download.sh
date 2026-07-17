@@ -20,7 +20,7 @@ download_one() {
   [ -z "$url" ] && return
   if [ -s "$DEST/$fn" ]; then echo "SKIP $fn"; return; fi
   code=$(curl -sL --max-time 90 -A "$UA" -w "%{http_code}" -o "$DEST/$fn" "$url")
-  sz=$(stat -f%z "$DEST/$fn" 2>/dev/null || echo 0)
+  sz=$(wc -c < "$DEST/$fn" 2>/dev/null | tr -d ' ' || echo 0)
   head=$(head -c 4 "$DEST/$fn" 2>/dev/null)
   if [ "$code" = "200" ] && [ "$sz" -gt 10000 ] && [ "$head" = "%PDF" ]; then
     echo "OK   $fn ($sz)"

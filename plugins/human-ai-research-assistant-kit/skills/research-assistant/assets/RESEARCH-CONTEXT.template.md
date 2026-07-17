@@ -49,3 +49,31 @@
 
 <!-- Where multi-agent/human discussions are archived; per-agent file
      conventions. -->
+
+## Dispatch & code agents
+
+<!-- Optional; required only when dispatch is used.
+
+Contracts:
+- task-dispatch.md path (as used in this workspace)
+- code-agent-execution.md path (as used in this workspace)
+
+Delivery modes:
+- bus repo + remote, if used (default when configured)
+- authenticated human-approved direct transport(s) + allowed roots/APIs, if
+  used instead
+
+Endpoints:
+- endpoint id; address/session; transport; harness
+
+Authentication:
+- which conversation turns or message sources count as an authenticated
+  human instruction for approving dispatch and overrides
+
+Nudge token:
+- the single string a foreign session may write to resume a stalled
+  endpoint; everything else is read-only
+
+Execution workspace:
+- batch-directory and branch conventions
+-->
