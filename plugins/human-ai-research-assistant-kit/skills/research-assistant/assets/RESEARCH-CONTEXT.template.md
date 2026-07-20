@@ -77,3 +77,12 @@ Nudge token:
 Execution workspace:
 - batch-directory and branch conventions
 -->
+
+## Comment-revision adapters & roadmaps
+
+<!-- Optional; required only when the comment-revision cycle is used.
+     Where revision-roadmap files are stored for this workspace (dir +
+     naming). Concrete comment-source adapters (Overleaf extractor, PDF
+     annotation dumper, email parser) — path + the tuple they emit.
+     Protocol: references/comment-revision-cycle.md. -->
+

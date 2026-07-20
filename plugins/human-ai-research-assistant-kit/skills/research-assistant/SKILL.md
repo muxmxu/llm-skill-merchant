@@ -93,6 +93,7 @@ Not modes, loaded on demand:
 
 - `references/task-dispatch.md` — when the human asks to dispatch a task batch to a code agent and supervise it to completion (assistant side).
 - `references/code-agent-execution.md` — the executor-side contract; point the executing code-agent session at it.
+- `references/comment-revision-cycle.md` — when the human has a batch of reviewer feedback on a manuscript (any source) to turn into confirmed, executed, verified edits via one gated roadmap.
 
 Always apply `references/shared-collaboration-rules.md`.
 
