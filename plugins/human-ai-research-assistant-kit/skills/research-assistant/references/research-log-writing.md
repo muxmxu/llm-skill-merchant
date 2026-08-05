@@ -61,6 +61,9 @@ phrases locally: a harsh conclusion may become a clear written conclusion, but
 it must not become a new priority, causal ranking, recommendation, or decision.
 Before delivery, compare each provenance-marked claim against its source as a
 single unit; the wording may change, while its proposition and force may not.
+Treat quantifiers and scope words as part of that unit: do not drop or widen
+terms such as “all”, “only”, “each”, “already tested”, a threshold, a date, or
+a comparison set.
 
 ## Register and Accountability
 
