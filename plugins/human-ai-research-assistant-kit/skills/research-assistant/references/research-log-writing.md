@@ -181,6 +181,27 @@ Do not add a frontmatter block, storage-path suggestion, file-operation report,
 or a second “next steps” artifact unless the human explicitly asks for it or
 provides a destination-file workflow.
 
+### Keep the supplied shape unless organization is needed
+
+For a fresh log whose material has no supplied title or section structure,
+deliver it as ordinary prose following the natural order of the supplied
+paragraphs and tables. Do not manufacture a date title, an “Open Question”
+section, a derived artifact, or a filename. Those additions make a short
+research record look like a completion package and can imply a priority the
+human did not set. Add the smallest useful heading only when the human asks for
+structure, or when genuinely separate topics would otherwise change meaning.
+
+### Fixed conditions do not settle attribution
+
+Report a confirmed matching configuration, hash, seed, or other fixed condition
+as a method or reproducibility fact. It does not, by itself, establish that a
+difference is not due to data or configuration, rule out every alternative, or
+locate the cause in a module. Such exclusion or causal language needs evidence
+in the supplied material; otherwise leave it out or state it as a question to
+be tested. This distinction matters because a reproducible comparison can be
+well controlled while its remaining performance difference is still not
+localized.
+
 ## Optional Section Menu (not a checklist)
 
 This is a MENU, not a form. Pick only the sections that serve this entry; an entry that is three lines of conjecture is complete with zero of these sections. Empty slots invite over-filling — do not add a section just because it exists.
