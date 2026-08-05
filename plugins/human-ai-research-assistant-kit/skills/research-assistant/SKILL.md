@@ -146,9 +146,12 @@ Use the language requested by the user. By default:
 
 ## Output Policy
 
-For research logs, progress notes, decisions, references, and code-agent tasks, default to inline markdown code blocks. Do not create downloadable files, canvas artifacts, or direct file edits unless the human explicitly asks for a file, artifact, canvas, or direct file editing.
-
-After the block, provide a suggested filename or path if appropriate.
+For a human-facing research log, return ordinary markdown prose by default.
+Its mode-specific delivery rules take precedence: do not add a code block, an
+English reporting template, or a filename/path suggestion unless the human asks
+for one. Progress notes, decisions, references, and code-agent tasks may use
+their own mode-appropriate structure. Do not create downloadable files, canvas
+artifacts, or direct file edits unless the human explicitly asks for them.
 
 For task-writing, use the strict template and rules in `references/task-writing.md`.
 
