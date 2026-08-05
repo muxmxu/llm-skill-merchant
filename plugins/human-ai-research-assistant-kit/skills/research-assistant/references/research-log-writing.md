@@ -47,9 +47,21 @@ The single most common failure of this mode: the human dumps a large, messy, str
 - Loose thinking stays loose. No academic connective tissue ("furthermore", "in conclusion"), no invented evidence labels on judgment passages.
 - Keep the human's terms in their original language; do not translate variable names, run ids, or terms of art.
 
+**Semantic preflight for every fresh log and style-only revision.** These checks
+protect the record rather than its surface style:
+
+- **MUST NOT** turn a fixed condition (matching hash, seed, configuration, or
+  recomputation) into an unstated exclusion such as “not a missing-file error”,
+  “not an aggregation error”, or “not a configuration factor”. Repeat the
+  confirmed condition as given; any further exclusion needs to be in the source.
+- **MUST NOT** strengthen modality or evidence. `可能` / “maybe”, `看起来`,
+  `不太像`, and `尚不能` do not become `大概率`, `主要`, `已表明`, `所以`, or
+  another stronger causal or evidential claim. These words change what the
+  day-T record says, even when the sentence becomes smoother.
+
 **Step 4 — Preserve attribution without manufacturing prose.** A style-only rewrite may add no explanation at all. Do not invent a connective inference merely to make the prose smoother. If the workspace defines an author-source marker, preserve it literally and on the same claim; do not split, rename, remove, or synthesize markers. In this workspace, `[AI finding/claim]` is that marker.
 
-**Step 5 — Post-draft self-check, then deliver.** Verify that facts, scope, negation, chronology, causality, uncertainty, and author-source markers are unchanged. Use readable paragraphs rather than forcing every sentence into the same length. Keep evidence labels only where the passage is accountable to data, paper, or code. Resolve every `[[wikilink]]` when a checker is available.
+**Step 5 — Post-draft self-check, then deliver.** Verify that facts, scope, negation, chronology, causality, uncertainty, modality, and author-source markers are unchanged. In particular, check every fixed-condition sentence against its source: it may report the condition, but may not name a new error class that it supposedly excludes. Check every hedge and causal connector: it may not become stronger. Use readable paragraphs rather than forcing every sentence into the same length. Keep evidence labels only where the passage is accountable to data, paper, or code. Resolve every `[[wikilink]]` when a checker is available.
 
 ### Style-only means semantic substitution, not editorial expansion
 
