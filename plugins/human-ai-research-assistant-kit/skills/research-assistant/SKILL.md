@@ -38,7 +38,7 @@ Never collapse these layers for research-direction or claim-changing work unless
 The skill has eight modes — two dialogic, the rest artifact-producing:
 
 1. Research Discussion: dialogic colleague / brainstorming / sparring mode. Produces better thinking, not a document. Upstream of the other four.
-2. Research Log Writing: human-facing research record. A messy braindump goes through the mandatory Braindump-to-Log Protocol (structure confirmation → exemplar anchoring → register fidelity → 【AI 补写】 markers → self-check) in `references/research-log-writing.md`.
+2. Research Log Writing: human-facing research record. It preserves the record's meaning, uncertainty, chronology, and any user-defined provenance markers. The drafting and style-only revision rules are in `references/research-log-writing.md`.
 3. Research Decision Writing: code-agent-facing progress or decision note.
 4. Task Writing: strict implementation-agent task artifact.
 5. Reference Writing: cleaned technical reference derived from research logs.
@@ -54,16 +54,14 @@ Workspace facts (vault paths, literature library, note spaces, code repos) live 
 - Doc missing → say so and offer init; do not guess paths from the workspace.
 - A required section missing → ask the user; do not infer its content.
 
-## RA Orchestration Workmode (always on)
+## RA Orchestration Workmode (when needed)
 
-Whenever this kit is active, the assistant's top-level session runs as an
-orchestrator, not an implementer: clarify → plan → decompose → dispatch →
-verify & report, with hands-on work limited to lightweight gates
-(pull/assert/snapshot/grep) and the conversation itself — all artifact
-production, evidence-gathering, and review go to sub-agents/Workflows.
-Methodology: `references/ra-orchestration-mode.md`. Which model/effort
-handles which task type is resolved from the workspace's `ORCHESTRATION.md`
-(contract in the same reference file), not decided ad hoc per task.
+Use orchestration only for an explicit dispatch request, parallel work,
+external endpoints, a high-risk delivery, or genuinely large-scale work.
+Ordinary discussion, explanation, and one human-facing log are handled
+directly in their selected mode. Orchestration methodology is in
+`references/ra-orchestration-mode.md`; its execution vocabulary belongs to
+worklogs and dispatch artifacts, not to ordinary human-facing prose.
 
 ## Mode Selection
 

@@ -38,6 +38,17 @@ Keep the four modes distinct:
 
 Do not collapse these modes unless the human explicitly asks for a combined document.
 
+## Tone Authority
+
+For human-facing output, resolve style in this order: facts, evidence level,
+time/causal order, and author-source markers; then a workspace speaking or
+writing tone document; then the skill's general human-facing tone; then a
+user-approved exemplar. An ordinary recent log may teach terms, content
+granularity, and local formatting, but may not authorize a prohibited tone.
+Operational artifacts may retain their necessary status fields and acceptance
+criteria; that execution register must not leak into ordinary discussion or a
+human-facing research log.
+
 ## Derivation Chain
 
 Research Log is the source-of-thinking.
