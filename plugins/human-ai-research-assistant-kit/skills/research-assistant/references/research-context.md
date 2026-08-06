@@ -96,7 +96,11 @@ authority.
   create a new directory.
 - **Papers & presentations** — each paper/presentation project: location,
   how it is linked into the workspace (e.g. symlinks to independent git
-  repos), and what editing a linked path really edits.
+  repos), and what editing a linked path really edits. If Academic
+  Presentation mode is used, this section must also point to the applicable
+  presentation style contract, or explicitly state that none exists. When
+  several contracts exist, give a deterministic mapping by project, venue,
+  audience, or medium. Distinguish live-deck style from poster style.
 - **Code & compute** — each code repository: where it is (local
   path/symlink, remote host + access command), the evidence discipline that
   applies (read-only by default), and a pointer to the repo's own

@@ -53,9 +53,27 @@ This mode is NOT:
 | Hand-drawn sketches | conditional | photos, ASCII, or descriptions; the AI recodes these |
 | Finished fine figures | conditional | the AI proofs but never edits these |
 
+## Presentation Style Contract
+
+Treat a workspace-specific presentation style contract as required input, not optional inspiration.
+
+On **every** Academic Presentation task — planning, writing, rewriting, diagram design, speaker-note writing, or deck review — do the following before the logic-gap report or any slide-level judgment:
+
+1. Read the workspace root's `RESEARCH-CONTEXT.md` when it exists.
+2. Resolve the presentation style contract from its presentations / resources section. Follow the explicit pointer; do not guess a filename from convention.
+3. Read the resolved style contract in full on this task. Do not rely on memory from an earlier task or on a summary embedded in another instruction file.
+4. Apply it to narrative rhythm, page density, slide/speech division, typography, diagrams, color semantics, audience adaptation, and review criteria.
+5. If the style contract links historical decks or exemplar pages, read those only according to the contract's own lookup rule. A style contract may be mandatory while its historical PDFs remain on-demand references.
+
+If `RESEARCH-CONTEXT.md` exists but has no style-contract pointer, report `[MISSING STYLE CONTRACT POINTER]` and ask the human where the corresponding style lives before producing slide content. A logic-gap report may still identify non-style story problems, but style-dependent design work waits for resolution.
+
+If the task is outside a research workspace and no `RESEARCH-CONTEXT.md` exists, report `style-contract: none provided` and proceed with this mode's generic rules. Do not invent personal preferences.
+
+The style contract controls presentation choices. It does not override evidence discipline, the human's ownership of the story, the step-4 gate, or explicit task instructions.
+
 ## Collection Strategy
 
-Before producing anything, confirm occasion, audience, and time/slide budget — together they set slide count, depth, and backup volume.
+Before producing anything, resolve and read the Presentation Style Contract, then confirm occasion, audience, and time/slide budget — together they set slide count, depth, and backup volume.
 
 Then fork on backbone:
 
@@ -82,6 +100,7 @@ The artifact is produced in **two gated blocks**. Produce Block 1 first and stop
 - audience: <undergrad | master | mixed | expert>
 - budget: <N min, ~M slides>
 - source_logs: <path(s), or "see per-slide provenance">
+- style_contract: <resolved path | none provided>
 - backbone-origin: <human | AI-proposed>
 - status: step-4-pending
 
