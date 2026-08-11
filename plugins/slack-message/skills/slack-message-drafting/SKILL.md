@@ -29,7 +29,7 @@ Infer the mode from the input; do not ask when it is clear.
 
 ## Drafting rules (generic layer — profile rules override)
 
-- **Paste-ready Slack mrkdwn**: no markdown headers; use `*bold*` lead lines, bullets, and code blocks; blank lines between blocks. The draft must survive a direct paste into Slack.
+- **Plain-text-safe by default**: Slack's default composer does not parse markup in pasted text, so the draft must read correctly as literal characters. No `*bold*`, no backticks, no markdown headers or tables. Structure with blank lines, plain bullets (`・` or `-`), indentation, and bracketed section markers (`【1】【2】…`). A profile may declare `Markup: mrkdwn allowed` (meaningful when the user has enabled Slack's "Format messages with markup" preference, which parses pasted markup at send time) — only then use `*bold*` lead lines and code blocks.
 - **Language** follows the profile.
 - **Content fidelity**: convey only what the user stated. Do not add facts, opinions, commitments, or deadlines the user did not give; do not soften or harden their stance. Where the message needs something the user did not supply, insert a `[…]` placeholder and point it out.
 - **Short-register recipients get a two-part output by default**: a main message (conclusion + the ask, within the profile's length ceiling) plus an optional thread follow-up draft carrying details and evidence. The user posts the follow-up only if asked for details.
