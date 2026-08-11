@@ -19,5 +19,6 @@ Workspace-local tone rules for the `slack-message-drafting` skill. One profile p
 ## Shared rules
 
 - <punctuation and orthography habits, e.g. full-width punctuation in Japanese>
-- <formatting habits beyond the skill's mrkdwn defaults>
+- <markup policy: plain text is the skill default; add "Markup: mrkdwn allowed" here or per profile only if pasted markup renders in your Slack setup (requires the "Format messages with markup" preference)>
+- <formatting habits beyond the skill defaults>
 - <draft export location override, if any>
