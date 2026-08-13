@@ -22,6 +22,11 @@ itself is under `## Code & compute`) and from the code repo's own runbooks
 - A kickoff message over tmux/chat only announces the batch (its fixed
   `DISPATCH task_id=... revision=...` grammar is defined in
   `task-dispatch.md`); it never carries binding detail.
+- The bus root itself carries `task-reception.md` and a copy of this file,
+  installed there by the dispatching side (`task-dispatch.md` Stage 3). A
+  bare kickoff is decodable from the bus alone: a fresh session with no
+  other context should start by reading `task-reception.md` at the bus
+  root.
 
 ## Acknowledgement
 

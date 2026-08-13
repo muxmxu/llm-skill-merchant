@@ -105,6 +105,12 @@ bus is bidirectional: completion reports come back on the same repo. Never
 deliver by pasting task bodies into the endpoint session — the bus is the
 auditable copy.
 
+The bus root must also carry the reception wiring: `task-reception.md`
+(the kit asset, `assets/task-dispatch/task-reception.md`) and a copy of
+`code-agent-execution.md`, both installed at the bus root. On the first
+dispatch to a given workspace, or whenever either file is missing from the
+bus, install them as part of this delivery step before pushing.
+
 ## Stage 4 — Dispatch
 
 Endpoints and transports come from RESEARCH-CONTEXT.md. Known transports:
@@ -116,6 +122,14 @@ Endpoints and transports come from RESEARCH-CONTEXT.md. Known transports:
 - **local-subagent**: spawn a sub-agent of the assistant session with the
   task file paths and the execution contract; suitable when the work runs
   on the local machine or the assistant's harness can reach the compute.
+
+Before kicking off a **fresh** endpoint session (one with no prior context
+in this workspace), verify it can decode a bare kickoff from the bus alone:
+the reception wiring from Stage 3 exists on the bus, and the endpoint's own
+entry doc, if it has one, points to it. A bare kickoff sent to an unwired
+fresh session stalls — it has no way to learn what `DISPATCH` means. This is
+a decodability check, not a payload change: the kickoff grammar below stays
+exactly as specified either way.
 
 The kickoff payload has a fixed, single-line grammar and nothing else:
 
