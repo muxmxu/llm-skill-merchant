@@ -1,0 +1,8 @@
+{
+  "name": "magi",
+  "description": "MAGI decision council <suit-for-ai-research-assistant>: turns \"should we do X\" into a ruling rather than a discussion. Tier-1 frames one decidable proposition and a shared bound-facts pack, seats N mutually orthogonal lenses (default 3), has them deliberate in parallel and blind under a schema that refuses any reason without a checkable source, audits every reason back to source and strikes the ones that do not hold, red-teams a unanimous vote before it is allowed to stand, then reports the tally with the surviving reasons for and against, the cost of not acting, and the conditions that would flip each vote. The human still decides.",
+  "version": "1.0.0",
+  "author": {
+    "name": "mux"
+  }
+}

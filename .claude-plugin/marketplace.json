@@ -31,6 +31,22 @@
       "source": "./plugins/slack-message"
     },
     {
+      "name": "agent-workspace",
+      "description": "Per-task self-tracking convention <suit-for-ai-research-assistant> <suit-for-code-agent>: agent_workspace/{YYYY-M-D}-{topic}/ with worklog.md, STATUS.md, and HANDOFF.md, plus the create-or-continue rule and the write triggers that keep the three current instead of reconstructed at the end of a session.",
+      "author": {
+        "name": "mux"
+      },
+      "source": "./plugins/agent-workspace"
+    },
+    {
+      "name": "magi",
+      "description": "MAGI decision council <suit-for-ai-research-assistant>: one decidable proposition, a shared bound-facts pack, orthogonal lenses deliberating in parallel and blind, every reason audited back to source, a unanimous vote red-teamed before it stands, and a ruling reported as a tally with surviving reasons, costs of not acting, and flip conditions. /magi:ask convenes it. The human still decides.",
+      "author": {
+        "name": "mux"
+      },
+      "source": "./plugins/magi"
+    },
+    {
       "name": "multi-agent-discussion",
       "description": "Multi-Agent Discussion Protocol <suit-for-ai-research-assistant>: file-based structured debate between multiple AI agents and the human, converging into final.md under the human's arbitration.",
       "author": {

@@ -1,0 +1,8 @@
+{
+  "name": "agent-workspace",
+  "description": "Per-task self-tracking convention <suit-for-ai-research-assistant> <suit-for-code-agent>: every non-trivial task gets an agent_workspace/{YYYY-M-D}-{topic}/ directory holding three files whose jobs never mix — worklog.md (record of the whole work, reverse-chronological), STATUS.md (where the current task stands; a zero-context recovery anchor), HANDOFF.md (file pointers and minimum context for whoever takes over). Carries what the existing conventions leave implicit: when to create a directory versus continue an existing one, and the write triggers that keep the three files current instead of reconstructed at the end. Dual-tagged because both sides of the collaboration keep the same records in the same shape.",
+  "version": "1.0.0",
+  "author": {
+    "name": "mux"
+  }
+}
