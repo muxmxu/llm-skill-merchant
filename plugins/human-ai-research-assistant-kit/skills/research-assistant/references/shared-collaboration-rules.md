@@ -38,6 +38,17 @@ Keep the four modes distinct:
 
 Do not collapse these modes unless the human explicitly asks for a combined document.
 
+## Tone Authority
+
+For human-facing output, resolve style in this order: facts, evidence level,
+time/causal order, and author-source markers; then a workspace speaking or
+writing tone document; then the skill's general human-facing tone; then a
+user-approved exemplar. An ordinary recent log may teach terms, content
+granularity, and local formatting, but may not authorize a prohibited tone.
+Operational artifacts may retain their necessary status fields and acceptance
+criteria; that execution register must not leak into ordinary discussion or a
+human-facing research log.
+
 ## Derivation Chain
 
 Research Log is the source-of-thinking.
@@ -50,7 +61,15 @@ instead derive from an authenticated direct human instruction.
 
 Do not confuse these four layers. When deriving one artifact from another, preserve the correct level of abstraction and audience.
 
-## Information Safety in Research Derivation (Log → Decision/Progress/Reference/Task)
+## Information Safety in Research Derivation (Source materials → Log → Decision/Progress/Reference/Task)
+
+When a fresh Research Log is assembled from supplied notes, tables, reports, or
+other source materials, it is also a derived artifact. Unless the human
+explicitly asks for AI synthesis, apply the subset rule to that first step:
+every statement in the Log must be traceable to the supplied material. A new
+AI explanation, exclusion, causal link, recommendation, or open question is
+not a harmless connective; it needs the explicit-synthesis route and the
+workspace's literal AI provenance marker.
 
 For research-direction or claim-changing work, derived artifacts are strictly
 subordinate to their source Research Log. Enforce:

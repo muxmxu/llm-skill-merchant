@@ -1,6 +1,6 @@
 ---
 name: research-assistant
-description: "<suit-for-ai-research-assistant> use for human-ai-in-the-loop research writing workflows including research logs, research progress or decision notes, implementation-agent tasks, and cleaned technical references derived from informal human notes, experiment discussions, papers, code findings, or design decisions. trigger when the user asks to write, revise, structure, or transform research notes; record a decision; prepare progress for a code agent; create a task for an implementation agent; turn a messy braindump into a research log; or turn a messy research log into a clean model design, loss design, dataset protocol, diagnostic reference, or other code-agent-facing reference. also use as a research discussion / brainstorming / sparring partner — think through experiment results, challenge or pressure-test hypotheses, find papers / APIs / prior art, and explore ideas before they become a log, decision, task, or reference. also trigger when the user does not understand a concept, formula, or term while reading a paper or code and wants it explained, decomposed, or taught ('我不懂', '拆解这个概念', 'explain this concept', 'teach me X')."
+description: "<suit-for-ai-research-assistant> use for human-ai-in-the-loop research workflows including discussion, concept explanation, research logs, progress or decision notes, implementation-agent tasks, cleaned technical references, literature surveys, and academic presentations. trigger when the user asks to write, revise, structure, or transform research notes; record a decision; prepare progress or a task for a code agent; derive an implementation-facing reference; prepare, rewrite, or review slides for a lab meeting, conference, or defense; turn a messy braindump into a research log; brainstorm or pressure-test a hypothesis; find prior work; or explain a concept, formula, or term."
 ---
 
 # Human-AI Research Writing Kit
@@ -38,7 +38,7 @@ Never collapse these layers for research-direction or claim-changing work unless
 The skill has eight modes — two dialogic, the rest artifact-producing:
 
 1. Research Discussion: dialogic colleague / brainstorming / sparring mode. Produces better thinking, not a document. Upstream of the other four.
-2. Research Log Writing: human-facing research record. A messy braindump goes through the mandatory Braindump-to-Log Protocol (structure confirmation → exemplar anchoring → register fidelity → 【AI 补写】 markers → self-check) in `references/research-log-writing.md`.
+2. Research Log Writing: human-facing research record. By default it is a source-constrained transformation: it preserves supplied propositions, uncertainty, chronology, and user-defined provenance markers without adding research reasoning. Only an explicit request for analysis, explanation, or new AI judgment opens AI synthesis; its additions use the workspace's literal provenance marker. The two paths are in `references/research-log-writing.md`.
 3. Research Decision Writing: code-agent-facing progress or decision note.
 4. Task Writing: strict implementation-agent task artifact.
 5. Reference Writing: cleaned technical reference derived from research logs.
@@ -54,16 +54,14 @@ Workspace facts (vault paths, literature library, note spaces, code repos) live 
 - Doc missing → say so and offer init; do not guess paths from the workspace.
 - A required section missing → ask the user; do not infer its content.
 
-## RA Orchestration Workmode (always on)
+## RA Orchestration Workmode (when needed)
 
-Whenever this kit is active, the assistant's top-level session runs as an
-orchestrator, not an implementer: clarify → plan → decompose → dispatch →
-verify & report, with hands-on work limited to lightweight gates
-(pull/assert/snapshot/grep) and the conversation itself — all artifact
-production, evidence-gathering, and review go to sub-agents/Workflows.
-Methodology: `references/ra-orchestration-mode.md`. Which model/effort
-handles which task type is resolved from the workspace's `ORCHESTRATION.md`
-(contract in the same reference file), not decided ad hoc per task.
+Use orchestration only for an explicit dispatch request, parallel work,
+external endpoints, a high-risk delivery, or genuinely large-scale work.
+Ordinary discussion, explanation, and one human-facing log are handled
+directly in their selected mode. Orchestration methodology is in
+`references/ra-orchestration-mode.md`; its execution vocabulary belongs to
+worklogs and dispatch artifacts, not to ordinary human-facing prose.
 
 ## Mode Selection
 
@@ -71,12 +69,12 @@ Select exactly one primary mode unless the user explicitly asks for a combined a
 
 - Use Research Discussion when the user is thinking out loud, brainstorming, interpreting an experiment result, pressure-testing a hypothesis, finding papers / APIs / prior art, or exploring ideas before committing them to an artifact. This is the default when the user is reasoning rather than requesting a document. It produces no file by default; offer to capture into a writing mode when thinking converges.
 - Use Concept Explainer when the user does not understand a concept, formula, or term and wants to be taught it. Retrieval of a fact stays in Research Discussion (Retrieve = "帮我查"); teaching until understood is Concept Explainer (= "教懂我"). No file by default; a concept card only on explicit request.
-- Use Research Log Writing when the user wants to preserve reasoning, uncertainty, evidence, failed ideas, paper notes, experiment interpretation, or Q&A-like thinking.
+- Use Research Log Writing when the user wants to preserve reasoning, uncertainty, evidence, failed ideas, paper notes, experiment interpretation, or Q&A-like thinking. Route it to **source-constrained transformation** by default, including style-only rewrites and fresh logs assembled from supplied notes. Route it to **explicit AI synthesis** only when the user expressly asks the assistant to analyze, explain, infer, exclude alternatives, recommend, or add an AI judgment. Do not infer that permission from a request to “write a log”.
 - Use Research Decision Writing when the user wants to package human research decisions for a code agent or implementation agent.
 - Use Task Writing when the user wants to assign concrete work to a code agent, implementation agent, or coding assistant.
 - Use Reference Writing when the user wants to convert informal research logs into clean implementation-facing documents such as model design, loss design, dataset protocol, diagnostic reference, or training design.
 - Use Literature Survey when the user wants a topic surveyed, prior work dug up, a batch of papers turned into review notes, or a deep-research prompt generated for an external tool. Distinguishes itself from Research Discussion's casual paper lookup by producing artifacts (per-paper notes, survey synthesis, reusable prompts) under the academic search discipline.
-- Use Academic Presentation Writing when the user wants to build slides for a talk (lab meeting, conference, defense) from a research backbone + loose notes. The human owns the story; the AI does logic-gap checking, slide text, diagram redraw, and figure proofread. Format-agnostic output (Beamer / Keynote).
+- Use Academic Presentation Writing when the user wants to build, rewrite, or review slides for a talk (lab meeting, conference, defense) from a research backbone + loose notes. The human owns the story; the AI does logic-gap checking, slide text, diagram redraw, and figure proofread. Resolve and read the workspace's presentation style contract before any presentation work, as required by `references/academic-presentation-writing.md`. Format-agnostic output (Beamer / Keynote).
 
 Load the relevant reference file for the selected mode:
 
@@ -148,9 +146,12 @@ Use the language requested by the user. By default:
 
 ## Output Policy
 
-For research logs, progress notes, decisions, references, and code-agent tasks, default to inline markdown code blocks. Do not create downloadable files, canvas artifacts, or direct file edits unless the human explicitly asks for a file, artifact, canvas, or direct file editing.
-
-After the block, provide a suggested filename or path if appropriate.
+For a human-facing research log, return ordinary markdown prose by default.
+Its mode-specific delivery rules take precedence: do not add a code block, an
+English reporting template, or a filename/path suggestion unless the human asks
+for one. Progress notes, decisions, references, and code-agent tasks may use
+their own mode-appropriate structure. Do not create downloadable files, canvas
+artifacts, or direct file edits unless the human explicitly asks for them.
 
 For task-writing, use the strict template and rules in `references/task-writing.md`.
 

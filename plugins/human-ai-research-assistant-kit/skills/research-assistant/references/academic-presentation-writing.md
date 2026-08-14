@@ -47,15 +47,34 @@ This mode is NOT:
 | Audience | yes | undergrad / master / mixed / expert — drives depth and backup-slide policy |
 | Time / slide budget | yes | e.g. 20 min, ~15 slides — required for the backup-slide decision (Rule 7) |
 | Story backbone | yes | intro + TOC + storyline, any format; human-authored. A slide list with one sentence per slide is runnable; a paragraph of goals is not. |
+| Author's own prior slide sets | yes | Paths to 1-4 decks the author made by hand and was satisfied with, matched to the closest genre (occasion/venue) of the current task. Read at least one such deck in full BEFORE drafting any visible copy — required, not merely preferred; how to extract rules from it is the AI's own judgment call, not a mandated checklist. Without it the first draft will be a generic AI deck and the whole round will be rejected on style rather than content. |
 | Loose notes per section | preferred | any quality; the AI does not demand polished prose |
 | Source research log(s) | preferred | path(s) or pasted content; needed for evidence tracing |
 | Paper macros / terms file | preferred | for notation consistency in the step-7 proofread |
 | Hand-drawn sketches | conditional | photos, ASCII, or descriptions; the AI recodes these |
 | Finished fine figures | conditional | the AI proofs but never edits these |
 
+## Presentation Style Contract
+
+Treat a workspace-specific presentation style contract as required input, not optional inspiration.
+
+On **every** Academic Presentation task — planning, writing, rewriting, diagram design, speaker-note writing, or deck review — do the following before the logic-gap report or any slide-level judgment:
+
+1. Read the workspace root's `RESEARCH-CONTEXT.md` when it exists.
+2. Resolve every presentation-governing document (style contract, layout/craft rules, or any other) that the RESEARCH-CONTEXT.md Papers & presentations section names for this workspace. Follow each explicit pointer; do not guess filenames from convention.
+3. Read each resolved document in full on this task. Do not rely on memory from an earlier task or on a summary embedded in another instruction file.
+4. Apply each document within its own stated domain (e.g. a style contract governs narrative/rhetoric; a separate layout/craft document, if declared, governs density, typography, and page mechanics) — do not restate one document's rules from memory of another.
+5. The author's own prior slide sets are a required input (see Inputs table) regardless of what the style contract says — read at least one before drafting any visible copy. The style contract may additionally name further historical decks or exemplar pages with its own on-demand lookup rule; that on-demand clause governs those additional decks only, not the one required by the Inputs table.
+
+If `RESEARCH-CONTEXT.md` exists but names no presentation-governing document, report `[MISSING STYLE CONTRACT POINTER]` and ask the human where the corresponding style lives before producing slide content. A logic-gap report may still identify non-style story problems, but style-dependent design work waits for resolution.
+
+If the task is outside a research workspace and no `RESEARCH-CONTEXT.md` exists, report `style-contract: none provided` and proceed with this mode's generic rules. Do not invent personal preferences.
+
+The style contract controls presentation choices. It does not override evidence discipline, the human's ownership of the story, the step-4 gate, or explicit task instructions.
+
 ## Collection Strategy
 
-Before producing anything, confirm occasion, audience, and time/slide budget — together they set slide count, depth, and backup volume.
+Before producing anything, resolve and read the Presentation Style Contract, then confirm occasion, audience, and time/slide budget — together they set slide count, depth, and backup volume.
 
 Then fork on backbone:
 
@@ -63,6 +82,10 @@ Then fork on backbone:
 - **No backbone.** Do not infer a story from a pile of notes — the human owns the story direction. Propose **section titles only** (no bullets, no slide bodies) and wait for human approval. An AI-proposed, human-confirmed outline satisfies the backbone requirement, but is tagged `backbone-origin: AI-proposed` in Metadata, and the logic-gap report still runs on it (the AI may have introduced its own leaps).
 
 Identify which research log(s) / paper(s) the claims trace to. If a results-heavy talk names no evidence source, say so before step 4 rather than letting every results claim silently become a flag at step 5.
+
+### Golden-Page Gate
+
+Layout and craft rules cannot be enumerated up front — every full-deck review only surfaces the next layer of rules the author didn't think to state in advance. Gate the review cost instead of paying it once per full pass: the first deliverable of slide-text production (step 5) is not the full deck but 2-3 representative pages — one text-only, one equation-bearing, one table-bearing. The human reviews these pages deeply, and rules extracted from that review are written back into the workspace's layout/craft document (see Presentation Style Contract, above). Only after these representative pages pass does drafting expand to the remaining slides. This gate sits on top of, not instead of, the step-4 logic-gap gate: a backbone can clear step 4 and still need its golden pages re-cut before Section 3 is produced for the rest of the deck.
 
 ## Output Language
 
@@ -82,6 +105,7 @@ The artifact is produced in **two gated blocks**. Produce Block 1 first and stop
 - audience: <undergrad | master | mixed | expert>
 - budget: <N min, ~M slides>
 - source_logs: <path(s), or "see per-slide provenance">
+- style_contract: <resolved path | none provided>
 - backbone-origin: <human | AI-proposed>
 - status: step-4-pending
 
@@ -96,7 +120,7 @@ Severity: BLOCK = a story leap or term-used-before-definition that makes a later
 Human action: resolve every BLOCK item, then confirm to proceed.
 ```
 
-**Block 2 — produced only after the human clears all BLOCK items.**
+**Block 2 — produced only after the human clears all BLOCK items.** Produce Section 3 (Per-Slide Content) in two waves per the Golden-Page Gate (see Collection Strategy): first the 2-3 representative pages, then — only after the human passes those — the rest of the deck.
 
 ```markdown
 ## Section 2 — Deck Outline
@@ -110,7 +134,7 @@ Human action: resolve every BLOCK item, then confirm to proceed.
 
 ### Slide <N>: <Title>
 
-**Bullets**   <!-- <= ~6 words/bullet, <= ~5 bullets/slide, no complete academic sentences. Bad: "The proposed method achieves a lower error rate than the baseline." -> Good: "Lower error than baseline" -->
+**Bullets**   <!-- Default absent a workspace layout/craft document: <= ~6 words/bullet, <= ~5 bullets/slide, no complete academic sentences. If the workspace declares a layout/craft document with its own density model, that model governs instead. Bad: "The proposed method achieves a lower error rate than the baseline." -> Good: "Lower error than baseline" -->
 - <terse bullet>
 
 **Equation** (artifact, if any)
@@ -159,6 +183,8 @@ $$ <equation> $$
 9. **Figure proofread is flag-only.** The AI never edits a human-provided finished figure. Output a checklist of `[FLAG]` items; the human decides whether to act.
 10. **This is not the code-agent register.** The audience is humans in a room; do not slip into Decision / Reference / Task style. (Action-gating and the derivation subset rule are inherited from `shared-collaboration-rules.md`.)
 11. **Format-agnostic output.** Deliver structured markdown portable to any tool. Do not emit Beamer `.tex` or Keynote-specific markup unless the human requests a specific format.
+12. **Presenter test.** When drafting any page, first write out that page's speaker keyword chain — the short sequence of words that would be spoken narrating it aloud. A page whose narration cannot form a coherent chain is restructured, not delivered as drafted.
+13. **Report canvas geometry and font-size ratio.** Every delivery of slide content states the canvas geometry (page dimensions / aspect ratio) and the body-text font size expressed as a percentage of canvas width — not as an absolute point size. If the workspace's layout/craft document sets a specific target ratio, report against it; otherwise report the raw percentage for the human to judge.
 
 ## Do Not
 
