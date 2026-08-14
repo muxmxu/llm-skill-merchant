@@ -2,25 +2,24 @@
 
 ## Mode statement
 
-Whenever this kit is active, the assistant's top-level (tier-1) session works
-as an **orchestrator**, not an implementer. It runs a five-phase loop for any
-non-trivial request:
+Use this mode only for explicit dispatch, parallel work, external endpoints,
+high-risk delivery, or large-scale work. It is not the default for ordinary
+discussion, explanation, or one human-facing log. When it applies, the
+top-level session runs a five-phase loop:
 
 ```
 0. Clarify    — restate understanding; surface ambiguities; confirm
 1. Plan       — a short plan before dispatch, for anything non-trivial
 2. Decompose  — break the plan into self-contained dispatchable units
 3. Dispatch   — send each unit to a sub-agent / Workflow at its assigned model+effort
-4. Verify &   — adversarially check what comes back; report outcome,
+4. Verify &   — independently check what comes back; report outcome,
    Report       deviations, and what changes upstream
 ```
 
-Tier-1's own hands stay on **lightweight gates only**: repo pulls/fetches,
-quick asserts, snapshot/version checks, greps used to confirm acceptance
-criteria, and the conversation with the human. Every artifact produced,
-every piece of evidence gathered, and every review performed is done by a
-sub-agent or a Workflow — tier-1 never writes the deliverable itself, and
-never gathers the evidence that will end up quoted in it.
+The top-level session may write a small, human-facing response directly when
+that is the requested work. Delegate only when delegation improves reliability,
+coverage, or turnaround; do not create a completion pipeline for a simple
+conversation or a single log.
 
 ## Phase 0 — Clarification gate
 
@@ -49,9 +48,9 @@ output format, and the model/effort it should run at. Nothing is left
 implicit. The better the prompt, the further down the model-cost ladder
 tier-1 can safely delegate.
 
-Before any dispatch goes out, tier-1 works through a **bound-facts
-checklist** for the task: enumerate, item by item, every fact the task's
-correctness depends on — the exact run or checkpoint (path or ID), the
+Before a dispatch that can change external state or materially affect a result,
+tier-1 works through a **bound-facts checklist**: enumerate every fact whose
+mistake would change that result or external state — the exact run or checkpoint (path or ID), the
 dataset and its version, config-file paths, model and tool versions, the
 target environment identifier — and for each one either pin a precise value
 or name exactly where the sub-agent is to obtain it (which file to read,
@@ -70,8 +69,8 @@ from `ORCHESTRATION.md` (below).
 
 ## Quality defaults
 
-Every substantive deliverable clears an adversarial check before it reaches
-the human:
+High-risk or externally consequential deliverables clear an independent
+verification before they reach the human:
 
 - **Closed-book reverification** of any number that ends up quoted in a
   report — the checker re-derives it from source, not from the writer's own
@@ -87,10 +86,9 @@ that touches tabular or numeric data leaves a **re-runnable trace** (a
 script plus its source path), not just a pasted number, so the human or a
 future sub-agent can independently reproduce it.
 
-Phase 4's two halves are ordered, never interleaved: the outcome reaches the
-human only after the adversarial check has finished. Do not emit a running
-commentary while verification is still in progress, and never announce a
-result before it has been checked — verify, then report.
+Keep process status in an orchestration worklog. Surface it in ordinary prose
+only when it changes a research conclusion, decision, or the user's next
+action.
 
 ## Human intervention and channel selection
 
@@ -180,8 +178,7 @@ Marker: first line of the doc is `<!-- runbook-contract: ra-orchestration v1 -->
 
 ### Doc resolution
 
-- Needed at the start of essentially every non-trivial task, since RA
-  Orchestration Mode is always on — tier-1 resolves a profile before its
+- Needed when this orchestration mode is selected; resolve a profile before the
   first dispatch call.
 - Doc missing → say so once, fall back to the built-in conservative default
   profile (below) for the current task, and proactively offer to draft the
@@ -195,7 +192,7 @@ Marker: first line of the doc is `<!-- runbook-contract: ra-orchestration v1 -->
   to conform/upgrade. Never hard-fail on a version mismatch.
 - A task spans multiple task types → resolve each covered role
   (clarification depth, writer, semantic reviewer, mechanical auditor,
-  adversarial-check strength) to the **more capable assignment** among the
+  independent-verification strength) to the **more capable assignment** among the
   matching rows. Never average down to the weaker row.
 
 ### Built-in conservative default profile
@@ -209,19 +206,19 @@ consistent with the Genericity rule below:
 - Semantic reviewer: a top-tier reasoning model.
 - Mechanical auditor: a capable mid-tier model, high effort.
 - Clarification depth: one round, ask-if-ambiguous.
-- Adversarial-check strength: full (closed-book + snapshot diff).
+- Independent-verification strength: full (closed-book + snapshot diff).
 
 ### Required columns (exact names)
 
 ```
 Task Type | Clarification Depth | Writer | Semantic Reviewer |
-Mechanical Auditor | Adversarial-Check Strength | Notes
+Mechanical Auditor | Independent Verification Strength | Notes
 ```
 
 Column names may be localized to the workspace's working language, as long
 as each localized column's order and semantics map one-to-one to this
 schema (e.g. a Chinese `ORCHESTRATION.md` may render the header row as
-任务类型 / 澄清深度 / writer / 语义 reviewer / 机械审计 / 对抗检查 / 备注).
+任务类型 / 澄清深度 / writer / 语义 reviewer / 机械审计 / 独立核验 / 备注).
 
 - **Task Type** — the kind of work being dispatched (paper writing,
   literature survey, evidence-pack assembly, slide/figure production, log
@@ -235,11 +232,11 @@ schema (e.g. a Chinese `ORCHESTRATION.md` may render the header row as
   meaning (not raw numbers).
 - **Mechanical Auditor** — model + effort that does closed-book
   number-checking and completeness sweeps.
-- **Adversarial-Check Strength** — how hard the Quality Defaults check runs
+- **Independent Verification Strength** — how hard the Quality Defaults check runs
   for this task type (e.g. "required: closed-book + snapshot diff",
   "single-pass recheck", "skip — low-stakes").
 - **Notes** — task-type-specific discipline that doesn't fit another column
-  (e.g. a log-writing row noting AI authorship stays unrecorded; a survey
+  (e.g. a log-writing row pointing to the workspace's author-source rule; a survey
   row noting numbers need independent verification before entering the
   vault).
 
