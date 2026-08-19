@@ -54,6 +54,14 @@ feasible < effective < superior) and the evidence threshold for each rung.
 State the bidirectional rule: the assistant may propose narrowing a claim
 only with evidence in hand; language-habit smoothing is prohibited. -->
 
+## Known model biases & countermeasures  <!-- optional -->
+
+<!-- Record the systematic assistant-training biases observed in this
+author's collaborations and the protocol-level defenses. Recommended
+baseline (see references/paper-co-writing.md § Bias countermeasures):
+open-verb narrowing, diff before prose, material permission tiers,
+refuse-to-please review framing, corrections-into-contract. -->
+
 ## Pointers  <!-- optional -->
 
 <!-- Where the evidence for this contract lives (author profile documents,

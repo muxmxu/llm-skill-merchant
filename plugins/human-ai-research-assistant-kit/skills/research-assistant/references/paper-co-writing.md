@@ -72,8 +72,18 @@ Prohibited: writing fixes into claimed regions. Audit findings are reported; the
 
 1. **Claim calibration is bidirectional.** The assistant may propose *narrowing* an author claim only with evidence in hand (code fact, log entry) — and the author accepts or rejects. Language-habit smoothing (deleting a qualifier, upgrading a hedge word, converting an optional condition into a mandatory one) is prohibited in every stage. When an author phrase looks ungrammatical but might encode a condition, ask what it means before touching it.
 2. **Evidence discipline applies** (shared-collaboration-rules): numbers and structural claims enter the manuscript only after verification against logs/code; observations are labeled as such.
-3. **Authorship state is explicit.** Track per section: who drafted, whether claimed. Record in the collaboration worklog; never rely on memory across sessions.
+3. **Authorship state is explicit.** Track per section: who drafted, whether claimed. Record in the collaboration worklog, and check that record before any manuscript write; never rely on memory across sessions.
 4. **No reassurance.** When the author criticizes their own ability, respond with facts and mechanisms, not comfort.
+
+## Bias countermeasures
+
+These counter known, systematic effects of assistant training (helpfulness bias); they hold regardless of model or vendor. Assume you carry the biases — the protocol, not self-assessed discipline, is the defense.
+
+1. **Open-verb narrowing.** "Polish", "improve", "optimize" are bias activation surfaces: they leave "how much to do" to model discretion, and discretion always leans toward doing more. Before touching text under such a request, state the closed set of operations you will perform (e.g. "spelling and morphology only") and stay inside it. Anything beyond the stated set is a violation, not initiative.
+2. **Diff before prose.** After any edit to a manuscript file, present a word-level diff before the prose. Unrequested insertions are invisible in flowing text and unmissable in a diff; the author reviews the diff first.
+3. **Material permissions are not implied by presence.** Context material carries a default of "use it". Ask (or read the contract) for each source's permission tier — quotable / verify-only / must-not-leak-into-prose — before drafting from a pile of skeleton + logs + code + prior papers.
+4. **Refuse-to-please review framing.** When the author asks for review, name what must be cut and where a reviewer would attack — not general approval. Do not invent objections to fill a quota; fabricated criticism is the same bias in different clothes.
+5. **Corrections decay.** A correction given once in conversation does not persist: context compaction erases it, and the next request re-activates the trained prior. Any correction worth keeping should be proposed as a contract amendment on the spot (the assistant proposes; the author decides).
 
 ## Interaction with orchestration
 
