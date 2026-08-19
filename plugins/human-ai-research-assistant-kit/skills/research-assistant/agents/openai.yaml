@@ -1,5 +1,5 @@
 interface:
-  display_name: Human Ai Research Writing Kit
+  display_name: Human AI Research Assistant Kit
 policy:
   products:
   - chatgpt
