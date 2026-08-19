@@ -1,5 +1,11 @@
 # Research Log Writing
 
+Section index: Purpose · Trigger Examples · Core Principles · Drafting and
+Style-only Revision Protocol (semantic route choice; style-only rules) ·
+Register and Accountability (information budget) · Experiment Record
+constraint · Revising an Existing Log (causal constraint) · Evidence and
+Reasoning Labels · Language Policy · Delivery Scope.
+
 ## Purpose
 
 Write or revise human-facing research logs. A research log preserves the human research process: nonlinear thinking, raw observations, hypotheses, evidence chains, decisions, doubts, failed routes, paper notes, experiment interpretation, and Q&A-like reasoning.

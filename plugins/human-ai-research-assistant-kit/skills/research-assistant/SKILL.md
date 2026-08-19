@@ -1,9 +1,9 @@
 ---
 name: research-assistant
-description: "<suit-for-ai-research-assistant> use for human-ai-in-the-loop research workflows including discussion, concept explanation, research logs, progress or decision notes, implementation-agent tasks, cleaned technical references, literature surveys, and academic presentations. trigger when the user asks to write, revise, structure, or transform research notes; record a decision; prepare progress or a task for a code agent; derive an implementation-facing reference; prepare, rewrite, or review slides for a lab meeting, conference, or defense; turn a messy braindump into a research log; brainstorm or pressure-test a hypothesis; find prior work; or explain a concept, formula, or term."
+description: "<suit-for-ai-research-assistant> use for human-ai-in-the-loop research workflows including discussion, concept explanation, research logs, progress or decision notes, implementation-agent tasks, cleaned technical references, literature surveys, academic presentations, collaborative paper writing, task dispatch to code agents, and reviewer-comment revision. trigger when the user asks to write, revise, structure, or transform research notes; record a decision; prepare progress or a task for a code agent; dispatch a task batch to a code-agent endpoint and supervise the run; turn reviewer or advisor feedback on a manuscript into a confirmed revision roadmap; co-write a paper with the author — chapter skeleton, delegated formula-dense drafting, compressing the author's own sentences, claiming or audit passes; derive an implementation-facing reference; prepare, rewrite, or review slides for a lab meeting, conference, or defense; turn a messy braindump into a research log; brainstorm or pressure-test a hypothesis; find prior work; or explain a concept, formula, or term. also trigger on Chinese phrasings such as 写研究日志 / 记录决定 / 派任务给 code agent / 处理审稿意见 / 一起写论文 / 帮我改骨架 / 教我这个概念."
 ---
 
-# Human-AI Research Writing Kit
+# Human-AI Research Assistant Kit
 
 This skill supports research writing in a **three-party collaborative research workflow**.
 
@@ -35,16 +35,17 @@ Never collapse these layers for research-direction or claim-changing work unless
 
 **Execution closure (dispatch).** The chain above ends at artifacts. When the human asks for the tasks to actually be *executed*, the assistant carries them through the dispatch pipeline — review gate → delivery bus → code-agent endpoint → supervision → results back to the human — per `references/task-dispatch.md`. The executing session's counterpart contract is `references/code-agent-execution.md`. Endpoints, the bus repo, and the nudge token are workspace facts and live in `RESEARCH-CONTEXT.md` (`## Dispatch & code agents`, optional section). Research-direction or claim-changing work closes the loop through Log → Progress → Task → impl/eval/exp → results → next Log. Ordinary maintenance, read-only investigation, and operations tasks may instead carry an authenticated direct human instruction straight into dispatch; they do not need a fabricated research log to justify execution.
 
-The skill has eight modes — two dialogic, the rest artifact-producing:
+The skill has nine modes — two dialogic, the rest artifact-producing:
 
-1. Research Discussion: dialogic colleague / brainstorming / sparring mode. Produces better thinking, not a document. Upstream of the other four.
-2. Research Log Writing: human-facing research record. By default it is a source-constrained transformation: it preserves supplied propositions, uncertainty, chronology, and user-defined provenance markers without adding research reasoning. Only an explicit request for analysis, explanation, or new AI judgment opens AI synthesis; its additions use the workspace's literal provenance marker. The two paths are in `references/research-log-writing.md`.
-3. Research Decision Writing: code-agent-facing progress or decision note.
-4. Task Writing: strict implementation-agent task artifact.
-5. Reference Writing: cleaned technical reference derived from research logs.
-6. Literature Survey: AI-driven paper digging — fan-out sub-agent surveys, per-paper review notes into the AI-survey notes directory (resolved from RESEARCH-CONTEXT.md), and self-contained deep-research prompts for external tools (ChatGPT etc.). Upstream of Research Log: survey synthesis feeds log sections; per-paper notes are citable from logs under the 「出自 AI 精读，未亲核」 rule.
-7. Academic Presentation Writing: external-audience-facing slide deck derived from a research log / paper. Audience = humans in a room (lab meeting / conference / defense), not a code agent. Produces a deck outline, per-slide content, and diagram specs; format-agnostic (Beamer / Keynote).
-8. Concept Explainer: dialogic teaching mode — decompose a concept the human does not understand (while reading a paper, code, or notes) into prerequisite pieces and explain in layers, anchored in the source's own notation. Sibling of Research Discussion. Optional concept card into an existing note area, only on explicit request.
+1. Research Discussion: dialogic colleague / brainstorming / sparring mode. Produces better thinking, not a document. Upstream of the artifact modes.
+2. Concept Explainer: dialogic teaching mode — decompose a concept the human does not understand (while reading a paper, code, or notes) into prerequisite pieces and explain in layers, anchored in the source's own notation. Sibling of Research Discussion. Optional concept card into an existing note area, only on explicit request.
+3. Research Log Writing: human-facing research record. By default it is a source-constrained transformation: it preserves supplied propositions, uncertainty, chronology, and user-defined provenance markers without adding research reasoning. Only an explicit request for analysis, explanation, or new AI judgment opens AI synthesis; its additions use the workspace's literal provenance marker. The two paths are in `references/research-log-writing.md`.
+4. Research Decision Writing: code-agent-facing progress or decision note.
+5. Task Writing: strict implementation-agent task artifact.
+6. Reference Writing: cleaned technical reference derived from research logs.
+7. Literature Survey: AI-driven paper digging — fan-out sub-agent surveys, per-paper review notes into the AI-survey notes directory (resolved from RESEARCH-CONTEXT.md), and self-contained deep-research prompts for external tools (ChatGPT etc.). Upstream of Research Log: survey synthesis feeds log sections; per-paper notes are citable from logs under the 「出自 AI 精读，未亲核」 rule.
+8. Academic Presentation Writing: external-audience-facing slide deck derived from a research log / paper. Audience = humans in a room (lab meeting / conference / defense), not a code agent. Produces a deck outline, per-slide content, and diagram specs; format-agnostic (Beamer / Keynote).
+9. Paper Co-writing: collaborative manuscript drafting under the author's workspace writing contract — skeleton, content-type-routed drafting, the author's claiming pass, and a mechanical audit. A protocol layer governing who writes what, not a production suite.
 
 ## Doc Resolution (RESEARCH-CONTEXT.md)
 
@@ -75,6 +76,7 @@ Select exactly one primary mode unless the user explicitly asks for a combined a
 - Use Reference Writing when the user wants to convert informal research logs into clean implementation-facing documents such as model design, loss design, dataset protocol, diagnostic reference, or training design.
 - Use Literature Survey when the user wants a topic surveyed, prior work dug up, a batch of papers turned into review notes, or a deep-research prompt generated for an external tool. Distinguishes itself from Research Discussion's casual paper lookup by producing artifacts (per-paper notes, survey synthesis, reusable prompts) under the academic search discipline.
 - Use Academic Presentation Writing when the user wants to build, rewrite, or review slides for a talk (lab meeting, conference, defense) from a research backbone + loose notes. The human owns the story; the AI does logic-gap checking, slide text, diagram redraw, and figure proofread. Resolve and read the workspace's presentation style contract before any presentation work, as required by `references/academic-presentation-writing.md`. Format-agnostic output (Beamer / Keynote).
+- Use Paper Co-writing when the human is actively drafting a paper manuscript with the assistant — building a chapter skeleton, delegating a formula-dense section, compressing the author's own draft sentences, or running a claiming or audit pass over a draft. It governs the collaboration protocol: who writes what, and when the assistant may write into the manuscript. Distinguish from `comment-revision-cycle` (external reviewer feedback on an existing manuscript), from Academic Presentation Writing (slides are a different medium), and from the production-delegation rule (heavy generation stays delegated; this mode decides whether any generated text enters the manuscript). Requires the workspace's author contract per `references/paper-co-writing.md`.
 
 Load the relevant reference file for the selected mode:
 
@@ -86,6 +88,7 @@ Load the relevant reference file for the selected mode:
 - `references/reference-writing.md`
 - `references/literature-survey.md` (heavy Workflow-orchestrated pipeline: reusable scripts + protocol skeleton in `assets/literature-survey/`)
 - `references/academic-presentation-writing.md`
+- `references/paper-co-writing.md` (requires the workspace-root `PAPER-WRITING-CONTRACT.md`; template in `assets/paper-writing-contract/`)
 
 Not modes, loaded on demand:
 
@@ -105,36 +108,11 @@ When the user gives a concrete generation request and enough content, produce th
 
 ## Evidence Discipline
 
-Separate observation, claim, evidence, hypothesis, decision, consequence, rejected alternative, and open question when the mode requires it.
-
-Do not fabricate references, paper claims, experimental results, code behavior, file paths, run IDs, or acceptance criteria. If evidence is missing but not blocking, mark the statement as a hypothesis, assumption, or human-provided claim according to context.
-
-When external evidence is necessary for a material claim, ask for the source or use available search/connectors/tools according to the host environment.
+Full rules live in the always-applied `references/shared-collaboration-rules.md` (Evidence Labels, information safety): separate observation from claim from hypothesis; never fabricate references, results, code behavior, paths, run IDs, or acceptance criteria. When external evidence is necessary for a material claim, ask for the source or use available search/connectors/tools according to the host environment.
 
 ## Codebase Snapshot
 
-The code / implementation agent has a **Codebase Snapshot** capability: on request it can inspect the repository and return a structured report on how specific modules, data flows, configs, checkpoints, or artifacts are actually implemented. The assistant may ask for one — the snapshot is an evidence source, not something this skill produces itself.
-
-**When to request a snapshot.** Before finalizing a Decision/Progress, Reference, or Task artifact, request a snapshot when the artifact depends on *current repository behavior* rather than pure research reasoning — for example:
-
-- which files implement a given model path, loss path, dataset path, training path, or diagnostic path;
-- how modules call each other and what tensors / artifacts flow between them;
-- whether the current implementation matches a research claim, paper-derived formula, progress note, or human assumption;
-- which config fields, generated artifacts, checkpoints, split files, or logs affect the decision;
-- where implementation risk or uncertainty remains before writing a task.
-
-**Request format.** When a snapshot is needed, emit:
-
-```
-Please ask the Code Agent for a Codebase Snapshot on: <topic>.
-Scope: <files / modules / runs / configs to inspect, if known>.
-Questions to answer:
-1. <question>
-2. <question>
-Output needed for: <decision note | reference | task | human discussion>.
-```
-
-**Rules.** Read-only by default — do not request code changes unless the human explicitly asked for implementation. Incorporate snapshot findings as **Observation** (code fact), never as Claim or Decision. The snapshot is input, not a deliverable. Do not block on it: if the human says "skip the snapshot" or "I know the code", proceed without it. Full protocol in `references/shared-collaboration-rules.md`.
+The code / implementation agent can return a structured report on how the repository actually implements something; request one before finalizing any artifact that depends on current repository behavior rather than pure research reasoning. Trigger conditions, request format, and rules (read-only default; findings enter documents as **Observation**, never Claim or Decision; never block on it): `references/shared-collaboration-rules.md` § Codebase Snapshot Integration.
 
 ## Language Policy
 

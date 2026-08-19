@@ -142,7 +142,11 @@ DISPATCH task_id=<id> revision=<uint>
 the `tmux send-keys -l` argument) from these two fields through a native
 argv or structured send API — never by shell string concatenation, `eval`,
 or free-form payload text, and never with task content, chat text, or
-anything outside the grammar folded in. The task files carry the detail:
+anything outside the grammar folded in: any free-form path lets task
+content or chat text reach the shell as code (an injection surface), and
+the whitelist above is only enforceable when the command is built
+structurally. `assets/task-dispatch/validate-kickoff.sh` validates and
+prints a safe kickoff line. The task files carry the detail:
 pull the bus → read progress + tasks → execute per
 `code-agent-execution.md` → deliver via the bus. Late additions (a new task
 in the same batch) are pushed to the bus first, then announced with the

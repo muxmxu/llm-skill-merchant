@@ -1,7 +1,7 @@
 {
   "name": "human-ai-research-assistant-kit",
-  "description": "AI Research Assistant side of the human-AI research collaboration model <suit-for-ai-research-assistant>: the thinking/writing/translation layer between informal human research and implementation-facing artifacts. One kit skill with eight modes — research discussion (sparring), concept explaining (teach-me), research log writing (incl. braindump-to-log protocol), decision/progress notes, code-agent tasks, technical references, literature survey fan-out, academic presentation writing. Doc-contract-driven: workspace facts live in the workspace-root RESEARCH-CONTEXT.md (portable via init). Register discipline, evidence labels, three-layer memory rule, and derivation-chain information safety built in.",
-  "version": "1.2.3",
+  "description": "AI Research Assistant side of the human-AI research collaboration model <suit-for-ai-research-assistant>: the thinking/writing/translation layer between informal human research and implementation-facing artifacts. One kit skill with nine modes — research discussion (sparring), concept explaining (teach-me), research log writing (incl. braindump-to-log protocol), decision/progress notes, code-agent tasks, technical references, literature survey fan-out, academic presentation writing, paper co-writing under a workspace author contract (PAPER-WRITING-CONTRACT.md). Doc-contract-driven: workspace facts live in the workspace-root RESEARCH-CONTEXT.md (portable via init). Register discipline, evidence labels, three-layer memory rule, and derivation-chain information safety built in.",
+  "version": "1.3.0",
   "author": {
     "name": "mux"
   }

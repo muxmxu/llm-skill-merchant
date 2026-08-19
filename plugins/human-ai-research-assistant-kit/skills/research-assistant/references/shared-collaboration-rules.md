@@ -97,6 +97,8 @@ Use these labels when helpful:
 
 Do not present unsupported hypotheses as facts.
 
+These labels classify *what kind of statement* something is. The provenance tags defined in `research-discussion.md` (`[Human-reported]`, `[Literature]`, `[Code-fact]`, …) classify *where it came from*; the two systems compose — one statement may carry both — and their shared words (Hypothesis, Claim) mean the same thing in either notation.
+
 ## Memory Layering
 
 Research memory lives in three layers. Keep them separate:
