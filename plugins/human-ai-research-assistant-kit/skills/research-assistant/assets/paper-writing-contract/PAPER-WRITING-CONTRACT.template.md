@@ -2,9 +2,10 @@
 # PAPER-WRITING-CONTRACT
 
 <!--
-Template for the workspace-root author contract consumed by the Paper
+Template for the workspace author contract consumed by the Paper
 Co-writing mode (references/paper-co-writing.md). Copy to the research
-workspace root as PAPER-WRITING-CONTRACT.md, keep the marker line above as
+workspace's merchant_skill_contract/HUMAN-AI-RA-CONTRACT/ directory as
+PAPER-WRITING-CONTRACT.md, keep the marker line above as
 line 1, and fill every required section. The contract is human-owned: the
 assistant proposes amendments but never edits it unilaterally. Write it in
 whichever language the author works in — the skill reads either.

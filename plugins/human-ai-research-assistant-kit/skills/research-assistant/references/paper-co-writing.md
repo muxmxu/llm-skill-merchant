@@ -10,14 +10,14 @@ What this mode is **not**:
 
 ## The author contract (doc contract)
 
-Every author collaborates differently, and the difference is not noise — it is the author's writing identity. All author-specific rules live in a workspace-root doc:
+Every author collaborates differently, and the difference is not noise — it is the author's writing identity. All author-specific rules live in a workspace contract doc:
 
 ```
-PAPER-WRITING-CONTRACT.md        (workspace root)
+merchant_skill_contract/HUMAN-AI-RA-CONTRACT/PAPER-WRITING-CONTRACT.md
 first line: <!-- runbook-contract: paper-writing v1 -->
 ```
 
-Resolution rules (same discipline as RESEARCH-CONTEXT.md):
+Resolve it per SKILL.md § Doc Resolution (RESEARCH-CONTEXT.md pointer first, then the contract directory, then the workspace root as legacy fallback). Resolution rules (same discipline as RESEARCH-CONTEXT.md):
 
 1. **Read the whole contract before writing anything into a manuscript.** The contract is a contract, not background advice. Skimming, or recalling a summary from a previous session, does not count.
 2. Contract missing → offer to initialize from `assets/paper-writing-contract/PAPER-WRITING-CONTRACT.template.md`. Interview the author only for genuine gaps; propose defaults from observed collaboration history where it exists. Never write manuscript prose for an author whose contract does not exist and who has declined to create one — fall back to explicit per-request instructions.

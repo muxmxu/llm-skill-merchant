@@ -1,6 +1,6 @@
 ---
 name: slack-message-drafting
-description: "<suit-for-ai-research-assistant> draft Slack messages the user will send manually, with the register (length, politeness, structure) resolved per recipient from the workspace-root SLACK-MESSAGE-TONE.md. Trigger when the user asks to draft, word, shorten, or restructure a Slack message; to compose a question for an advisor or colleague; or to write a reply to a pasted Slack message. Drafting only — this skill never sends anything."
+description: "<suit-for-ai-research-assistant> draft Slack messages the user will send manually, with the register (length, politeness, structure) resolved per recipient from the workspace's SLACK-MESSAGE-TONE.md (in merchant_skill_contract/SLACK-MESSAGE-CONTRACT/, falling back to the workspace root). Trigger when the user asks to draft, word, shorten, or restructure a Slack message; to compose a question for an advisor or colleague; or to write a reply to a pasted Slack message. Drafting only — this skill never sends anything."
 ---
 
 # Slack Message Drafting
@@ -13,8 +13,8 @@ Never send, schedule, or post a message through any Slack tool (MCP or otherwise
 
 ## Tone resolution
 
-1. Read `SLACK-MESSAGE-TONE.md` at the current workspace root. It defines recipient profiles (register, language, question form, evidence-backed rules) and shared formatting rules. Its rules override the generic defaults below.
-2. If the file does not exist: say so, offer to create it from `assets/SLACK-MESSAGE-TONE.template.md` (in this skill), and for the current draft ask the user for the minimum recipient facts (who, language, expected length/politeness) instead of guessing.
+1. Read the workspace's `SLACK-MESSAGE-TONE.md`. Look for it at `merchant_skill_contract/SLACK-MESSAGE-CONTRACT/SLACK-MESSAGE-TONE.md` under the current workspace root first, then at the workspace root itself (legacy location — use it and propose migrating it once). It defines recipient profiles (register, language, question form, evidence-backed rules) and shared formatting rules. Its rules override the generic defaults below.
+2. If the file exists at neither location: say so, offer to create it in `merchant_skill_contract/SLACK-MESSAGE-CONTRACT/` from `assets/SLACK-MESSAGE-TONE.template.md` (in this skill), and for the current draft ask the user for the minimum recipient facts (who, language, expected length/politeness) instead of guessing.
 
 ## Audience resolution
 

@@ -159,8 +159,9 @@ The research-assistant kit carries this mode's methodology only; which
 model/effort handles which task type is a workspace fact, and workspace
 facts do not belong in the kit (same separation `research-context.md`
 enforces for `RESEARCH-CONTEXT.md`). That fact lives in a file the skill
-reads: `ORCHESTRATION.md`, at the research-workspace root, alongside
-`RESEARCH-CONTEXT.md`.
+reads: `ORCHESTRATION.md`, resolved per SKILL.md § Doc Resolution — the
+workspace's `merchant_skill_contract/HUMAN-AI-RA-CONTRACT/` directory, with
+the workspace root as legacy fallback.
 
 Marker: first line of the doc is `<!-- runbook-contract: ra-orchestration v1 -->`.
 

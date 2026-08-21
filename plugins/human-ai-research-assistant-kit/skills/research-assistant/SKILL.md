@@ -1,6 +1,6 @@
 ---
 name: research-assistant
-description: "<suit-for-ai-research-assistant> use for human-ai-in-the-loop research workflows including discussion, concept explanation, research logs, progress or decision notes, implementation-agent tasks, cleaned technical references, literature surveys, academic presentations, collaborative paper writing, task dispatch to code agents, and reviewer-comment revision. trigger when the user asks to write, revise, structure, or transform research notes; record a decision; prepare progress or a task for a code agent; dispatch a task batch to a code-agent endpoint and supervise the run; turn reviewer or advisor feedback on a manuscript into a confirmed revision roadmap; co-write a paper with the author — chapter skeleton, delegated formula-dense drafting, compressing the author's own sentences, claiming or audit passes; derive an implementation-facing reference; prepare, rewrite, or review slides for a lab meeting, conference, or defense; turn a messy braindump into a research log; brainstorm or pressure-test a hypothesis; find prior work; or explain a concept, formula, or term. also trigger on Chinese phrasings such as 写研究日志 / 记录决定 / 派任务给 code agent / 处理审稿意见 / 一起写论文 / 帮我改骨架 / 教我这个概念."
+description: "<suit-for-ai-research-assistant> use for human-ai-in-the-loop research workflows including discussion, concept explanation, research logs, progress or decision notes, implementation-agent tasks, cleaned technical references, literature surveys, academic presentations, collaborative paper writing, venue-anchored simulated review, task dispatch to code agents, and reviewer-comment revision. trigger when the user asks to write, revise, structure, or transform research notes; record a decision; prepare progress or a task for a code agent; dispatch a task batch to a code-agent endpoint and supervise the run; turn reviewer or advisor feedback on a manuscript into a confirmed revision roadmap; co-write a paper with the author — chapter skeleton, delegated formula-dense drafting, compressing the author's own sentences, claiming or audit passes; run a simulated peer review of a manuscript against a specific venue's official standard, or build/update a venue review checklist from a venue's editorial policy; derive an implementation-facing reference; prepare, rewrite, or review slides for a lab meeting, conference, or defense; turn a messy braindump into a research log; brainstorm or pressure-test a hypothesis; find prior work; or explain a concept, formula, or term. also trigger on Chinese phrasings such as 写研究日志 / 记录决定 / 派任务给 code agent / 处理审稿意见 / 一起写论文 / 帮我改骨架 / 教我这个概念 / 模拟审稿 / 按会议标准审一轮 / 建一份审稿 checklist."
 ---
 
 # Human-AI Research Assistant Kit
@@ -31,11 +31,11 @@ Research Log   → human-facing       → source-of-thinking         (preserve u
 
 Never collapse these layers for research-direction or claim-changing work unless the human explicitly asks for a combined artifact. When deriving one artifact from another, preserve the correct audience and abstraction level.
 
-**Production delegation.** Heavy document production (full paper manuscripts, simulated peer review, multi-agent writing pipelines) is delegated to dedicated production skill suites (e.g. academic-research-skills) rather than rebuilt in this kit. This kit owns the evidence layer: research logs remain the source of truth, it prepares the evidence pack going in, and it checks the returned product against the log under the subset rule (`references/shared-collaboration-rules.md`).
+**Production delegation.** Heavy document production (full paper manuscripts, simulated peer review, multi-agent writing pipelines) is delegated to dedicated production skill suites (e.g. academic-research-skills) rather than rebuilt in this kit. This kit owns the evidence layer: research logs remain the source of truth, it prepares the evidence pack going in, and it checks the returned product against the log under the subset rule (`references/shared-collaboration-rules.md`). For simulated peer review specifically, the Venue Review mode is the protocol layer governing that delegation — rubric resolution, invocation discipline, and verification of the returned findings.
 
 **Execution closure (dispatch).** The chain above ends at artifacts. When the human asks for the tasks to actually be *executed*, the assistant carries them through the dispatch pipeline — review gate → delivery bus → code-agent endpoint → supervision → results back to the human — per `references/task-dispatch.md`. The executing session's counterpart contract is `references/code-agent-execution.md`. Endpoints, the bus repo, and the nudge token are workspace facts and live in `RESEARCH-CONTEXT.md` (`## Dispatch & code agents`, optional section). Research-direction or claim-changing work closes the loop through Log → Progress → Task → impl/eval/exp → results → next Log. Ordinary maintenance, read-only investigation, and operations tasks may instead carry an authenticated direct human instruction straight into dispatch; they do not need a fabricated research log to justify execution.
 
-The skill has nine modes — two dialogic, the rest artifact-producing:
+The skill has ten modes — two dialogic, the rest artifact-producing:
 
 1. Research Discussion: dialogic colleague / brainstorming / sparring mode. Produces better thinking, not a document. Upstream of the artifact modes.
 2. Concept Explainer: dialogic teaching mode — decompose a concept the human does not understand (while reading a paper, code, or notes) into prerequisite pieces and explain in layers, anchored in the source's own notation. Sibling of Research Discussion. Optional concept card into an existing note area, only on explicit request.
@@ -46,14 +46,23 @@ The skill has nine modes — two dialogic, the rest artifact-producing:
 7. Literature Survey: AI-driven paper digging — fan-out sub-agent surveys, per-paper review notes into the AI-survey notes directory (resolved from RESEARCH-CONTEXT.md), and self-contained deep-research prompts for external tools (ChatGPT etc.). Upstream of Research Log: survey synthesis feeds log sections; per-paper notes are citable from logs under the 「出自 AI 精读，未亲核」 rule.
 8. Academic Presentation Writing: external-audience-facing slide deck derived from a research log / paper. Audience = humans in a room (lab meeting / conference / defense), not a code agent. Produces a deck outline, per-slide content, and diagram specs; format-agnostic (Beamer / Keynote).
 9. Paper Co-writing: collaborative manuscript drafting under the author's workspace writing contract — skeleton, content-type-routed drafting, the author's claiming pass, and a mechanical audit. A protocol layer governing who writes what, not a production suite.
+10. Venue Review: pre-submission simulated review of a manuscript against a specific venue's official standard. Resolves or builds the venue's mechanical review checklist (a workspace contract doc), delegates the review round to a production review suite under strict invocation discipline, and returns verified findings as a comment batch feeding `comment-revision-cycle`. A protocol layer, not a review panel.
 
-## Doc Resolution (RESEARCH-CONTEXT.md)
+## Doc Resolution (RESEARCH-CONTEXT.md and the contract directory)
 
 Workspace facts (vault paths, literature library, note spaces, code repos) live in `RESEARCH-CONTEXT.md` at the research-workspace root — not in this skill. Contract, resolution rules, and the init procedure: `references/research-context.md`.
 
 - The doc is needed only when the selected mode touches workspace resources (vault writes, literature paths, note-space resolution). Pure conversation proceeds without it.
 - Doc missing → say so and offer init; do not guess paths from the workspace.
 - A required section missing → ask the user; do not infer its content.
+
+**Contract directory.** `RESEARCH-CONTEXT.md` itself always sits at the workspace root (it is the bootstrap anchor). Every *other* workspace contract doc this kit consumes — the orchestration table (`ORCHESTRATION.md`), the paper-writing contract, presentation style/layout contracts, tone contracts, venue review checklists — lives in a dedicated directory under the workspace root:
+
+```
+merchant_skill_contract/HUMAN-AI-RA-CONTRACT/
+```
+
+Resolution order for any such contract: (1) an explicit pointer in `RESEARCH-CONTEXT.md` wins; (2) the contract directory above; (3) legacy fallback — the workspace root. When a contract is found only at a legacy location, use it and propose migrating it into the contract directory once; do not silently duplicate it.
 
 ## RA Orchestration Workmode (when needed)
 
@@ -77,6 +86,7 @@ Select exactly one primary mode unless the user explicitly asks for a combined a
 - Use Literature Survey when the user wants a topic surveyed, prior work dug up, a batch of papers turned into review notes, or a deep-research prompt generated for an external tool. Distinguishes itself from Research Discussion's casual paper lookup by producing artifacts (per-paper notes, survey synthesis, reusable prompts) under the academic search discipline.
 - Use Academic Presentation Writing when the user wants to build, rewrite, or review slides for a talk (lab meeting, conference, defense) from a research backbone + loose notes. The human owns the story; the AI does logic-gap checking, slide text, diagram redraw, and figure proofread. Resolve and read the workspace's presentation style contract before any presentation work, as required by `references/academic-presentation-writing.md`. Format-agnostic output (Beamer / Keynote).
 - Use Paper Co-writing when the human is actively drafting a paper manuscript with the assistant — building a chapter skeleton, delegating a formula-dense section, compressing the author's own draft sentences, or running a claiming or audit pass over a draft. It governs the collaboration protocol: who writes what, and when the assistant may write into the manuscript. Distinguish from `comment-revision-cycle` (external reviewer feedback on an existing manuscript), from Academic Presentation Writing (slides are a different medium), and from the production-delegation rule (heavy generation stays delegated; this mode decides whether any generated text enters the manuscript). Requires the workspace's author contract per `references/paper-co-writing.md`.
+- Use Venue Review when the human wants a manuscript reviewed against a specific venue's standard before submission — a simulated peer-review round, a desk-check against the venue's compliance rules, or the construction/update of a venue review checklist from official editorial policy. Distinguish from `comment-revision-cycle` (which consumes a feedback batch; Venue Review produces one) and from a generic quality pass (this mode requires a venue anchor or explicitly says none applies). Rubric resolution, checklist construction, delegation discipline, and result handling per `references/venue-review.md`.
 
 Load the relevant reference file for the selected mode:
 
@@ -88,7 +98,8 @@ Load the relevant reference file for the selected mode:
 - `references/reference-writing.md`
 - `references/literature-survey.md` (heavy Workflow-orchestrated pipeline: reusable scripts + protocol skeleton in `assets/literature-survey/`)
 - `references/academic-presentation-writing.md`
-- `references/paper-co-writing.md` (requires the workspace-root `PAPER-WRITING-CONTRACT.md`; template in `assets/paper-writing-contract/`)
+- `references/paper-co-writing.md` (requires the workspace's `PAPER-WRITING-CONTRACT.md`, resolved per § Doc Resolution; template in `assets/paper-writing-contract/`)
+- `references/venue-review.md` (venue checklists live in the contract directory's `venue-checklists/`; template in `assets/venue-review-checklist/`)
 
 Not modes, loaded on demand:
 
