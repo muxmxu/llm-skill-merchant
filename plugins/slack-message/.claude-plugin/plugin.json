@@ -1,6 +1,6 @@
 {
   "name": "slack-message",
-  "description": "Slack message drafting <suit-for-ai-research-assistant>: audience-register-driven drafting (from-scratch and reply modes) with per-workspace SLACK-MESSAGE-TONE.md recipient profiles. /slack-message:tof exports to a file, /slack-message:cp copies to the clipboard. Drafting only — never sends.",
+  "description": "Slack message drafting <suit-for-ai-research-assistant>: audience-register-driven drafting (from-scratch and reply modes) with per-workspace SLACK-MESSAGE-TONE.md recipient profiles (in merchant_skill_contract/SLACK-MESSAGE-CONTRACT/, workspace root as legacy fallback). /slack-message:tof exports to a file, /slack-message:cp copies to the clipboard. Drafting only — never sends.",
   "version": "0.1.0",
   "author": {
     "name": "mux"

@@ -73,7 +73,7 @@ and do not mix a source claim and a new AI claim under one marker.
 
 **Step 1 — Choose the lightest safe entry.** When the requested log has one clear topic, or the user asks for a style-only rewrite, draft directly. When multiple threads would change the meaning if separated, state a one-sentence topic split and ask for confirmation before restructuring. Do not turn a clear drafting request into a mandatory interview.
 
-**Step 2 — Resolve tone authority.** A workspace `RESEARCH_WRITE_TONE.md` (or an explicitly approved style exemplar) governs voice and readability. Recent logs may supply terminology, section habits, and the amount of detail, but never become a style authority by themselves. In particular, do not copy a recent log's battle-report, audit, scolding, or completion-report register.
+**Step 2 — Resolve tone authority.** A workspace `RESEARCH_WRITE_TONE.md` (resolved per SKILL.md § Doc Resolution; or an explicitly approved style exemplar) governs voice and readability. Recent logs may supply terminology, section habits, and the amount of detail, but never become a style authority by themselves. In particular, do not copy a recent log's battle-report, audit, scolding, or completion-report register.
 
 **Step 3 — Register fidelity while drafting.** Apply "Register and Accountability" below, plus these transformation-specific rules:
 

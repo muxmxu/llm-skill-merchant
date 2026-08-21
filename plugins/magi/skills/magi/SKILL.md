@@ -231,7 +231,9 @@ precisely because Stage 0 closes the bound facts before anything is
 dispatched. If Stage 0 could not close them, the council does not run yet —
 that is the same gate, not an exception to it.
 
-Resolve model and effort per role from the workspace's `ORCHESTRATION.md`,
+Resolve model and effort per role from the workspace's `ORCHESTRATION.md`
+(in `merchant_skill_contract/HUMAN-AI-RA-CONTRACT/`, falling back to the
+workspace root — the research-assistant kit's contract-directory convention),
 and pass both explicitly on every `agent()` call. Seats, auditors, and the
 red team must not run on tier-1's own model. Stage 0 and Stage 5 stay with
 tier-1 and are never delegated.
