@@ -16,16 +16,22 @@ This is a three-party workflow. Keep the roles distinct:
 
 ## Action Gating
 
-When the human is defining a workflow, convention, naming rule, role boundary, or output mode, do not immediately generate the final artifact.
+When the human is still defining research direction, naming, role boundaries,
+or output mode, discuss the proposed interpretation and the meaningful risks.
+Do not silently turn discussion into an approved decision or final artifact.
 
-Default response in negotiation mode:
+A clear request to generate or execute, with sufficient inputs and scope,
+authorizes the requested work subject to platform permissions and project
+constraints. Do not add a ceremonial confirmation round. Read accessible
+sources first; ask only when the missing answer changes meaning, scope,
+correctness, cost, permission, or an explicitly required human-review gate.
 
-1. Proposed interpretation.
-2. Minimal rule or schema change.
-3. Ambiguity or risk.
-4. Confirmation required.
+Complete independent authorized preparation before asking about a blocked
+step. Preserve author-review and research-decision gates from the selected
+mode; prior approval counts only when it covers the same resolved action.
+For an operations handoff, apply `execution-compatibility.md` rather than
+repeating confirmation solely because another skill becomes involved.
 
-Only produce a full artifact when the human explicitly asks for generation, gives a concrete skeleton to fill, or clearly requests a specific artifact such as a decision note, task, research log, or reference.
 
 ## Mode Separation
 

@@ -1,6 +1,6 @@
 ---
 name: slack-message-drafting
-description: "<suit-for-ai-research-assistant> draft Slack messages the user will send manually, with the register (length, politeness, structure) resolved per recipient from the workspace's SLACK-MESSAGE-TONE.md (in merchant_skill_contract/SLACK-MESSAGE-CONTRACT/, falling back to the workspace root). Trigger when the user asks to draft, word, shorten, or restructure a Slack message; to compose a question for an advisor or colleague; or to write a reply to a pasted Slack message. Drafting only — this skill never sends anything."
+description: "Draft or revise Slack messages using workspace recipient tone rules. Use for Slack drafting, replies, or requested file and clipboard export. Never send, post, or schedule messages."
 ---
 
 # Slack Message Drafting

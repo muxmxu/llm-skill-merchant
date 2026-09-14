@@ -1,6 +1,6 @@
 ---
 name: impl
-description: "Implementation workflow for the AI Code Agent, driven by the project's development-rules doc (e.g. ProjectDevelopRule.md): take in and execute implementation task artifacts written by the human or research assistant, check the working tree for compliance with project rules before committing, and init a development-rules doc for a new project. Trigger when the user hands over a task document or asks to implement a specified change following project conventions; asks whether the current changes comply with project rules, are safe to commit, or follow test/commit conventions; or wants to set up development rules in a new project. Also trigger on explicit subcommands: impl init | task | check. <suit-for-code-agent>"
+description: "suit-for-code-agent: Implement an accepted task or a clear human instruction under project development rules; check changes before a requested commit. Use for implementation, impl task, impl check, or impl init, not experiment or compute operations."
 ---
 
 # impl — implementation workflow
@@ -8,6 +8,12 @@ description: "Implementation workflow for the AI Code Agent, driven by the proje
 Role: AI Code Agent, **implementation mode** (see `../../references/roles.md`;
 a project-local ROLE.txt overrides it). Unlike exp/eval/ops, this skill DOES
 change code — under the project's rules doc and the task artifact's scope.
+
+## Execution compatibility
+
+For execution, read `../../references/execution-compatibility.md`. Guided
+execution is the default. Existing explicit confirmation counts only under
+its Authorization coverage rules; project-specific fresh-approval gates remain.
 
 ## Doc resolution (loose contract)
 

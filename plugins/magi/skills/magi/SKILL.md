@@ -1,6 +1,6 @@
 ---
 name: magi
-description: "<suit-for-ai-research-assistant> convene a MAGI decision council on a decision the human is facing — whether to run an experiment, adopt an approach, cut scope, spend a budget, submit to a venue, or abandon a line of work. Several mutually orthogonal lenses deliberate in parallel and blind on a shared bound-facts pack, every reason is audited back to its source and struck if it does not hold, a unanimous vote is red-teamed before it stands, and the result is reported as a ruling with a vote tally, the surviving reasons for and against, the cost of not acting, and each vote's flip condition. Trigger on 'should we do X', 'is X worth it', 'X or Y', and on an explicit ask for MAGI. Not a brainstorm and not a debate: open-ended thinking belongs in research discussion, and designing the how belongs in planning."
+description: "suit-for-ai-research-assistant: Run an evidence-audited decision council when the user requests MAGI or a formal multi-perspective vote. Ordinary requests for an opinion, brainstorming, or comparisons remain research discussion. The human makes the final decision."
 ---
 
 # MAGI — decision council
@@ -20,6 +20,13 @@ What this is not:
   argument.
 - **Not an executor.** The council reports; the human rules. Convening the
   council is not permission to act on its ruling.
+
+## Invocation boundary
+
+Use this workflow when the user requests MAGI or a formal multi-perspective
+vote. A generic request for an opinion or comparison remains discussion.
+Preserve every blind-deliberation, source-audit, red-team, and human-arbitration
+step below once the council is requested. Invocation never authorizes execution.
 
 ## Stage 0 — Frame the proposition
 

@@ -1,6 +1,6 @@
 ---
 name: eval
-description: "Evaluation operator driven by the project's EVALUATION.md runbook: run the project's evaluation battery on a training run with cost guards and confirmation, compare metrics across runs with consistency checks, produce a readable metrics report for a run, and init the runbook for a new project. Trigger when the user asks to evaluate a run or checkpoint, compute or re-run metrics, compare two or more runs, ask which run is better, summarize or report a run's metrics, or set up evaluation conventions in a new project. Also trigger on explicit subcommands: eval init | run | compare | report. <suit-for-code-agent>"
+description: "suit-for-code-agent: Run, compare, or report checkpoint metrics under EVALUATION.md. Use for experiment evaluation requests, preserving cost, contention, overwrite, split, and reporting rules; never changes metric definitions."
 ---
 
 # eval — evaluation operator
@@ -10,6 +10,12 @@ project-local ROLE.txt overrides it). You are an **operator, not a
 developer**: never modify evaluation code or metric definitions. If the
 runbook and reality disagree, report the mismatch and propose a doc update —
 never improvise.
+
+## Execution compatibility
+
+For execution, read `../../references/execution-compatibility.md`. Guided
+execution is the default. Existing explicit confirmation counts only under
+its Authorization coverage rules; project-specific fresh-approval gates remain.
 
 ## Doc resolution
 
@@ -29,7 +35,7 @@ arguments → list subcommands plus which runs already have metrics, ask which.
 
 1. Before any GPU-heavy evaluation, check whether training is active (via
    EXPERIMENTS.md's monitoring commands if present) and warn about contention;
-   proceed only on confirmation.
+   proceed only with explicit authorization covering any observed contention.
 2. Respect the doc's **cost guards**: steps it marks heavy/expensive need
    explicit confirmation, as does overriding a default skip.
 3. Never delete or overwrite existing metric files without confirmation;
@@ -46,8 +52,9 @@ arguments → list subcommands plus which runs already have metrics, ask which.
    start command.
 2. Resolve the orchestrator command for the given run dir; default checkpoint
    and split per `## Reporting rules`.
-3. Show the planned command; if the orchestrator has a dry-run flag, offer it
-   first. Explicit confirmation → execute.
+3. Show the planned command; use a documented read-only dry-run when useful.
+   Check authorization coverage for the resolved plan, cost, contention, and
+   overwrite effects. Covered approval → execute; otherwise ask for the gap.
 4. Verify landing per `## Metrics layout` — including any documented location
    exceptions — and reply with a short table: family → file → written or
    failed.
