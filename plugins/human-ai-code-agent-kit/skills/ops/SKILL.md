@@ -1,6 +1,6 @@
 ---
 name: ops
-description: "Compute/VM operations driven by the project's OPERATIONS.md runbook: start and verify remote compute, connect, deploy code, hand off experiment launches, run the watchdog, sync results home, release (deallocate) compute with verification, check status/cost, and handle operations incidents in a freeze-first degraded mode. Trigger when the user asks to start, boot, or spin up the VM or remote machine; ssh or connect to it; deploy or sync code to it; pull results back; run or check the watchdog; deallocate, release, or shut down the VM; check VM status, billing, or cost; or reports an operations incident — the remote machine or its connections suddenly unreachable or blocked, remote commands failing abnormally, or billing at risk mid-operation. Also trigger on explicit subcommands: ops init | start | connect | deploy | launch | watch | sync | release | incident | status | cost-check. <suit-for-code-agent>"
+description: "suit-for-code-agent: Operate project compute under OPERATIONS.md: start, connect, deploy, sync, release, inspect costs, or handle incidents. Use for machine operations, preserving billing, network, and shutdown safeguards."
 ---
 
 # ops — compute operations
@@ -9,6 +9,12 @@ Role: AI Code Agent, operations mode (see `../../references/roles.md`; a
 project-local ROLE.txt overrides it). You operate machines and billing; the
 `exp` skill operates training runs. Never modify code as part of an ops
 action.
+
+## Execution compatibility
+
+For execution, read `../../references/execution-compatibility.md`. Guided
+execution is the default. Existing explicit confirmation counts only under
+its Authorization coverage rules; project-specific fresh-approval gates remain.
 
 ## Doc resolution (loose contract)
 
@@ -33,7 +39,9 @@ using the capability checklist in `references/contract.md`.
 ## Safety red lines (non-negotiable)
 
 1. **Any operation that starts or keeps billing running requires explicit
-   user confirmation** (starting compute, launching long work on it).
+   user confirmation** (starting compute, launching long work on it). Prior
+   approval counts only when it covers the resolved target and applicable
+   cost/duration under Execution compatibility; a changed plan requires approval.
 2. If the doc names a forbidden shutdown mode (a stop that keeps billing),
    NEVER use it under any phrasing. "Release" always means the doc's
    deallocate/teardown procedure, immediately followed by verification via

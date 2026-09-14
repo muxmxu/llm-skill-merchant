@@ -1,6 +1,6 @@
 ---
 name: multi-agent-discussion
-description: "<suit-for-ai-research-assistant> Multi-Agent Discussion Protocol: structured multi-round debate between several AI agents (Claude / DeepSeek / Codex / multiple personas) and the human around one research topic. Trigger when the user starts or continues a discussion under agents-human-discussion/, asks you to write your *_said.md, respond to another agent's arguments, or converge a discussion into final.md. Rules: each agent writes only its own file, quote-before-rebut, evidence vs speculation labels, no strawman, human arbitrates."
+description: "suit-for-ai-research-assistant: Conduct file-based debate when the user requests a multi-agent discussion or a response to another agent. Write only the assigned agent file, quote claims accurately, and preserve evidence labels and human arbitration."
 ---
 
 # Multi-Agent Discussion Protocol

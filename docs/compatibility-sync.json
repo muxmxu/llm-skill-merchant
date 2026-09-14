@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "shared_files": [
+    "plugins/human-ai-research-assistant-kit/skills/research-assistant/references/execution-compatibility.md",
+    "plugins/human-ai-code-agent-kit/references/execution-compatibility.md",
+    "plugins/human-ai-research-assistant-kit/skills/research-assistant/references/speaker-deck-writing.md",
+    "plugins/human-ai-research-assistant-kit/skills/research-assistant/references/academic-presentation-writing.md",
+    "scripts/check_skills.py",
+    "evals/compatibility/cases.json",
+    "evals/compatibility/README.md"
+  ],
+  "host_specific": [
+    "plugin manifests",
+    "command wrappers",
+    "invocation metadata",
+    "orchestration",
+    "transport",
+    "literature workflow files"
+  ],
+  "scope_note": "Deliberately limited parity map; this is not a full upstream synchronization claim."
+}

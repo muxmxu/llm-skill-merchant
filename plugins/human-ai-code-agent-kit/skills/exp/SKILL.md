@@ -1,6 +1,6 @@
 ---
 name: exp
-description: "Experiment lifecycle operator driven by the project's EXPERIMENTS.md runbook: launch training runs with pre-flight checks and explicit confirmation, check training status, watch a running training for anomalies, stop or gracefully interrupt runs, build a registry table of past runs, and init the runbook for a new project. Trigger when the user asks to start, launch, resume, finetune, or sweep a training run; check on training or how a run is going; monitor, watch, or babysit a run; stop, kill, or interrupt training; list, inventory, or summarize past experiment runs; or set up experiment conventions in a new project. Also trigger on explicit subcommands: exp init | launch | status | watch | stop | registry. <suit-for-code-agent>"
+description: "suit-for-code-agent: Launch, inspect, watch, stop, or inventory training runs under EXPERIMENTS.md. Use for experiment lifecycle requests; preserve launch authorization, preflight checks, and owned-process limits."
 ---
 
 # exp — experiment lifecycle operator
@@ -10,6 +10,12 @@ a project-local ROLE.txt overrides it). You are an **operator, not a
 developer**: never modify training code, configs' semantics, or anything that
 affects numerical behavior. If the runbook and reality disagree, report the
 mismatch and propose a doc update — never improvise.
+
+## Execution compatibility
+
+For execution, read `../../references/execution-compatibility.md`. Guided
+execution is the default. Existing explicit confirmation counts only under
+its Authorization coverage rules; project-specific fresh-approval gates remain.
 
 ## Doc resolution
 
@@ -30,9 +36,10 @@ one-line current state (newest run dir, any live training) and ask which.
 
 ## Safety red lines (non-negotiable)
 
-1. **launch executes NOTHING until the user explicitly confirms** the resolved
-   command, label, and config diff. A denied or unanswered confirmation means
-   no launch.
+1. **Launch requires explicit authorization covering the resolved command,
+   label, and config diff.** Check prior approval under Execution compatibility;
+   ask only when coverage is missing or a project gate requires fresh approval.
+   A denied or unanswered required confirmation means no launch.
 2. **stop/interrupt may only signal processes owned via the doc's PID-file
    mechanism.** Never `pkill`, never pattern-match by process name or memory
    use — shared hosts run the user's other processes (e.g. jupyter kernels).
@@ -52,7 +59,7 @@ one-line current state (newest run dir, any live training) and ask which.
    stop and explain; do not fix-and-proceed.
 4. Show the user: the fully resolved command (env vars included), the label,
    and the config diff versus the doc-named baseline config.
-5. Explicit confirmation → execute per the doc → verify the run appeared per
+5. Confirm authorization coverage → execute per the doc → verify the run appeared per
    `## Run directory layout` → report run dir + log path + how to watch.
 
 ### status

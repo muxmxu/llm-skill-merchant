@@ -1,6 +1,6 @@
 ---
 name: codebase-snapshot
-description: "Read-only codebase investigation report for a human researcher or an AI Research Assistant: inspects specified modules, data flows, configs, or artifacts and returns an evidence-grounded summary (files, data/call flow, current implementation, risks, open questions) — never a decision, log, or implementation task. Trigger when the user or an AI Research Assistant asks what the current code does, which files implement a behavior, how modules connect and what flows between them, whether the implementation matches a claimed design or research assumption, or wants implementation details/risks summarized before a research decision or task is written. Also trigger on explicit subcommand: codebase-snapshot. <suit-for-code-agent>"
+description: "suit-for-code-agent: Inspect current code, data flow, and configuration and return a read-only, source-cited snapshot. Use when implementation facts are needed for a research discussion or task; never implements changes."
 ---
 
 # codebase-snapshot — read-only codebase investigation report

@@ -34,9 +34,9 @@ For anything non-trivial, a short plan comes before dispatch: it lets the
 human redirect early, and it gives decomposition a concrete unit list to
 hand to sub-agents. When the plan itself needs current-state evidence to be
 concrete (what does the repo actually look like, what does the log actually
-say), that exploration is itself dispatched to **read-only** sub-agents —
-tier-1 does not read the codebase or the vault to build the plan; it reads
-the sub-agent's report.
+say), delegate broad exploration to **read-only** sub-agents when useful. Tier-1
+may read decisive code or log evidence directly and must independently verify
+material returned claims against the cited sources.
 
 ## Delegation prompt discipline
 
@@ -61,9 +61,9 @@ improvises, adopts whatever on disk looks close, and drifts further off with
 every step. The fact has to arrive in the prompt, or the task has to
 genuinely not need it.
 
-A sub-agent should never need to ask tier-1 a clarifying question mid-task —
-if it would, the prompt was underspecified and should be fixed, not patched
-over in a follow-up message. Sub-agents never inherit tier-1's own model:
+If a sub-agent finds a material ambiguity mid-task, it reports the exact gap
+and pauses the dependent step. Tier-1 may clarify within the accepted scope;
+a change to research direction or authority still belongs to the human. Sub-agents never inherit tier-1's own model:
 every dispatch call sets model/effort explicitly, per the profile resolved
 from `ORCHESTRATION.md` (below).
 
