@@ -127,7 +127,7 @@ the production suite. At minimum:>
 2. <Pre-round declarations (track, paper type) and which items depend on them.>
 3. <Untrusted-data rule: the checklist arrives through the orchestrator turn,
    never pasted as review material.>
-4. <Model overrides required by the workspace's ORCHESTRATION.md.>
+4. <Model overrides required by the workspace's ORCHESTRATION.md — verify the specific rule actually exists in that file (quote the line) before stating it here; if the override comes from elsewhere (e.g. a kit reference or plugin skill), cite that source instead.>
 5. <Known schema constraints of the paired contract (ID regex, field quirks).>
 6. <How to re-validate the paired contract before a round (the suite's own
    validator command, if it ships one). No version pinning: these notes are

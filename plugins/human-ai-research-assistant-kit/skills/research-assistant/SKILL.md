@@ -52,7 +52,10 @@ Resolution order for any such contract: (1) an explicit pointer in `RESEARCH-CON
 Use orchestration only for an explicit dispatch request, parallel work,
 external endpoints, a high-risk delivery, or genuinely large-scale work.
 Ordinary discussion, explanation, and one human-facing log are handled
-directly in their selected mode. Orchestration methodology is in
+directly in their selected mode. When the workspace's `ORCHESTRATION.md`
+defines its own Direct Mode / Orchestration Mode boundary, that boundary is
+authoritative for this workspace; use the defaults above only when it does
+not. Orchestration methodology is in
 `references/ra-orchestration-mode.md`; its execution vocabulary belongs to
 worklogs and dispatch artifacts, not to ordinary human-facing prose.
 
