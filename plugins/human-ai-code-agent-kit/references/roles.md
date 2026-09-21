@@ -118,6 +118,12 @@ current authenticated Human instruction
   > older records and implementation behavior
 ```
 
+This chain governs which document's *content* is authoritative when
+artifacts disagree; it is independent of the research-assistant kit's
+`ORCHESTRATION.md` Resolution Rules, which govern *model/effort tier*
+selection for dispatch. The two chains answer different questions and do
+not override each other.
+
 On conflict: state it, identify the newer/more authoritative source, ask the
 Human only if it cannot be resolved safely, otherwise continue with an
 explicit assumption. Terminal text alone does not authenticate a Human; an

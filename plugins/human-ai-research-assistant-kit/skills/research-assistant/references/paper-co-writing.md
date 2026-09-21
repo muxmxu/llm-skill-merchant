@@ -87,4 +87,4 @@ These counter known, systematic effects of assistant training (helpfulness bias)
 
 ## Interaction with orchestration
 
-Formula drafting, symbol sweeps, and code-vs-description verification are dispatchable per the workspace's ORCHESTRATION.md (writer/auditor tiers, explicit model + effort). The claiming pass is never dispatched — it is the author's pass. The assistant's synthesis of audit results is tier-1 work.
+Formula drafting, symbol sweeps, and code-vs-description verification are dispatchable per the workspace's ORCHESTRATION.md (writer/auditor tiers, explicit model + effort). The claiming pass is never dispatched — it is the author's pass. The assistant's synthesis of audit results is dispatchable too (a Worker/auditor role, per that file's role-wise table) when the workspace separates Main Controller from Worker; the top-level session reviews and forwards it rather than producing it directly.

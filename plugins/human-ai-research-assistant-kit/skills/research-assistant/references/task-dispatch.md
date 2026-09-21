@@ -83,9 +83,13 @@ path/number/signature vs the repo and source logs), template compliance
 the executing agent; ambiguities, missing inputs, undecidable acceptance
 criteria), cross-layer consistency. Fix findings; the human may cap rounds
 (a stop signal from the human ends further rework, but never turns an open
-`FAIL` or `NOT RUN` finding into a `PASS`). Reviewer model tier: capable-but-cheap
-(never the top tier; see the sub-agent tiering rule in the household's
-memory/config).
+`FAIL` or `NOT RUN` finding into a `PASS`). Reviewer model tier: per the
+workspace's `ORCHESTRATION.md` Task Reviewer role (role-wise default is a
+stronger reasoning tier than the writer, not necessarily the cheapest
+available) — resolve the specific default from that file's current
+Role-wise table rather than hardcoding one here. Absent such a file, default
+to capable-but-cheap (never the top tier; see the sub-agent tiering rule in
+the household's memory/config).
 
 Independent review means a reviewer distinct from whichever sub-agent wrote
 the artifact; a self-check by the writer itself is self-review, not

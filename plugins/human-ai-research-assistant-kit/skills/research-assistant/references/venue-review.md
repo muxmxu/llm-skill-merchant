@@ -198,5 +198,7 @@ Package the round as a **comment batch** and hand it to
 
 Dispatching the suite, verifying locators, and spot-checking findings are
 dispatchable per the workspace's `ORCHESTRATION.md`. Synthesis of the round
-into the comment batch, and everything human-facing, is tier-1 work. The
-human's arbitration is never delegated.
+into the comment batch is dispatchable too (a Worker or Task Reviewer role,
+per that file's role-wise table) when the workspace runs under Main
+Controller / Worker separation; the top-level session only reviews and
+forwards it. The human's arbitration is never delegated.

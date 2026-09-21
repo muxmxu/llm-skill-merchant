@@ -77,9 +77,10 @@ decomposition or retry rather than into integration.
 This reference does not define its own model-tier table. Model/effort
 assignment for the implementer, semantic-reviewer, and mechanical-auditor
 roles above follows the same `ORCHESTRATION.md` contract defined in the
-research-assistant kit's `ra-orchestration-mode.md` (marker:
-`<!-- runbook-contract: ra-orchestration v1 -->`) — read that file for the
-resolution rules and the required-columns schema; it is not duplicated here.
+research-assistant kit's `ra-orchestration-mode.md` — read that file for the
+resolution rules (including the case where the workspace file carries its
+own native role/loop table instead of that kit's required-columns schema);
+not duplicated here.
 
 If the executing workspace has no `ORCHESTRATION.md` (or the task type isn't
 covered by any row), fall back to the same conservative default that

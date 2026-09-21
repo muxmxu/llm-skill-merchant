@@ -17,9 +17,14 @@ top-level session runs a five-phase loop:
 ```
 
 The top-level session may write a small, human-facing response directly when
-that is the requested work. Delegate only when delegation improves reliability,
-coverage, or turnaround; do not create a completion pipeline for a simple
-conversation or a single log.
+that is the requested work. When the workspace's `ORCHESTRATION.md` defines
+its own Direct Mode / Orchestration Mode boundary, that boundary decides
+whether the top-level session may do so; use the sentence above only when
+the workspace file is silent on that boundary, and defer to `:46`/`:48` (no
+small-task exception once inside orchestration mode) for any task the
+workspace file's threshold puts inside the loop. Delegate only when
+delegation improves reliability, coverage, or turnaround; do not create a
+completion pipeline for a simple conversation or a single log.
 
 ## Phase 0 — Clarification gate
 
@@ -34,9 +39,11 @@ For anything non-trivial, a short plan comes before dispatch: it lets the
 human redirect early, and it gives decomposition a concrete unit list to
 hand to sub-agents. When the plan itself needs current-state evidence to be
 concrete (what does the repo actually look like, what does the log actually
-say), delegate broad exploration to **read-only** sub-agents when useful. Tier-1
-may read decisive code or log evidence directly and must independently verify
-material returned claims against the cited sources.
+say), delegate broad exploration to **read-only** sub-agents when useful.
+When the workspace's `ORCHESTRATION.md` separates Main Controller from Fact
+Agent, route independent verification of a material claim to a Fact Agent
+invocation rather than having tier-1 verify it directly; tier-1 may still
+read evidence to compress it into a dispatch prompt.
 
 ## Delegation prompt discipline
 
@@ -80,8 +87,10 @@ verification before they reach the human:
 - **Instruction-following audit** — did the sub-agent do what was asked, no
   more and no less.
 
-Default to **at most two rework rounds**; a disagreement that survives two
-rounds goes to the human to arbitrate rather than looping further. Any task
+Default to **at most two rework rounds**; when the workspace's
+`ORCHESTRATION.md` defines a replan/escalation ladder (Planner replan →
+upper-model consultant → Human), a disagreement that survives two rounds
+follows that ladder rather than going straight to the human. Any task
 that touches tabular or numeric data leaves a **re-runnable trace** (a
 script plus its source path), not just a pasted number, so the human or a
 future sub-agent can independently reproduce it.
@@ -163,19 +172,24 @@ reads: `ORCHESTRATION.md`, resolved per SKILL.md § Doc Resolution — the
 workspace's `merchant_skill_contract/HUMAN-AI-RA-CONTRACT/` directory, with
 the workspace root as legacy fallback.
 
-Marker: first line of the doc is `<!-- runbook-contract: ra-orchestration v1 -->`.
+Marker: if present, first line of the doc is `<!-- runbook-contract: ra-orchestration v1 -->`; a workspace `ORCHESTRATION.md` that carries its own loop and role table (see "What the doc is" below) is authoritative without it — treat the marker as an optional version tag, not a precondition for reading the doc.
 
 ### What the doc is (and is not)
 
-- A **human-owned dispatch table**: task type → model assignment profile.
-  The human writes and edits it directly; tier-1 reads it and never rewrites
-  it unprompted. It is the single place model-tier decisions for delegation
+- A **human-owned contract**: at minimum a task type → model assignment
+  profile; a workspace may also let it carry the orchestration loop and
+  role definitions (Plan/Dispatch/Review/Update/Repeat, Planner/Worker/
+  Reviewer roles) instead of leaving them to this reference file. The human
+  writes and edits it directly; tier-1 reads it and never rewrites it
+  unprompted. It is the single place model-tier decisions for delegation
   live — do not re-litigate model choice in conversation once the table
   covers a task type.
-- **Not methodology.** How to clarify, plan, decompose, dispatch, and verify
-  lives in this reference file. `ORCHESTRATION.md` answers only "which
-  model, at what effort, for this kind of task" — never how the loop itself
-  runs.
+- **Methodology default.** When the workspace file carries only the
+  model-assignment table, how to clarify, plan, decompose, dispatch, and
+  verify lives in this reference file. When the workspace file also defines
+  its own loop and roles, that definition is authoritative for the loop;
+  this reference file's methodology applies only where the workspace file
+  is silent.
 
 ### Doc resolution
 
@@ -185,10 +199,15 @@ Marker: first line of the doc is `<!-- runbook-contract: ra-orchestration v1 -->
   profile (below) for the current task, and proactively offer to draft the
   file (starter rows from the task types actually seen in this workspace) —
   gated on human review before writing, per its human-owned status.
-- Doc present but the task's type is not covered by any row → use the
-  `fallback` row. No `fallback` row either → apply the built-in default for
-  this single task instance and flag the gap to the human as an opportunity
-  to add a row; do not block the task on it.
+- Doc present and organized as its own native role/loop table (not this
+  kit's Task Type schema below) → read and apply that table directly; do
+  not run the Task Type row-matching algorithm below and do not fall
+  through to the built-in default profile — the workspace file is
+  authoritative even though its columns differ.
+- Doc present, uses this kit's Task Type schema, but the task's type is not
+  covered by any row → use the `fallback` row. No `fallback` row either →
+  apply the built-in default for this single task instance and flag the gap
+  to the human as an opportunity to add a row; do not block the task on it.
 - Marker missing or an older contract version → proceed, warn once, offer
   to conform/upgrade. Never hard-fail on a version mismatch.
 - A task spans multiple task types → resolve each covered role
@@ -215,6 +234,10 @@ consistent with the Genericity rule below:
 Task Type | Clarification Depth | Writer | Semantic Reviewer |
 Mechanical Auditor | Independent Verification Strength | Notes
 ```
+
+This schema applies only to a workspace `ORCHESTRATION.md` written in this
+kit's own Task Type format; a workspace file with its own native role/loop
+table (see Doc resolution above) is read directly instead.
 
 Column names may be localized to the workspace's working language, as long
 as each localized column's order and semantics map one-to-one to this
