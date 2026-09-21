@@ -20,9 +20,9 @@ The top-level session may write a small, human-facing response directly when
 that is the requested work. When the workspace's `ORCHESTRATION.md` defines
 its own Direct Mode / Orchestration Mode boundary, that boundary decides
 whether the top-level session may do so; use the sentence above only when
-the workspace file is silent on that boundary, and defer to `:46`/`:48` (no
-small-task exception once inside orchestration mode) for any task the
-workspace file's threshold puts inside the loop. Delegate only when
+the workspace file is silent on that boundary, and defer to its 「总则 & 工作模式」
+item 2 (no small-task exception once inside orchestration mode) for any task
+the workspace file's threshold puts inside the loop. Delegate only when
 delegation improves reliability, coverage, or turnaround; do not create a
 completion pipeline for a simple conversation or a single log.
 
