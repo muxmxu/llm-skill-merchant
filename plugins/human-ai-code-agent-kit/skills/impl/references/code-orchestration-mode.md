@@ -34,8 +34,13 @@ Three tiers can be in play, and this reference governs only the inner two:
   completion state.
 
 Main-session ownership names the single integration owner; it grants no new
-authority beyond that. Nothing in this mode authorizes staging, committing,
-pushing, operating remote systems, expanding scope, or destructive cleanup —
+authority beyond that. When the workspace's `ORCHESTRATION.md` bars the main
+session from producing artifacts itself, the main session keeps integration
+ownership but dispatches the integration pass to one named integration agent,
+which is then the single final-tree writer; the integration checks go to the
+review and audit roles that contract names. Nothing in this mode authorizes
+staging, committing, pushing, operating remote systems, expanding scope, or
+destructive cleanup —
 each of those still needs its own explicit authorization (see `../SKILL.md`'s
 safety red lines, in particular red line #5).
 
@@ -53,7 +58,8 @@ safety red lines, in particular red line #5).
 4. Verify     — independent adversarial check per module: a semantic reviewer
    audits claims, edge cases, and whether the sub-agent stayed in scope; a
    mechanical auditor runs the cheap checks (lint, type-check, unit tests)
-5. Integrate  — stop all writers, then one integration pass: merge the
+5. Integrate  — stop all writers, then one integration pass by the single
+   final-tree writer (see "Who holds which role"): merge the
    modules, resolve cross-module conflicts, run the full test suite end to
    end against the final tree
 6. Report     — a single completion report, regardless of how many
@@ -177,7 +183,9 @@ running it twice can do damage a source-only rewrite cannot undo. A safety,
 authorization, or protected-zone conflict blocks immediately and does not
 consume a retry round. Rework still stays bounded: after two failed
 correction rounds on the same issue, report the disagreement or blocker
-instead of continuing to loop.
+instead of continuing to loop — unless the workspace's `ORCHESTRATION.md`
+defines a replan/escalation ladder, in which case the disagreement follows
+that ladder before reaching the human.
 
 ## Verification and integration
 
@@ -194,8 +202,9 @@ the files it covered, a generated artifact, a dependency, a shared interface,
 or the validation configuration changes underneath it. Re-run the check
 against the current state before relying on it again.
 
-Before final integration, stop every writer — the executor main session is
-the only agent still allowed to touch the working tree. Recheck path
+Before final integration, stop every writer — the executor main session, or
+the one integration agent it dispatched under the workspace contract, is the
+only agent still allowed to touch the working tree. Recheck path
 ownership, review the complete diff, rerun the affected modules' checks
 against the final tree, then run the end-to-end checks. Never integrate a
 stale attempt, a required module with no current independent evidence, or a
@@ -235,13 +244,13 @@ committing and pushing as each needing their own explicit authorization.
 
 ## Tips for models running in Claude Code
 
-The first four points from the research-assistant kit's
-`ra-orchestration-mode.md` "Tips for models running in Claude Code" section
-apply here unchanged — see it for the details (Workflow `agent()` does take a
-per-call effort parameter; the top-level `Agent` tool does not, with two
-workarounds; always set `model` explicitly on dispatch calls; Workflow
-scripts cannot use `Date.now()`/`Math.random()`, pass such values via
-`args`). Not duplicated here to avoid drift between the two copies. That
-section's fifth point — the channel-interruptibility-to-tool mapping — is
-RA tier-1-specific (it governs how a human corrects work the RA orchestrator
-dispatched) and does not apply on the code-agent side.
+Items 1–4 of the research-assistant kit's
+`references/claude-code-workflow-tips.md` apply here unchanged — see it for
+the details (Workflow `agent()` does take a per-call effort parameter; the
+top-level `Agent` tool does not, with two workarounds; always set `model`
+explicitly on dispatch calls; Workflow scripts cannot use
+`Date.now()`/`Math.random()`, pass such values via `args`). Not duplicated
+here to avoid drift between the two copies. Its item 5 — the
+channel-interruptibility-to-tool mapping — is RA tier-1-specific (it governs
+how a human corrects work the RA orchestrator dispatched) and does not apply
+on the code-agent side.

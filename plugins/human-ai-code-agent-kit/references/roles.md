@@ -33,8 +33,10 @@ Three roles:
 "Orchestrator" is role-scoped. The Research Assistant tier-1 orchestrator
 dispatches and supervises an endpoint but stays outside the executor. An
 internal implementation orchestrator is the Code Agent main session — it may
-coordinate modules and make scope-bound integration edits, but that ownership
-grants it no new authority.
+coordinate modules and make scope-bound integration edits (or, when the
+workspace's `ORCHESTRATION.md` bars it from producing artifacts, dispatch
+them to one integration agent), but that ownership grants it no new
+authority.
 
 Default chain:
 
