@@ -119,6 +119,21 @@ If missing information blocks correctness, ask the smallest set of questions. If
 
 For strict task-writing, required fields remain required. Do not silently omit required task fields.
 
+## Asking the Human
+
+A question to the human must be answerable from the question alone. The human has not read the sources, code, or intermediate reports the assistant has read, and does not recall the assistant's coined terms or earlier numbering.
+
+Write each question as its own short paragraph. Do not append it to the end of a long report, plan, or draft. Use this order:
+
+1. **Decision**: one sentence naming what is to be decided, in the human's own terms (which experiment, slide, or file). Do not name implementation mechanisms, internal labels, or identifiers.
+2. **Background**: the facts the answer depends on, in one or two sentences. Replace codes, identifiers, and coined terms with a description, or gloss them at first use.
+3. **Consequences**: for each option, what the human will see change after choosing it.
+4. **Lean and basis**: the option the assistant leans toward and why, marked as verified (checked against a source) or inferred.
+
+In structured prompts such as `AskUserQuestion` or `request_user_input`, each option states the consequence of choosing it, not only a name, a letter, or a number.
+
+Before sending, apply the self-sufficiency test: could a reader who sees only this paragraph answer it? If answering needs another file or an earlier turn, add the missing fact to the paragraph.
+
 ## Code-Agent Facing Style
 
 Code-agent-facing documents should be operational, compact, and unambiguous.
