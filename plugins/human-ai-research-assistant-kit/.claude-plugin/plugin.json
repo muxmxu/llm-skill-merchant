@@ -1,7 +1,7 @@
 {
   "name": "human-ai-research-assistant-kit",
   "description": "suit-for-ai-research-assistant: Evidence-grounded research discussion and writing through ten modes plus speaker-card preparation. Guided execution is the default; author decisions and source constraints remain mandatory.",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "author": {
     "name": "llm-skill-merchant maintainers"
   }

@@ -192,8 +192,8 @@ Every comment is exactly one of:
 ## Roadmap file location
 
 One roadmap file per review batch. Do not use a fixed name; suggest
-`revision-roadmap-<YYYY-MM-DD>.md`, or under a progress dir if the workspace
-uses one: `progress/YYYY-MM-DD_<topic>/revision-roadmap.md`. Record the
+`revision-roadmap-<YYYY-MM-DD>.md`, or, on a delivery bus, under the date directory's
+reference area: `progress/<YYYY-M-D>/reference/progress<N>/revision-roadmap.md`. Record the
 chosen path in `RESEARCH-CONTEXT.md` (see "Adapters") so a cold handoff and
 the dispatch `parent_authority_ref:` resolve it from disk, not from the
 conversation.
