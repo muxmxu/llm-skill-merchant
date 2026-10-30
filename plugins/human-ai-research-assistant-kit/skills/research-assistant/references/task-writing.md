@@ -62,9 +62,9 @@ Suggest:
 
 `Filename: task-<short_snake_case_title>.md`
 
-If the user provides a project path, preserve it, e.g.:
+If the user provides a project path, preserve it. On a delivery bus the layout is fixed: one directory per date, no topic suffix, and task numbers continue across that date directory:
 
-`Filename: progress/YYYY-MM-DD_<topic>/task-<short_snake_case_title>.md`
+`Filename: progress/<YYYY-M-D>/tasks/<NN>-<topic>.md`
 
 ## Task Template
 

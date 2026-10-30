@@ -23,9 +23,9 @@ enough: pull and read.
 ## On reception
 
 1. **Pull the bus** (`git pull`).
-2. **Locate the batch**: find the task file `progress/<batch>/tasks/*.md`
+2. **Locate the batch**: find the task file `progress/<YYYY-M-D>/tasks/*.md`
    whose Metadata `task_id` matches the kickoff line (grep for it).
-3. **Read in order**: that batch's `progress.md` first (binding decisions,
+3. **Read in order**: the `progress<N>.md` named in the task's `parent_authority_ref` first (binding decisions,
    interpretation boundaries, evaluation policy), then the task file itself.
    The task file is authoritative — if chat text and the task file disagree,
    the task file wins; say so and proceed by the file.

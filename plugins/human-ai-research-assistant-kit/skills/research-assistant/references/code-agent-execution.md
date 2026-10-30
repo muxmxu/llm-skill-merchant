@@ -13,10 +13,15 @@ itself is under `## Code & compute`) and from the code repo's own runbooks
 
 ## Inbox
 
-- Tasks arrive on the **delivery bus** (a git repo; pull it first). A batch
-  is `progress/<date>/`: one `progress.md` (decisions + verified facts) and
-  `tasks/NN-<name>.md` (strict task artifacts).
-- Reading order: progress.md first (decisions bind), then tasks. **The task
+- Tasks arrive on the **delivery bus** (a git repo; pull it first). A date
+  directory is `progress/<YYYY-M-D>/` (date only, no topic suffix):
+  `progress0.md` ... `progress<N>.md` (decisions + verified facts, one per
+  work item of that day, numbered in creation order), `tasks/<NN>-<topic>.md`
+  (strict task artifacts, numbered across the whole date directory), and
+  `reference/` (log copies, human instructions, review and escalation files;
+  per-entry material under `reference/progress<N>/`).
+- Reading order: the `progress<N>.md` named in the task's
+  `parent_authority_ref` first (decisions bind), then the task. **The task
   file is authoritative** — if chat instructions and the task file
   disagree, the task file wins; say so and proceed by the file.
 - A kickoff message over tmux/chat only announces the batch (its fixed

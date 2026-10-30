@@ -42,7 +42,7 @@ Output exactly one markdown code block containing the decision/progress content.
 
 Do not assume the filename must be `progress.md`. Use a suggested path such as:
 
-`Filename: progress/YYYY-MM-DD_<snake_case_title>.md`
+`Filename: progress/<YYYY-M-D>/progress<N>.md` (delivery-bus layout: one directory per date, no topic suffix; entries of the same date are numbered in creation order)
 
 If the user's repository convention uses a single progress page, suggest the page path the user provided or a single markdown filename.
 
