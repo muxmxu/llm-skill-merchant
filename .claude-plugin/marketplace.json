@@ -53,6 +53,14 @@
         "name": "llm-skill-merchant maintainers"
       },
       "source": "./plugins/multi-agent-discussion"
+    },
+    {
+      "name": "tg-ask",
+      "description": "Telegram line between the human and Claude Code sessions in tmux: unattended sessions file decision requests that a relay sends and calls back on answer; the human can list, watch live, snapshot, type into, and press keys in sessions from Telegram. /tg-ask:setup, /tg-ask:health-check, /tg-ask:teardown.",
+      "author": {
+        "name": "llm-skill-merchant maintainers"
+      },
+      "source": "./plugins/tg-ask"
     }
   ]
 }

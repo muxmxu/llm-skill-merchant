@@ -263,8 +263,8 @@ def check_sync(root: Path, errors: list[str]) -> dict[str, Any] | None:
 def check_manifests(root: Path, errors: list[str]) -> None:
     manifests = sorted(root.glob("plugins/*/.claude-plugin/plugin.json"))
     manifests += sorted(root.glob("plugins/*/.codex-plugin/plugin.json"))
-    if len(manifests) != 6:
-        add_error(errors, root / "plugins", f"expected exactly six plugin manifests (found {len(manifests)})")
+    if len(manifests) != 7:
+        add_error(errors, root / "plugins", f"expected exactly seven plugin manifests (found {len(manifests)})")
     for path in manifests:
         value = load_json(path, errors)
         if value is None:
@@ -279,8 +279,8 @@ def check_manifests(root: Path, errors: list[str]) -> None:
 
 def check_repo(root: Path, errors: list[str]) -> RepoState:
     skill_paths = sorted(root.glob("plugins/*/skills/*/SKILL.md"))
-    if len(skill_paths) != 10:
-        add_error(errors, root / "plugins", f"expected exactly ten SKILL.md files (found {len(skill_paths)})")
+    if len(skill_paths) != 11:
+        add_error(errors, root / "plugins", f"expected exactly eleven SKILL.md files (found {len(skill_paths)})")
     skills: list[Skill] = []
     for path in skill_paths:
         parsed = parse_skill(path, errors)
