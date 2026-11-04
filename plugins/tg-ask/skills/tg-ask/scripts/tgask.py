@@ -45,6 +45,7 @@ SAID = HOME / "said.jsonl"
 PAIR = HOME / "pair.json"
 RELAY_SESSION = "tg-relay"
 SELF = Path(__file__).resolve()
+HOST = socket.gethostname().split(".")[0]  # one bot per machine; the tag survives forwards and previews
 
 # ---------------------------------------------------------------- hook (fast path)
 
@@ -211,13 +212,19 @@ def ready_for_input(scr) -> bool:
     return bool(b) and not DIALOG_RE.search(b) and bool(INPUT_RE.search(b))
 
 
-def paste(pane: str, text: str):
-    """Type text into a pane as one bracketed paste, then submit it."""
+def paste(pane: str, text: str) -> bool:
+    """Type text into a pane as one bracketed paste, then submit it. False if not delivered."""
+    if not ready_for_input(screen(pane)):
+        return False
     buf = f"tgask-{os.getpid()}"
     tmux("load-buffer", "-b", buf, "-", stdin=text)
     tmux("paste-buffer", "-p", "-d", "-b", buf, "-t", pane)
     time.sleep(0.4)
+    # Re-check before Enter: a dialog that opened meanwhile would take the Enter as "approve".
+    if not ready_for_input(screen(pane)):
+        return False  # the text stays in the input box; nothing is submitted
     tmux("send-keys", "-t", pane, "Enter")
+    return True
 
 # ---------------------------------------------------------------- telegram
 
@@ -477,7 +484,7 @@ def cmd_say(a):
     chat = owner() or die("no allowlisted Telegram user; run /tg-ask:setup")
     pane = os.environ.get("TMUX_PANE")
     me = next((s for s in sessions() if s["pane"] == pane), None) if pane else None
-    head = f"💬 {me['sid'][:6]} {me['name']}" if me else "💬"
+    head = f"💬 [{HOST}] {me['sid'][:6]} {me['name']}" if me else f"💬 [{HOST}]"
     try:
         sent = send_text(chat, f"{head}\n{text.strip()}")
     except TgError as e:
@@ -558,7 +565,7 @@ class Relay:
         sid = s["sid"][:6]
         try:
             api("sendMessage", chat_id=chat,
-                text=f"🔔 {sid} {s['name']}\n{e.get('msg', '')}\n\n/status {sid} · /key {sid} 1")
+                text=f"🔔 [{HOST}] {sid} {s['name']}\n{e.get('msg', '')}\n\n/status {sid} · /key {sid} 1")
         except TgError as err:
             log(f"alert failed: {err}")
 
@@ -582,13 +589,13 @@ class Relay:
     def fmt_ls(self) -> str:
         ss = sessions()
         if not ss:
-            return "No Claude sessions in tmux."
+            return f"🖥 {HOST}: no Claude sessions in tmux."
         out = []
         for s in ss:
             st = self.state(s["pane"], screen(s["pane"]))
             out.append(f"{ICON[st]} {s['sid'][:6]}  {s['name']}  {st}{self.since(s['pane'], st)}\n"
                        f"    📁 {short_path(s['cwd'])}\n    {s['title']}")
-        return "\n".join(out)
+        return f"🖥 {HOST}\n" + "\n".join(out)
 
     def watch_text(self, s) -> str:
         scr = screen(s["pane"])
@@ -598,7 +605,7 @@ class Relay:
         lines = [f"▸ {e.get('tool', '')}: {e.get('brief', '')}"[:140] for e in tools] or ["(no tool calls seen yet)"]
         if st == "waiting":
             lines += ["", "⏸ waiting on a dialog:", bottom(scr, 8)]
-        return (f"{ICON[st]} {sid} {s['name']} · {st}{self.since(s['pane'], st)}\n📁 {short_path(s['cwd'])}\n\n"
+        return (f"{ICON[st]} [{HOST}] {sid} {s['name']} · {st}{self.since(s['pane'], st)}\n📁 {short_path(s['cwd'])}\n\n"
                 + "\n".join(lines) + f"\n\n/unwatch · /status {sid}")
 
     # ---- periodic work
@@ -623,7 +630,7 @@ class Relay:
             return
         s = next((s for s in sessions() if s["pane"] == meta.get("pane")), None)
         frm = f"from {s['sid'][:6]} {s['name']}\n" if s else ""
-        text = f"❓ {meta['id']}\n{frm}\n{body.strip()}"
+        text = f"❓ [{HOST}] {meta['id']}\n{frm}\n{body.strip()}"
         if len(text) > 3900:
             text = text[:3800] + f"\n\n… (truncated; full text in {path})"
         opts = meta.get("options") or []
@@ -652,8 +659,9 @@ class Relay:
                 self.notify(f"⏳ {meta['id']}: session {s['sid'][:6]} has not been at its input box for 10 min, "
                             f"so the answer is not delivered yet. /status {s['sid'][:6]}")
             return
-        paste(pane, f"[tg-ask] the human answered request {meta['id']}. "
-                    f"Read the `answer` field in {path} and continue accordingly.")
+        if not paste(pane, f"[tg-ask] the human answered request {meta['id']}. "
+                           f"Read the `answer` field in {path} and continue accordingly."):
+            return  # retried on the next tick
         meta.update(status="delivered", delivered_at=iso())
         save_req(path, meta, body)
         log(f"delivered {meta['id']}")
@@ -783,8 +791,9 @@ class Relay:
         if not ready_for_input(screen(pane)):
             return self.reply(chat, "That session is not at its input box (a dialog or menu is open). "
                                     "Check /status and answer it with /key.")
-        paste(pane, "[tg] " + text)
-        self.reply(chat, "⌨️ sent")
+        if not paste(pane, "[tg] " + text):
+            return self.reply(chat, "⚠️ A dialog opened while typing; the text was left unsubmitted. Check /status.")
+        self.reply(chat, f"⌨️ sent [{HOST}]")
 
     def on_command(self, chat, text):
         head, _, rest = text.partition(" ")
@@ -969,6 +978,15 @@ def cmd_pair_wait(a):
 def cmd_enable(_a):
     for d in (HOME, REQ, EVENTS):
         d.mkdir(parents=True, exist_ok=True)
+    for root, dirs, files in os.walk(HOME):  # tighten files created before umask was set
+        for n in dirs:
+            os.chmod(os.path.join(root, n), 0o700)
+        for n in files:
+            os.chmod(os.path.join(root, n), 0o600)
+    HOME.chmod(0o700)
+    STATE.chmod(0o700)
+    if (STATE / "access.json").exists():
+        (STATE / "access.json").chmod(0o600)
     ENABLED.write_text(iso() + "\n")
     print(f"enabled ({ENABLED})")
 
@@ -1091,6 +1109,7 @@ def cmd_selftest(_a):
 
 
 def main():
+    os.umask(0o077)  # requests, events and access.json may hold private content: owner-only
     ap = argparse.ArgumentParser(prog="tgask.py", description=__doc__.split("\n")[0])
     sp = ap.add_subparsers(dest="cmd", required=True)
     p = sp.add_parser("ask", help="file a request for the human (body on stdin)")
