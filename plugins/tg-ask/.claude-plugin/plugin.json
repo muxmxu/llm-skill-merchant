@@ -1,7 +1,7 @@
 {
   "name": "tg-ask",
   "description": "Telegram line between the human and Claude Code sessions in tmux: unattended sessions file decision requests that a relay sends to Telegram and calls back on answer; the human can list, watch live, snapshot, type into, and press keys in any session from Telegram. /tg-ask:setup, /tg-ask:health-check, /tg-ask:teardown.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "mux"
   }

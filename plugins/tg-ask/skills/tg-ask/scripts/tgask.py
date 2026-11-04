@@ -1037,12 +1037,17 @@ def cmd_health(a):
         add("OK", "relay", f"started (pid {pid})") if pid else add("FAIL", "relay", "not running")
     else:
         stale = str(SELF) not in pid_args(pid)
+        note = ""
         if stale and a.fix:
             cmd_stop(a)
             ensure_relay()
             time.sleep(3)
-            pid, stale = relay_pid(), False
-        add("WARN", "relay", f"pid {pid} runs an older copy of tgask.py; rerun with --fix") if stale else add("OK", "relay", f"pid {pid}")
+            pid, stale, note = relay_pid(), False, " (restarted: was running an older copy)"
+        if stale:
+            add("WARN", "relay", f"pid {pid} runs an older copy of tgask.py; rerun with --fix")
+        else:
+            add("OK", "relay", f"pid {pid}{note}" if pid else "restart failed" + note)
+    add("OK", "script", str(SELF))
     if pid:
         try:
             age = time.time() - float(HEARTBEAT.read_text())
