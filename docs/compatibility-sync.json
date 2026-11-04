@@ -5,6 +5,7 @@
     "plugins/human-ai-code-agent-kit/references/execution-compatibility.md",
     "plugins/human-ai-research-assistant-kit/skills/research-assistant/references/speaker-deck-writing.md",
     "plugins/human-ai-research-assistant-kit/skills/research-assistant/references/academic-presentation-writing.md",
+    "plugins/tg-ask/skills/tg-ask/scripts/tgask.py",
     "scripts/check_skills.py",
     "evals/compatibility/cases.json",
     "evals/compatibility/README.md"
