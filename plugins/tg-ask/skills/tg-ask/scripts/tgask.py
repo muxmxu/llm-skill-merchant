@@ -194,7 +194,7 @@ def short_path(p: str) -> str:
 # shortcut: screen-scraping Claude Code's TUI (input box = "❯" right under a ─ rule; selection dialogs
 # show "❯ 1."); re-check these regexes if a Claude Code release changes the layout.
 DIALOG_RE = re.compile(r"❯\s*\d+\.")
-INPUT_RE = re.compile(r"─{10,}[ \t]*\n[ \t]*❯")
+INPUT_RE = re.compile(r"─{10,}[^\n]*\n[ \t]*❯")  # the rule may carry a label, e.g. "──── ultracode ─"
 BUSY_RE = re.compile(r"…\s*\(\d+[hms]")
 
 
@@ -1094,6 +1094,7 @@ def cmd_selftest(_a):
     assert ready_for_input(f"out\n{rule}\n❯ \n{rule}\n  status")
     assert not ready_for_input(f"Do you want to proceed?\n❯ 1. Yes\n  2. No\n{rule}\n❯ ")
     assert not ready_for_input("plain zsh prompt %")
+    assert ready_for_input(f"{rule} ultracode ─\n❯ t\n{rule}\n  status")
     assert BUSY_RE.search("✽ Kerfuffling… (40s · ↓ 3.3k tokens)")
     assert "<bot-token>" in redact("curl api.telegram.org/bot123456789:" + "x" * 35 + "/getMe")
     assert redact("export API_KEY=abc123") == "export API_KEY=<redacted>"
