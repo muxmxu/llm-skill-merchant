@@ -17,6 +17,7 @@ EXPECTED_SHARED_FILES = [
     "plugins/human-ai-code-agent-kit/references/execution-compatibility.md",
     "plugins/human-ai-research-assistant-kit/skills/research-assistant/references/speaker-deck-writing.md",
     "plugins/human-ai-research-assistant-kit/skills/research-assistant/references/academic-presentation-writing.md",
+    "plugins/tg-ask/skills/tg-ask/scripts/tgask.py",
     "scripts/check_skills.py",
     "evals/compatibility/cases.json",
     "evals/compatibility/README.md",
@@ -248,7 +249,7 @@ def check_sync(root: Path, errors: list[str]) -> dict[str, Any] | None:
     if value.get("schema_version") != 1:
         add_error(errors, path, "schema_version must be exactly 1")
     if value.get("shared_files") != EXPECTED_SHARED_FILES:
-        add_error(errors, path, "shared_files must equal the exact seven approved paths in order")
+        add_error(errors, path, "shared_files must equal the exact eight approved paths in order")
     if value.get("host_specific") != EXPECTED_HOST_SPECIFIC:
         add_error(errors, path, "host_specific must list the six non-asserted host-specific areas")
     if value.get("scope_note") != EXPECTED_SCOPE_NOTE:

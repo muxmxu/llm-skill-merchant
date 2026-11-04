@@ -1,6 +1,6 @@
 ---
 name: tg-ask
-description: "Reach the human on Telegram from an unattended Claude Code session in tmux: file a decision request when blocked on a choice only the human can make, send a short message, and handle answers or instructions that arrive as `[tg-ask]` or `[tg]` input. Use when the human is away or the session runs unattended; when the human is at the terminal, ask in the terminal instead."
+description: "Reach the human on Telegram from an unattended Claude or Codex session in tmux: file a decision request, send a short message, and handle answers or instructions arriving as `[tg-ask]` or `[tg]` input. Use when the human is away; when the human is at the terminal, ask there instead."
 ---
 
 # tg-ask — reach the human on Telegram

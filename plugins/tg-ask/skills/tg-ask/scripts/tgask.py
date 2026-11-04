@@ -90,8 +90,10 @@ def cmd_hook(_a) -> int:
         if ev == "PreToolUse":
             rec["tool"] = data.get("tool_name", "")
             rec["brief"] = brief(data.get("tool_input"))
-        elif ev == "Notification":
-            rec["msg"] = redact(str(data.get("message", "")))[:200]
+        elif ev in ("Notification", "PermissionRequest"):
+            if ev == "PermissionRequest":
+                rec["ev"] = "Notification"
+            rec["msg"] = redact(str(data.get("message") or ("permission requested for " + str(data.get("tool_name", "tool")))))[:200]
         EVENTS.mkdir(parents=True, exist_ok=True)
         f = EVENTS / (pane.lstrip("%") + ".jsonl")
         with open(f, "a", encoding="utf-8") as fh:
@@ -146,15 +148,24 @@ def is_claude(a: str) -> bool:
     return os.path.basename(a.split()[0]) == "claude" or "@anthropic-ai/claude-code" in a
 
 
-def find_claude(root: int, kids, args):
+def agent_type(a: str):
+    if is_claude(a):
+        return "claude"
+    if a and os.path.basename(a.split()[0]) == "codex":
+        return "codex"
+    return None
+
+
+def find_agent(root: int, kids, args):
     stack, seen = [root], set()
     while stack:
         p = stack.pop()
         if p in seen:
             continue
         seen.add(p)
-        if is_claude(args.get(p, "")):
-            return p
+        agent = agent_type(args.get(p, ""))
+        if agent:
+            return p, agent
         stack.extend(kids.get(p, []))
     return None
 
@@ -170,11 +181,12 @@ def sessions():
         pane, ppid, name, cwd, title = (line.split("\t") + [""] * 5)[:5]
         if not ppid.isdigit():
             continue
-        cpid = find_claude(int(ppid), kids, args)
-        if cpid is None:
+        found = find_agent(int(ppid), kids, args)
+        if found is None:
             continue
+        cpid, agent = found
         sid = hashlib.sha1(f"{pane}:{cpid}".encode()).hexdigest()[:12]
-        res.append({"sid": sid, "pane": pane, "name": name, "cwd": cwd, "title": title, "pid": cpid})
+        res.append({"sid": sid, "pane": pane, "name": name, "cwd": cwd, "title": title, "pid": cpid, "agent": agent})
     return res
 
 
@@ -196,6 +208,10 @@ def short_path(p: str) -> str:
 DIALOG_RE = re.compile(r"❯\s*\d+\.")
 INPUT_RE = re.compile(r"─{10,}[^\n]*\n[ \t]*❯")  # the rule may carry a label, e.g. "──── ultracode ─"
 BUSY_RE = re.compile(r"…\s*\(\d+[hms]")
+# shortcut: Codex TUI screen scraping; unknown layouts fail closed. Recheck on Codex upgrades.
+CODEX_DIALOG_RE = re.compile(r"(?im)^\s*(?:›\s*\d+\.|Press enter to confirm|Would you like to run|Do you want to)")
+CODEX_BUSY_RE = re.compile(r"(?im)^\s*[•✦✧]\s*(?:Working|Thinking|Running|Searching|Planning|Exploring|Reading|Writing|Analyzing)\b.*(?:esc to interrupt|\(\d)")
+CODEX_INPUT_RE = re.compile(r"(?ms)^› [^\n]*\n(?:.*\n)*?\s{2,}[^\n]* · [^\n]*(?:\n\s{2,}← for agents · \? for shortcuts)?\s*$")
 
 
 def screen(pane: str):
@@ -207,24 +223,27 @@ def bottom(scr, n: int = 25) -> str:
     return "\n".join((scr or "").rstrip("\n").splitlines()[-n:])
 
 
-def ready_for_input(scr) -> bool:
+def ready_for_input(scr, agent="claude") -> bool:
     b = bottom(scr)
-    return bool(b) and not DIALOG_RE.search(b) and bool(INPUT_RE.search(b))
+    if agent == "codex":
+        return bool(b) and not CODEX_DIALOG_RE.search(b) and not CODEX_BUSY_RE.search(b) and "esc to interrupt" not in b.lower() and bool(CODEX_INPUT_RE.search(b))
+    return agent == "claude" and bool(b) and not DIALOG_RE.search(b) and bool(INPUT_RE.search(b))
 
 
-def paste(pane: str, text: str) -> bool:
+def paste(pane: str, text: str, agent="claude") -> bool:
     """Type text into a pane as one bracketed paste, then submit it. False if not delivered."""
-    if not ready_for_input(screen(pane)):
+    if not ready_for_input(screen(pane), agent):
         return False
     buf = f"tgask-{os.getpid()}"
-    tmux("load-buffer", "-b", buf, "-", stdin=text)
-    tmux("paste-buffer", "-p", "-d", "-b", buf, "-t", pane)
+    if not tmux("load-buffer", "-b", buf, "-", stdin=text)[0]:
+        return False
+    if not tmux("paste-buffer", "-p", "-d", "-b", buf, "-t", pane)[0]:
+        return False
     time.sleep(0.4)
     # Re-check before Enter: a dialog that opened meanwhile would take the Enter as "approve".
-    if not ready_for_input(screen(pane)):
+    if not ready_for_input(screen(pane), agent):
         return False  # the text stays in the input box; nothing is submitted
-    tmux("send-keys", "-t", pane, "Enter")
-    return True
+    return tmux("send-keys", "-t", pane, "Enter")[0]
 
 # ---------------------------------------------------------------- telegram
 
@@ -400,7 +419,7 @@ def relay_pid():
     except OSError:
         return None
     a = pid_args(pid)
-    return pid if ("tgask.py" in a and a.endswith(" relay")) else None
+    return pid if ("tgask.py" in a and re.search(r"\brelay(?:\s|$)", a)) else None
 
 
 def ensure_relay() -> bool:
@@ -410,7 +429,8 @@ def ensure_relay() -> bool:
     if tmux("has-session", "-t", "=" + RELAY_SESSION)[0]:
         return False  # its restart loop brings the relay back within seconds
     HOME.mkdir(parents=True, exist_ok=True)
-    cmd = f"while true; do {shlex.quote(sys.executable)} {shlex.quote(str(SELF))} relay; sleep 5; done"
+    digest = hashlib.sha256(SELF.read_bytes()).hexdigest()
+    cmd = f"while true; do {shlex.quote(sys.executable)} {shlex.quote(str(SELF))} relay --script-sha256 {digest}; sleep 5; done"
     ok, _ = tmux("new-session", "-d", "-s", RELAY_SESSION, "-c", str(HOME), cmd)
     if not ok:
         die("could not start the relay tmux session")
@@ -497,12 +517,12 @@ def cmd_say(a):
 
 def cmd_sessions(_a):
     for s in sessions():
-        print(f"{s['sid']}  {s['pane']:>4}  {s['name']}  {short_path(s['cwd'])}")
+        print(f"{s['sid']}  {s['pane']:>4}  {s['agent']}  {s['name']}  {short_path(s['cwd'])}")
 
 # ---------------------------------------------------------------- relay
 
 HELP = """tg-ask commands
-/ls — Claude sessions in tmux (id, state)
+/ls — Claude and Codex sessions in tmux (id, state)
 /watch <id> — live activity of one session
 /unwatch — stop the live view
 /status <id> — snapshot of the session's screen
@@ -569,8 +589,12 @@ class Relay:
         except TgError as err:
             log(f"alert failed: {err}")
 
-    def state(self, pane, scr) -> str:
+    def state(self, pane, scr, agent="claude") -> str:
         b = bottom(scr)
+        if agent == "codex":
+            if CODEX_DIALOG_RE.search(b):
+                return "waiting"
+            return "idle" if ready_for_input(scr, agent) else "working"
         # The screen decides: hook events go stale in sessions that started before the plugin loaded.
         if DIALOG_RE.search(b):
             return "waiting"
@@ -589,23 +613,23 @@ class Relay:
     def fmt_ls(self) -> str:
         ss = sessions()
         if not ss:
-            return f"🖥 {HOST}: no Claude sessions in tmux."
+            return f"🖥 {HOST}: no Claude or Codex sessions in tmux."
         out = []
         for s in ss:
-            st = self.state(s["pane"], screen(s["pane"]))
-            out.append(f"{ICON[st]} {s['sid'][:6]}  {s['name']}  {st}{self.since(s['pane'], st)}\n"
+            st = self.state(s["pane"], screen(s["pane"]), s["agent"])
+            out.append(f"{ICON[st]} {s['sid'][:6]}  {s['agent']} {s['name']}  {st}{self.since(s['pane'], st)}\n"
                        f"    📁 {short_path(s['cwd'])}\n    {s['title']}")
         return f"🖥 {HOST}\n" + "\n".join(out)
 
     def watch_text(self, s) -> str:
         scr = screen(s["pane"])
-        st = self.state(s["pane"], scr)
+        st = self.state(s["pane"], scr, s["agent"])
         sid = s["sid"][:6]
         tools = [e for e in self.ev.get(s["pane"], []) if e.get("ev") == "PreToolUse"][-6:]
         lines = [f"▸ {e.get('tool', '')}: {e.get('brief', '')}"[:140] for e in tools] or ["(no tool calls seen yet)"]
         if st == "waiting":
             lines += ["", "⏸ waiting on a dialog:", bottom(scr, 8)]
-        return (f"{ICON[st]} [{HOST}] {sid} {s['name']} · {st}{self.since(s['pane'], st)}\n📁 {short_path(s['cwd'])}\n\n"
+        return (f"{ICON[st]} [{HOST}] {sid} {s['agent']} {s['name']} · {st}{self.since(s['pane'], st)}\n📁 {short_path(s['cwd'])}\n\n"
                 + "\n".join(lines) + f"\n\n/unwatch · /status {sid}")
 
     # ---- periodic work
@@ -629,7 +653,7 @@ class Relay:
             log("no allowFrom user; cannot send requests")
             return
         s = next((s for s in sessions() if s["pane"] == meta.get("pane")), None)
-        frm = f"from {s['sid'][:6]} {s['name']}\n" if s else ""
+        frm = f"from {s['sid'][:6]} {s['agent']} {s['name']}\n" if s else ""
         text = f"❓ [{HOST}] {meta['id']}\n{frm}\n{body.strip()}"
         if len(text) > 3900:
             text = text[:3800] + f"\n\n… (truncated; full text in {path})"
@@ -645,13 +669,15 @@ class Relay:
 
     def callback(self, path, meta, body):
         pane = meta.get("pane", "")
-        if not any(s["pane"] == pane for s in sessions()):
+        session = next((s for s in sessions() if s["pane"] == pane), None)
+        if not session:
             meta["status"] = "orphaned"
             save_req(path, meta, body)
             self.notify(f"⚠️ {meta['id']}: the asking session is gone. The answer is saved in\n{path}")
             log(f"orphaned {meta['id']}")
             return
-        if not ready_for_input(screen(pane)):
+        agent = session["agent"]
+        if not ready_for_input(screen(pane), agent):
             if time.time() - meta.get("answered_ts", time.time()) > 600 and not meta.get("stuck_notified"):
                 meta["stuck_notified"] = True
                 save_req(path, meta, body)
@@ -660,7 +686,7 @@ class Relay:
                             f"so the answer is not delivered yet. /status {s['sid'][:6]}")
             return
         if not paste(pane, f"[tg-ask] the human answered request {meta['id']}. "
-                           f"Read the `answer` field in {path} and continue accordingly."):
+                           f"Read the `answer` field in {path} and continue accordingly.", agent):
             return  # retried on the next tick
         meta.update(status="delivered", delivered_at=iso())
         save_req(path, meta, body)
@@ -788,10 +814,12 @@ class Relay:
         return None
 
     def type_into(self, chat, pane, text):
-        if not ready_for_input(screen(pane)):
+        session = next((s for s in sessions() if s["pane"] == pane), None)
+        agent = session["agent"] if session else ""
+        if not ready_for_input(screen(pane), agent):
             return self.reply(chat, "That session is not at its input box (a dialog or menu is open). "
                                     "Check /status and answer it with /key.")
-        if not paste(pane, "[tg] " + text):
+        if not paste(pane, "[tg] " + text, agent):
             return self.reply(chat, "⚠️ A dialog opened while typing; the text was left unsubmitted. Check /status.")
         self.reply(chat, f"⌨️ sent [{HOST}]")
 
@@ -862,7 +890,7 @@ class Relay:
             me = api("getMe")
             log(f"relay polling as @{me['username']}")
             cmds = [{"command": c, "description": d} for c, d in [
-                ("ls", "List Claude sessions"), ("watch", "Live view: /watch <id>"),
+                ("ls", "List Claude and Codex sessions"), ("watch", "Live view: /watch <id>"),
                 ("unwatch", "Stop live view"), ("status", "Screen snapshot: /status <id>"),
                 ("to", "Type into a session: /to <id> <text>"), ("key", "Press a key: /key <id> <key>"),
                 ("pending", "Open requests"), ("help", "Help")]]
@@ -1036,7 +1064,7 @@ def cmd_health(a):
             pid = relay_pid()
         add("OK", "relay", f"started (pid {pid})") if pid else add("FAIL", "relay", "not running")
     else:
-        stale = str(SELF) not in pid_args(pid)
+        stale = ("--script-sha256 " + hashlib.sha256(SELF.read_bytes()).hexdigest()) not in pid_args(pid)
         note = ""
         if stale and a.fix:
             cmd_stop(a)
@@ -1101,6 +1129,9 @@ def cmd_selftest(_a):
     assert not ready_for_input("plain zsh prompt %")
     assert ready_for_input(f"{rule} ultracode ─\n❯ t\n{rule}\n  status")
     assert BUSY_RE.search("✽ Kerfuffling… (40s · ↓ 3.3k tokens)")
+    fixtures = SELF.parent.parent / "fixtures"
+    for name, expected in (("idle", True), ("working", False), ("approval", False)):
+        assert ready_for_input((fixtures / f"codex-{name}.txt").read_text(), "codex") == expected, name
     assert "<bot-token>" in redact("curl api.telegram.org/bot123456789:" + "x" * 35 + "/getMe")
     assert redact("export API_KEY=abc123") == "export API_KEY=<redacted>"
     assert "ghp_" not in redact("ghp_" + "a" * 30)
@@ -1123,9 +1154,10 @@ def main():
     p.add_argument("--option", action="append", help="button label; repeat for each option")
     p = sp.add_parser("say", help="send a message to the human")
     p.add_argument("text", nargs="?")
-    sp.add_parser("sessions", help="list Claude sessions in tmux")
+    sp.add_parser("sessions", help="list Claude and Codex sessions in tmux")
     sp.add_parser("hook")
-    sp.add_parser("relay")
+    p = sp.add_parser("relay")
+    p.add_argument("--script-sha256", help=argparse.SUPPRESS)
     sp.add_parser("start")
     sp.add_parser("stop")
     sp.add_parser("set-token", help="read a BotFather token on stdin, verify, save")
