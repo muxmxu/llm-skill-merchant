@@ -13,8 +13,8 @@ Never send, schedule, or post a message through any Slack tool (MCP or otherwise
 
 ## Tone resolution
 
-1. Read the workspace's `SLACK-MESSAGE-TONE.md`. Look for it at `merchant_skill_contract/SLACK-MESSAGE-CONTRACT/SLACK-MESSAGE-TONE.md` under the current workspace root first, then at the workspace root itself (legacy location — use it and propose migrating it once). It defines recipient profiles (register, language, question form, evidence-backed rules) and shared formatting rules. Its rules override the generic defaults below.
-2. If the file exists at neither location: say so, offer to create it in `merchant_skill_contract/SLACK-MESSAGE-CONTRACT/` from `assets/SLACK-MESSAGE-TONE.template.md` (in this skill), and for the current draft ask the user for the minimum recipient facts (who, language, expected length/politeness) instead of guessing.
+1. Read `SLACK-MESSAGE-TONE.md`. Look for it at `merchant_skill_contract/SLACK-MESSAGE-CONTRACT/SLACK-MESSAGE-TONE.md` under the current workspace root first, then at the workspace root itself (legacy location — use it and propose migrating it once), then in the user-level contract directory: `~/.claude/contracts/` under Claude Code, `~/.codex/contracts/` under Codex, or the location the user's global instructions declare. A workspace copy overrides the user-level one. The file defines recipient profiles (register, language, question form, evidence-backed rules) and shared formatting rules. Its rules override the generic defaults below.
+2. If the file exists at none of these locations: say so, offer to create it in `merchant_skill_contract/SLACK-MESSAGE-CONTRACT/` from `assets/SLACK-MESSAGE-TONE.template.md` (in this skill), and for the current draft ask the user for the minimum recipient facts (who, language, expected length/politeness) instead of guessing.
 
 ## Audience resolution
 

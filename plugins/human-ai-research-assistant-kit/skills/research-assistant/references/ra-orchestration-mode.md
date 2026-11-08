@@ -169,8 +169,10 @@ model/effort handles which task type is a workspace fact, and workspace
 facts do not belong in the kit (same separation `research-context.md`
 enforces for `RESEARCH-CONTEXT.md`). That fact lives in a file the skill
 reads: `ORCHESTRATION.md`, resolved per SKILL.md § Doc Resolution — the
-workspace's `merchant_skill_contract/HUMAN-AI-RA-CONTRACT/` directory, with
-the workspace root as legacy fallback.
+workspace's `merchant_skill_contract/HUMAN-AI-RA-CONTRACT/` directory, then
+the workspace root as legacy fallback, then the user-level contract directory
+(`~/.claude/contracts/` or `~/.codex/contracts/`). A workspace copy overrides
+the user-level one.
 
 Marker: if present, first line of the doc is `<!-- runbook-contract: ra-orchestration v1 -->`; a workspace `ORCHESTRATION.md` that carries its own loop and role table (see "What the doc is" below) is authoritative without it — treat the marker as an optional version tag, not a precondition for reading the doc.
 
@@ -217,8 +219,8 @@ Marker: if present, first line of the doc is `<!-- runbook-contract: ra-orchestr
 
 ### Built-in conservative default profile
 
-Used only when `ORCHESTRATION.md` is missing or has no matching/fallback
-row. Stated as capability tiers, not vendor model names — the kit must stay
+Used only when `ORCHESTRATION.md` is missing at every resolution step
+(workspace and user level) or has no matching/fallback row. Stated as capability tiers, not vendor model names — the kit must stay
 valid for a workspace on any provider (Anthropic, DeepSeek, OpenAI, ...),
 consistent with the Genericity rule below:
 

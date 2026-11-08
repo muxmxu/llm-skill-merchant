@@ -82,7 +82,8 @@ resolution rules (including the case where the workspace file carries its
 own native role/loop table instead of that kit's required-columns schema);
 not duplicated here.
 
-If the executing workspace has no `ORCHESTRATION.md` (or the task type isn't
+If no `ORCHESTRATION.md` resolves, neither in the workspace nor in the
+user-level contract directory (or the task type isn't
 covered by any row), fall back to the same conservative default that
 reference defines: implementer = a capable mid-tier model at high effort;
 semantic reviewer = a top-tier reasoning model; mechanical checks = a capable
