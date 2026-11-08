@@ -66,6 +66,9 @@ Use this mode when the human:
 - Read the human's own materials directly (Obsidian research logs, repo code,
   configs, `reference/` PDFs, prior progress entries). Do not ask the human to
   paste what you can read yourself.
+- Before using a research log as evidence, resolve the workspace's research-log use
+  contract, if any; it defines how temporary concepts are anchored and how AI
+  author-source markers are read.
 - Use web search / fetch for external literature, prior art, and API docs when a
   claim needs an external source.
 - Prefer reading the actual code / library over guessing an API.

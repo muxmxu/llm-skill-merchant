@@ -65,8 +65,7 @@ stated limit. An empty explanation is preferable to a made-up one.
 **Explicit AI synthesis is an opt-in route.** Use it only when the human
 expressly asks for analysis, explanation, inference, alternative exclusion,
 recommendation, or a new AI judgment. Preserve all source propositions and
-their existing markers first. Then attach the literal workspace marker
-`[AI-SOURCE-MARKER]` to each newly introduced explanation, exclusion, causal
+their existing markers first. Then attach the workspace's literal AI author-source marker to each newly introduced explanation, exclusion, causal
 link, recommendation, hypothesis, prediction, falsification condition, open
 question, or next step. Do not use an existing marker to cover a new sentence,
 and do not mix a source claim and a new AI claim under one marker.
@@ -74,6 +73,8 @@ and do not mix a source claim and a new AI claim under one marker.
 **Step 1 — Choose the lightest safe entry.** When the requested log has one clear topic, or the user asks for a style-only rewrite, draft directly. When multiple threads would change the meaning if separated, state a one-sentence topic split and ask for confirmation before restructuring. Do not turn a clear drafting request into a mandatory interview.
 
 **Step 2 — Resolve tone authority.** A workspace `RESEARCH_WRITE_TONE.md` (resolved per SKILL.md § Doc Resolution; or an explicitly approved style exemplar) governs voice and readability. Recent logs may supply terminology, section habits, and the amount of detail, but never become a style authority by themselves. In particular, do not copy a recent log's battle-report, audit, scolding, or completion-report register.
+
+**Step 2b — Resolve the log-use contract.** A workspace research-log use contract (resolved per SKILL.md § Doc Resolution) may govern the scope and anchoring of temporary concepts, thread membership, where later results of the same experiment go, and the split between result and analysis logs; apply it before structuring the log.
 
 **Step 3 — Register fidelity while drafting.** Apply "Register and Accountability" below, plus these transformation-specific rules:
 
@@ -93,9 +94,9 @@ checks protect the record rather than its surface style:
   another stronger causal or evidential claim. These words change what the
   day-T record says, even when the sentence becomes smoother.
 
-**Step 4 — Preserve attribution without manufacturing prose.** A source-constrained transformation may add no explanation at all. Do not invent a connective inference merely to make the prose smoother. If the workspace defines an author-source marker, preserve it literally and on the same claim; do not split, rename, remove, or synthesize markers. In this workspace, `[AI-SOURCE-MARKER]` is that marker. Explicit AI synthesis must use a separate literal marker for every new AI proposition.
+**Step 4 — Preserve attribution without manufacturing prose.** A source-constrained transformation may add no explanation at all. Do not invent a connective inference merely to make the prose smoother. If the workspace defines an author-source marker, preserve it literally and on the same claim; do not split, rename, remove, or synthesize markers. The workspace tone contract defines the literal markers, their levels and their placement; resolve it before drafting. Explicit AI synthesis must use a separate literal marker for every new AI proposition.
 
-**Step 5 — Post-draft self-check, then deliver.** In a source-constrained transformation, verify that every sentence maps to supplied propositions and that facts, scope, negation, chronology, causality, uncertainty, modality, and author-source markers are unchanged. In particular, check every fixed-condition sentence against its source: it may report the condition, but may not name a new error class that it supposedly excludes. Check every hedge and causal connector: it may not become stronger. In explicit AI synthesis, also check that each added research proposition has its own literal `[AI-SOURCE-MARKER]` marker. Use readable paragraphs rather than forcing every sentence into the same length. Keep evidence labels only where the passage is accountable to data, paper, or code. Resolve every `[[wikilink]]` when a checker is available.
+**Step 5 — Post-draft self-check, then deliver.** In a source-constrained transformation, verify that every sentence maps to supplied propositions and that facts, scope, negation, chronology, causality, uncertainty, modality, and author-source markers are unchanged. In particular, check every fixed-condition sentence against its source: it may report the condition, but may not name a new error class that it supposedly excludes. Check every hedge and causal connector: it may not become stronger. In explicit AI synthesis, also check that each added research proposition has its own literal AI author-source marker (as defined by the workspace). Use readable paragraphs rather than forcing every sentence into the same length. Keep evidence labels only where the passage is accountable to data, paper, or code. Resolve every `[[wikilink]]` when a checker is available.
 
 ### Style-only means semantic substitution, not editorial expansion
 
@@ -162,7 +163,7 @@ limitation plainly. Expand it only when the source already contains the
 concrete mismatch, its possible effect, and the narrower conclusion. Otherwise
 do not supply that reasoning merely to make the record feel complete. In
 explicit AI synthesis, a new explanation of the limitation is an AI claim and
-needs its own literal `[AI-SOURCE-MARKER]` marker.
+needs its own literal AI author-source marker (as defined by the workspace).
 
 ## Experiment Record — FORBIDDEN unless this passage is accountable to DATA
 
@@ -190,7 +191,7 @@ explanation, correction, or hindsight note.
 - The only legitimate edit is **relaxing an over-claim to the register it deserved THAT DAY**: a conjecture written as a proven claim becomes a conjecture again, because it *was* a conjecture on day T. This needs no future knowledge — whether something had been tested yet is a day-T fact.
 - **Forbidden — hindsight.** Do not import a later result, do not add "(this turned out wrong)", do not harden or soften a passage because of how it played out. The day-T author could not know that. Backward dependence (citing an experiment from before T) is fine; forward dependence is not.
 - A correction or retraction lives in the **later** log where the new knowledge was acquired, dated when it was known — never retro-injected into the past log.
-- Do not add a falsification framing to a source-constrained revision. In explicit AI synthesis, a new day-T design question is an AI proposition and needs its own literal `[AI-SOURCE-MARKER]` marker; never phrase it via a later outcome.
+- Do not add a falsification framing to a source-constrained revision. In explicit AI synthesis, a new day-T design question is an AI proposition and needs its own literal AI author-source marker (as defined by the workspace); never phrase it via a later outcome.
 - A flag is only valid if it is **outcome-independent**: the passage was over-claimed relative to its day-T evidence regardless of how it later turned out. If a passage would have been fine to write that day and is suspect only because of what happened next, do not touch it.
 - Reality check after the edit: the day-T author would say "yes, I should have written it that way then" — not "I couldn't have known that." If the second, you imported the future; revert.
 
@@ -212,7 +213,7 @@ If evidence is missing, mark the statement as a hypothesis, assumption, human in
 
 Research logs may preserve mixed language, informal phrasing, and original terminology. Do not force full English unless requested. Preserve technical terms when translation would reduce precision.
 
-If the human maintains personal log-form conventions (notation gloss, symbol-collision rules, math formatting, attribution rules, concept-note granularity), honor them; they govern form, this file governs register and rigor.
+If the human maintains personal log-form conventions (notation gloss, symbol-collision rules, math formatting, attribution rules, concept-note granularity), honor them; they govern form, this file governs register and rigor. Such conventions may also fix page-splitting and appendix rules, and where they do they override Rule 8 below.
 
 ## Delivery Scope
 
@@ -284,3 +285,4 @@ This is a MENU, not a form. Pick only the sections that serve this entry; an ent
 - Do not erase Q&A-like reasoning if it helps preserve the research process.
 - Do not replace human uncertainty with a polished narrative.
 - Do not turn the log into a progress note, task, or reference unless explicitly requested.
+- Do not render the human's thinking as quoted lines followed by assistant commentary; organize it in the human's own voice, and keep any assistant disagreement as a separately marked item under the workspace's marker rules.

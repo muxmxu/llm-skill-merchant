@@ -39,7 +39,7 @@ Workspace facts (vault paths, literature library, note spaces, code repos) live 
 - Doc missing → say so and offer init; do not guess paths from the workspace.
 - A required section missing → ask the user; do not infer its content.
 
-**Contract directory.** `RESEARCH-CONTEXT.md` itself always sits at the workspace root (it is the bootstrap anchor). Every *other* workspace contract doc this kit consumes — the orchestration table (`ORCHESTRATION.md`), the paper-writing contract, presentation style/layout contracts, tone contracts, venue review checklists — lives in a dedicated directory under the workspace root:
+**Contract directory.** `RESEARCH-CONTEXT.md` itself always sits at the workspace root (it is the bootstrap anchor). Every *other* workspace contract doc this kit consumes — the orchestration table (`ORCHESTRATION.md`), the paper-writing contract, presentation style/layout contracts, tone contracts, the research-log use contract, venue review checklists — lives in a dedicated directory under the workspace root:
 
 ```
 merchant_skill_contract/HUMAN-AI-RA-CONTRACT/

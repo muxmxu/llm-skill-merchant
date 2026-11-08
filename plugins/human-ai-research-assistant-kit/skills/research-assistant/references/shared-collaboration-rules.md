@@ -89,6 +89,10 @@ instructions. Those tasks cite an authenticated `human_instruction` as their
 parent authority and remain subject to project rules and non-waivable safety
 constraints.
 
+Deriving from a research log also follows the workspace's research-log use
+contract, if one exists, for concept anchoring and for which AI-marked items
+may be cited.
+
 ## Evidence Labels
 
 Use these labels when helpful:
