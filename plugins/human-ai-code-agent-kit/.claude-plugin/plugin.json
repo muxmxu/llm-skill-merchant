@@ -1,7 +1,7 @@
 {
   "name": "human-ai-code-agent-kit",
   "description": "suit-for-code-agent: Project-runbook workflows for implementation, experiment lifecycle, evaluation, compute operations, and read-only code inspection, with guided execution by default.",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "author": {
     "name": "llm-skill-merchant maintainers"
   }
