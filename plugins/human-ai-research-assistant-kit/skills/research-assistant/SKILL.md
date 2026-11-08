@@ -47,6 +47,8 @@ merchant_skill_contract/HUMAN-AI-RA-CONTRACT/
 
 Resolution order for any such contract: (1) an explicit pointer in `RESEARCH-CONTEXT.md` wins; (2) the contract directory above; (3) legacy fallback — the workspace root. When a contract is found only at a legacy location, use it and propose migrating it into the contract directory once; do not silently duplicate it.
 
+**Node handoff.** Switching the working machine (`/handoff-to <node>`, `/takeover`) is its own pipeline, not one of the ten modes: read `references/node-handoff.md` in full, skip Mode Selection, and resolve `MULTI-NODE-SOP.md` by the order above. That contract supplies every node name, path and tool name through its skill interface section; the reference holds none. It runs on the main thread only; ordinary single-node work never loads it.
+
 ## RA Orchestration Workmode (when needed)
 
 Use orchestration only for an explicit dispatch request, parallel work,
