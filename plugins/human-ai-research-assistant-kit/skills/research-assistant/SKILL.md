@@ -39,13 +39,13 @@ Workspace facts (vault paths, literature library, note spaces, code repos) live 
 - Doc missing → say so and offer init; do not guess paths from the workspace.
 - A required section missing → ask the user; do not infer its content.
 
-**Contract directory.** `RESEARCH-CONTEXT.md` itself always sits at the workspace root (it is the bootstrap anchor). Every *other* workspace contract doc this kit consumes — the orchestration table (`ORCHESTRATION.md`), the paper-writing contract, presentation style/layout contracts, tone contracts, the research-log use contract, venue review checklists — lives in a dedicated directory under the workspace root:
+**Contract directory.** `RESEARCH-CONTEXT.md` itself always sits at the workspace root (it is the bootstrap anchor). Every *other* workspace contract doc this kit consumes — the orchestration table (`ORCHESTRATION.md`), the paper-writing contract, presentation style/layout contracts, tone contracts, the research-log use contract, venue review checklists — lives in a dedicated directory under the workspace root, unless it is a user-level contract (see the resolution order below):
 
 ```
 merchant_skill_contract/HUMAN-AI-RA-CONTRACT/
 ```
 
-Resolution order for any such contract: (1) an explicit pointer in `RESEARCH-CONTEXT.md` wins; (2) the contract directory above; (3) legacy fallback — the workspace root; (4) the **user-level contract directory** — `~/.claude/contracts/` under Claude Code, `~/.codex/contracts/` under Codex, or the location the user's global instructions declare. When a contract is found only at a legacy location, use it and propose migrating it into the contract directory once; do not silently duplicate it.
+Resolution order for any such contract: (1) an explicit pointer in `RESEARCH-CONTEXT.md` wins; (2) the contract directory above; (3) legacy fallback — the workspace root; (4) the **user-level contract directory** — `~/.claude/contracts/` under Claude Code, `~/.codex/contracts/` under Codex, or the location the user's global instructions declare. When a contract is found only at a legacy location, use it and propose migrating it into the contract directory once; do not silently duplicate it. A contract found at step 4 is already where it belongs; do not propose copying it into the workspace.
 
 The user-level directory holds contracts that describe the user rather than one project (typically `ORCHESTRATION.md` and `SLACK-MESSAGE-TONE.md`), so the same rules apply in every workspace, including one with no `RESEARCH-CONTEXT.md`. A workspace copy found at steps 1–3 overrides it. Project-bound contracts (paper, presentation, research-log use, venue checklists, node SOP) are not looked up at step 4.
 

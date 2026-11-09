@@ -1,6 +1,6 @@
 # SLACK-MESSAGE-TONE
 
-Workspace-local tone rules for the `slack-message-drafting` skill. One profile per recipient or audience group. Rules here override the skill's generic defaults. Keep rules evidence-backed where possible: quote the real reaction that motivated each rule.
+Tone rules for the `slack-message-drafting` skill, kept either in one workspace or in the user-level contract directory (applies to every workspace). One profile per recipient or audience group. Rules here override the skill's generic defaults. Keep rules evidence-backed where possible: quote the real reaction that motivated each rule.
 
 ## Profile: <name or role, e.g. advisor / labmates / collaborator X>
 
