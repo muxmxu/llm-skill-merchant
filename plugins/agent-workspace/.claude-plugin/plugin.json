@@ -1,7 +1,7 @@
 {
   "name": "agent-workspace",
   "description": "Maintain continuity records for resumable, formally delegated, or explicitly tracked work. Reuse existing task directories; short self-contained tasks need no new records.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "llm-skill-merchant maintainers"
   }

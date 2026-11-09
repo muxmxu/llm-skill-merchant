@@ -72,9 +72,8 @@ Use this mode when the human:
 ## Concept Card Rules
 
 - **Destination:** resolve from RESEARCH-CONTEXT.md `## Note spaces` and pick
-  the existing area that fits the content (a DSP concept belongs with the
-  signal-processing study notes; an infra/tooling concept with the tech
-  notes). If no doc: offer init per `references/research-context.md` — do
+  the existing area that fits the content (a domain concept belongs with that
+  domain's study notes; an infra/tooling concept with the tech notes). If no doc: offer init per `references/research-context.md` — do
   not guess.
 - **Red line: never create a new directory.** If no existing area fits,
   propose candidates and let the human decide.

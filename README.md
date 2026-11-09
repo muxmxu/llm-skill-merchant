@@ -1,8 +1,8 @@
 # llm-skill-merchant
 
-**The central hub for every Claude Code skill I build.** Cross-machine,
-cross-machine: any skill created on any of my machines lands here as (part of)
-a plugin; every machine consumes from here. One repository = one source of
+**A cross-machine plugin marketplace of skills for human-AI research
+collaboration.** Skills are developed here as (part of) a plugin; every machine
+consumes from here. One repository = one source of
 truth — no more per-machine skill drift.
 
 ## How it works

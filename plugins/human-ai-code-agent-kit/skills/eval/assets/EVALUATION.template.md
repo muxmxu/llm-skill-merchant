@@ -23,7 +23,7 @@
 
 <!-- Where results land: paths, file naming, rough schema. EVERY location
      exception. Caveats about derived artifacts (e.g. normalized outputs unfit
-     for energy metrics). -->
+     for scale-dependent metrics). -->
 
 ## Comparison
 

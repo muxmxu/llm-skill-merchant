@@ -3,8 +3,7 @@
 Companion to `ra-orchestration-mode.md`. Read only when the executing
 harness is Claude Code; nothing here applies to other providers.
 
-Verified against actual harness behavior (2026-07-15) — item 1 corrects a
-mistake a tier-1 model made in practice; do not re-derive these from
+Verified against actual harness behavior; do not re-derive these from
 intuition, trust this list.
 
 1. The Workflow tool's `agent()` call **does** support a per-call effort

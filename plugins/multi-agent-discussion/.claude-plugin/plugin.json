@@ -1,7 +1,7 @@
 {
   "name": "multi-agent-discussion",
   "description": "suit-for-ai-research-assistant: File-based multi-agent debate with accurate quotations, evidence labels, assigned-file ownership, and human arbitration.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "llm-skill-merchant maintainers"
   }

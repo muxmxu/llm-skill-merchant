@@ -42,8 +42,8 @@ agent_workspace/{YYYY-M-D}-{topic}/
 `{topic}` is a short kebab-case slug for the work, not for one session's
 slice of it. `{YYYY-M-D}` is the day the *work* started, not today.
 
-**Pick one date form and never mix.** A workspace that writes `2026-8-5`
-must not also produce `2026-08-05`; the two spellings of the same day create
+**Pick one date form and never mix.** A workspace that writes `2000-1-2`
+must not also produce `2000-01-02`; the two spellings of the same day create
 two directories for one topic, and each session afterwards updates whichever
 one it happens to find. When the workspace's existing directories disagree,
 ask the human which form is canonical rather than adding a third.

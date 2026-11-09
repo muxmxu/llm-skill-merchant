@@ -16,7 +16,7 @@ TEMPLATE NOTES (delete after filling)
   expected for any real venue.
 - Item IDs are stable: <VENUE>-<letter><n> (e.g. CONF-C1, CONF-R3).
   Never renumber existing items; append.
-- Worked exemplar: the CONF instance next to this template's target
+- Filled instances live in the workspace's venue-checklists contract
   directory (merchant_skill_contract/HUMAN-AI-RA-CONTRACT/venue-checklists/).
 -->
 

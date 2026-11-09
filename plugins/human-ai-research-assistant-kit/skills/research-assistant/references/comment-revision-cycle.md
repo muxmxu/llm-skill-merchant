@@ -160,7 +160,7 @@ Every comment is exactly one of:
 | `actionable` | an instruction to change something | pre-fill options; `status: awaiting-human` until the human decides |
 | `question` | the reviewer asks the human a question | If the answer is an enumerable set of text changes, pre-fill `options:` and let the human resolve it in place like an `actionable` item (pick → `confirmed`). Otherwise `status: question`: the human fills `answer:`; the answer is information, never executed — if it implies an edit, re-run step 1 to derive a NEW `actionable` block, which then re-enters the gate. |
 
-## Discipline (encoded from real runs)
+## Discipline
 
 1. **Never revert an edit the reviewer already applied.** `applied-explanation`
    items are verify-only; any manuscript text the reviewer merged in is ground

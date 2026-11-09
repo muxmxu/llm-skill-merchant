@@ -1,4 +1,4 @@
-# Literature Survey Mode 
+# Literature Survey Mode
 
 Use when the human asks to survey a topic, dig prior work, or build a reading list — typically via fan-out sub-agents, or via an external deep-research tool (see "Deep-research prompt generation"). Three deliverable types, all or some per request:
 
@@ -23,8 +23,10 @@ Path resolution: every workspace location this mode writes to (notes dir, PDF di
 
 ## Per-paper note format
 
+The format below is the kit's default. When RESEARCH-CONTEXT.md `## Literature` declares its own note schema (filename, frontmatter, body headings, citation marker), that declaration wins.
+
 - Location: the AI-survey notes directory from RESEARCH-CONTEXT.md `## Literature`, in a `<YYYY-MM>/` subfolder; filename `<YYYY - Title>.md` (year, " - ", title with ":" replaced by " - ").
-- Frontmatter (reference-manager import contract — dashboards depend on these fields):
+- Frontmatter (the reference-manager import contract; the workspace's notes dashboard depends on these fields):
 
 ```yaml
 ---
@@ -36,13 +38,13 @@ publication: "<venue>"
 year: "<YYYY>"
 date: "<YYYY-MM-DD>"
 url: "<arxiv abs / venue url>"
-zotero_link: ""            # empty until imported to Zotero
+zotero_link: ""            # empty until imported to the reference manager
 pdf_link: "[<pdf file>](file://<absolute local path>)"
 status: reading            # AI NEVER sets read — read means the human personally read it
 origin: ai-survey
 tags:
   - research
-  - ai-survey
+  - <AI-survey tag from RESEARCH-CONTEXT.md `## Literature`>
   - <topical tags>
 ---
 ```
@@ -52,7 +54,7 @@ tags:
 - PDFs: download to the PDF storage directory from RESEARCH-CONTEXT.md `## Literature` (topic-subfoldered) with naming `YYYY-Venue-Author-Keyword-<arxivId>.pdf`; `pdf_link` points there.
 - Dashboard: the notes dashboard declared in RESEARCH-CONTEXT.md `## Literature` picks notes up automatically if the frontmatter contract is respected.
 
-## Citing ai-survey papers in research logs
+## Citing AI-surveyed papers in research logs
 
 - Link normally: `[[YYYY - Title]]`.
 - A claim taken from an AI note the human has not personally read carries the marker 「出自 AI 精读，未亲核」. Drop the marker once the note's status flips to `read`.

@@ -1,7 +1,7 @@
 {
   "name": "slack-message",
   "description": "Draft and revise Slack messages using workspace recipient tone rules. File or clipboard export only when requested; never sends, posts, or schedules messages.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": {
     "name": "llm-skill-merchant maintainers"
   }

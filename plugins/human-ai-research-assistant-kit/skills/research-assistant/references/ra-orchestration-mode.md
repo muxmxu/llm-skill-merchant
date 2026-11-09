@@ -20,8 +20,8 @@ The top-level session may write a small, human-facing response directly when
 that is the requested work. When the workspace's `ORCHESTRATION.md` defines
 its own Direct Mode / Orchestration Mode boundary, that boundary decides
 whether the top-level session may do so; use the sentence above only when
-the workspace file is silent on that boundary, and defer to its 「总则 & 工作模式」
-item 2 (no small-task exception once inside orchestration mode) for any task
+the workspace file is silent on that boundary, and defer to its general rules
+(for example, a rule that allows no small-task exception once inside orchestration mode) for any task
 the workspace file's threshold puts inside the loop. Delegate only when
 delegation improves reliability, coverage, or turnaround; do not create a
 completion pipeline for a simple conversation or a single log.
@@ -243,8 +243,8 @@ table (see Doc resolution above) is read directly instead.
 
 Column names may be localized to the workspace's working language, as long
 as each localized column's order and semantics map one-to-one to this
-schema (e.g. a Chinese `ORCHESTRATION.md` may render the header row as
-任务类型 / 澄清深度 / writer / 语义 reviewer / 机械审计 / 独立核验 / 备注).
+schema (e.g. a non-English `ORCHESTRATION.md` may render each header in its
+working language).
 
 - **Task Type** — the kind of work being dispatched (paper writing,
   literature survey, evidence-pack assembly, slide/figure production, log

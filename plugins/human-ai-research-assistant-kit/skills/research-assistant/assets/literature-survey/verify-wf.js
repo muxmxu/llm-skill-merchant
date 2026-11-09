@@ -17,7 +17,7 @@ export const meta = {
 const MANIFEST = '/ABS/PATH/TO/review-manifest.md'  // numbered table: # | Title | Venue+Year | Primary angle | PDF filename | Note filename
 const PDFDIR   = '/ABS/PATH/TO/reference/<topic>'   // where the downloaded PDFs live
 const NOTEDIR  = '/ABS/PATH/TO/ai-survey-notes/YYYY-MM'  // where the notes live
-const NOTE_COUNT  = 0           // number of manifest rows = number of notes to verify
+const NOTE_COUNT  = 0           // set to N: number of manifest rows = number of notes to verify
 const SURVEY_DATE = 'YYYY-MM-DD'  // the date stamped in note frontmatter — must be preserved on edit
 const VERIFY_MODEL = 'opus'     // adversarial reading → opus; omit to inherit session model
 
