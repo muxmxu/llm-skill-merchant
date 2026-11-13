@@ -51,6 +51,8 @@ The user-level directory holds contracts that describe the user rather than one 
 
 **Node handoff.** Switching the working machine (`/handoff-to <node>`, `/takeover`) is its own pipeline, not one of the ten modes: read `references/node-handoff.md` in full, skip Mode Selection, and resolve `MULTI-NODE-SOP.md` by the order above. That contract supplies every node name, path and tool name through its skill interface section; the reference holds none. It runs on the main thread only; ordinary single-node work never loads it.
 
+**Research loop.** Carrying one topic from discussion through log, delivery bus, dispatch, supervision and result backfill (`/research-loop [topic]`) is its own pipeline, not one of the ten modes: read `references/research-loop.md` in full, skip Mode Selection, and resolve the workspace's research loop contract by the order above (in the contract directory it is the file named like that reference, with the stem in upper case). That contract supplies every path, stage name, tier and default through its skill interface section; the reference holds none. The pipeline chains the existing modes and the dispatch stages, stops only at human gates, and recovers from the topic's existing record files after a compaction or a new session. It runs on the main thread only. Besides the command, and only in a workspace where this contract and the place values it points to resolve, it becomes active when the human says an idea has taken shape or asks for a log and bus artifacts from a discussion, after a one-sentence notice the human may decline.
+
 ## RA Orchestration Workmode (when needed)
 
 Use orchestration only for an explicit dispatch request, parallel work,
@@ -89,6 +91,8 @@ Additional workflows, only when requested or required by the selected mode:
 - `references/code-agent-execution.md`: the receiving executor's contract.
 - `references/comment-revision-cycle.md`: transform reviewer feedback into
   approved, executed, and verified manuscript changes.
+- `references/research-loop.md`: carry one topic from discussion to result
+  backfill across the existing modes and the dispatch stages.
 
 ## Collaboration Protocol
 

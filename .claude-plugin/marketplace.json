@@ -16,7 +16,7 @@
     },
     {
       "name": "human-ai-research-assistant-kit",
-      "description": "AI Research Assistant side of the human-AI research collaboration model <suit-for-ai-research-assistant>: seven-mode kit for research discussion (sparring), research logs (incl. braindump-to-log protocol), decision notes, code-agent tasks, technical references, literature survey fan-out, academic presentation writing, and its downstream speaker-deck stage (the presenter's stage card, under the workspace's DECK_STYLE.md). Also carries the node handoff pipeline (/handoff-to, /takeover) that moves the working machine between nodes under the workspace's MULTI-NODE-SOP.md.",
+      "description": "AI Research Assistant side of the human-AI research collaboration model <suit-for-ai-research-assistant>: seven-mode kit for research discussion (sparring), research logs (incl. braindump-to-log protocol), decision notes, code-agent tasks, technical references, literature survey fan-out, academic presentation writing, and its downstream speaker-deck stage (the presenter's stage card, under the workspace's DECK_STYLE.md). Also carries the node handoff pipeline (/handoff-to, /takeover) that moves the working machine between nodes under the workspace's MULTI-NODE-SOP.md, and the research loop pipeline (/research-loop) that carries one topic from discussion through log, delivery bus, dispatch, supervision and result backfill under the workspace's research loop contract.",
       "author": {
         "name": "llm-skill-merchant maintainers"
       },
