@@ -293,7 +293,7 @@ _tls = threading.local()  # one keep-alive connection per thread: saves a TLS ha
 def api(method: str, _timeout: float = 30, _token: str | None = None, **params):
     t = _token or token()
     if not t:
-        raise TgError("no bot token; run /tg-ask:setup")
+        raise TgError("no bot token; run the host's tg-ask setup procedure")
     body = json.dumps(params).encode()
     for attempt in (1, 2):
         conn = getattr(_tls, "conn", None)
@@ -439,7 +439,7 @@ def ensure_relay() -> bool:
 
 def cmd_start(_a):
     if not ENABLED.exists():
-        die("not set up on this machine; run /tg-ask:setup")
+        die("not set up on this machine; run the host's tg-ask setup procedure")
     print("relay started" if ensure_relay() else "relay already running")
 
 
@@ -463,7 +463,7 @@ def cmd_ask(a):
     if not pane:
         die("not inside tmux ($TMUX_PANE unset): the relay could not call this session back")
     if not ENABLED.exists():
-        die("not set up on this machine; run /tg-ask:setup")
+        die("not set up on this machine; run the host's tg-ask setup procedure")
     body = sys.stdin.read()
     if not body.strip():
         die("request body required on stdin")
@@ -501,7 +501,7 @@ def cmd_say(a):
     text = a.text if a.text is not None else sys.stdin.read()
     if not text.strip():
         die("nothing to say")
-    chat = owner() or die("no allowlisted Telegram user; run /tg-ask:setup")
+    chat = owner() or die("no allowlisted Telegram user; run the host's tg-ask setup procedure")
     pane = os.environ.get("TMUX_PANE")
     me = next((s for s in sessions() if s["pane"] == pane), None) if pane else None
     head = f"💬 [{HOST}] {me['sid'][:6]} {me['name']}" if me else f"💬 [{HOST}]"
@@ -1042,7 +1042,7 @@ def cmd_health(a):
 
     add("OK", "python", sys.version.split()[0]) if sys.version_info >= (3, 8) else add("FAIL", "python", "need 3.8+")
     add("OK", "tmux", shutil.which("tmux")) if shutil.which("tmux") else add("FAIL", "tmux", "not on PATH")
-    add("OK", "setup", str(HOME)) if ENABLED.exists() else add("FAIL", "setup", "not enabled; run /tg-ask:setup")
+    add("OK", "setup", str(HOME)) if ENABLED.exists() else add("FAIL", "setup", "not enabled; run the host's tg-ask setup procedure")
     if not token():
         add("FAIL", "token", f"no TELEGRAM_BOT_TOKEN in {STATE / '.env'}")
     else:
