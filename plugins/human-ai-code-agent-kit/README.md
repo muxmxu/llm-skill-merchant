@@ -49,6 +49,15 @@ Run the `init` subcommand in the new repo:
   maintenance as a chain of fresh sessions (`scripts/drive.py`), with the
   development rules against over-defensive code adopted into the `impl` rules
   doc. Personal and machine facts stay in the user-level `LIFECYCLE-HOST.md`.
+- **code-handoff** — hands the current task to an agent on another node, in
+  any repository: updates the three agent-workspace files, writes
+  `KICKOFF.md`, copies the workspace (`rsync`/`scp`, pushed by the sender or
+  pulled by the receiver) to a target the human names. Code and long-term
+  records travel by git (a `git bundle` when a branch may not be pushed).
+- **code-takeover** — `code-takeover [kickoff]`: reads the kickoff (default
+  `KICKOFF.md`, or a path or pasted text), gets the workspace and code,
+  confirms the handoff is meant for this node, then continues from the
+  `STATUS.md` next step. No runbook needed for either.
 
 ## Safety philosophy
 

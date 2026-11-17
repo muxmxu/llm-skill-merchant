@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "human-ai-code-agent-kit",
-      "description": "AI Code Agent side of the human-AI research collaboration model <suit-for-code-agent>: doc-contract-driven skills for experiment lifecycle (exp), evaluation (eval), compute operations (ops), implementation workflow (impl), and long unattended product lifecycle runs (long-term).",
+      "description": "AI Code Agent side of the human-AI research collaboration model <suit-for-code-agent>: doc-contract-driven skills for experiment lifecycle (exp), evaluation (eval), compute operations (ops), implementation workflow (impl), long unattended product lifecycle runs (long-term), and handing code agent work to another node (code-handoff, code-takeover).",
       "author": {
         "name": "llm-skill-merchant maintainers"
       },

@@ -280,8 +280,8 @@ def check_manifests(root: Path, errors: list[str]) -> None:
 
 def check_repo(root: Path, errors: list[str]) -> RepoState:
     skill_paths = sorted(root.glob("plugins/*/skills/*/SKILL.md"))
-    if len(skill_paths) != 12:
-        add_error(errors, root / "plugins", f"expected exactly twelve SKILL.md files (found {len(skill_paths)})")
+    if len(skill_paths) != 14:
+        add_error(errors, root / "plugins", f"expected exactly fourteen SKILL.md files (found {len(skill_paths)})")
     skills: list[Skill] = []
     for path in skill_paths:
         parsed = parse_skill(path, errors)
