@@ -93,8 +93,9 @@ next step in STATUS.md.
    `decided.md`; the open cycle plan and phase plan; `LIFECYCLE.md`; the host
    contract; the orchestration contract sections the step needs. Under a node contract, run its
    start-of-work routine first.
-3. **Verify the baseline.** Fetch when the repository has a remote; compare
-   the branch heads with what STATUS records. For every dispatch STATUS lists
+3. **Verify the baseline.** Fetch when the repository has a remote; if the
+   fetch fails (offline), note it in the worklog and continue on the local
+   refs. Compare the branch heads with what STATUS records. For every dispatch STATUS lists
    as running, check its real state with the host's task listing and stop or
    collect it before saying anything about it; a process listing is not
    evidence that nothing runs. Interrupted work: inspect the residual diff
@@ -118,8 +119,9 @@ next step in STATUS.md.
    `<records dir>`; search the staged diff for `<personal vocabulary>` and
    for generic patterns (home-directory paths, email
    addresses, non-loopback IP addresses); move any hit to `local.md` or
-   `human-inputs.md` and stage again; commit on the integration branch as
-   `records: <step>`. It is a local commit, so the Commit
+   `human-inputs.md` and stage again; commit on the integration branch with
+   `git commit -m "records: <step>" -- <records dir>`, so nothing else that
+   is staged goes in. It is a local commit, so the Commit
    authorization gate applies: until an authorization is recorded, records are
    written and not committed. Code commits follow the same authorization.
    Under a node contract, run its end-of-work routine.
@@ -143,6 +145,8 @@ the plan (an amendment) instead of retrying it as it is.
 agent only under an authorization that names it; it never runs twice on one
 state directory: it holds an exclusive lock on `driver.lock` for as long as
 it runs, and a second driver exits at once with "another driver holds".
+It needs a POSIX system (macOS, Linux; on Windows, WSL), since it uses
+`fcntl` locks and process groups.
 
 ```
 python3 <skill>/scripts/drive.py --state-dir <state dir> \

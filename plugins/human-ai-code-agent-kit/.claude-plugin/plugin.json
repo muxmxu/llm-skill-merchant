@@ -1,7 +1,7 @@
 {
   "name": "human-ai-code-agent-kit",
   "description": "suit-for-code-agent: Project-runbook workflows for implementation, experiment lifecycle, evaluation, compute operations, read-only code inspection, long unattended product lifecycle runs, and node-to-node handoff of code agent work (code-handoff, code-takeover), with guided execution by default.",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "author": {
     "name": "llm-skill-merchant maintainers"
   }
