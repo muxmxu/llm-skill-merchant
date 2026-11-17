@@ -1,7 +1,7 @@
 <!-- runbook-contract: lifecycle v1 -->
 # Lifecycle
 
-<!-- The project's own process for a long lifecycle run. The lifecycle skill
+<!-- The project's own process for a long lifecycle run. The long-term skill
      navigates by the exact H2 headings below; do not rename them. This file
      is tracked and may be published: no personal or machine facts (paths
      under a home directory, user or host names, model tiers, agent command
@@ -31,11 +31,14 @@
 
 ## State and records
 
-<!-- <state dir>: the run's state directory relative to the repository root,
-     and whether it is tracked (verbatim human words live there).
+<!-- <state dir>: the run's untracked, machine-local state directory relative
+     to the repository root (verbatim human words live there).
+     <records dir>: the tracked directory for the run's records (worklog,
+     plans, ledgers), relative to the repository root.
      <decision record>: the tracked file for numbered product decisions. -->
 
 - State directory: TODO
+- Records directory: TODO
 - Decision record: TODO
 
 ## Checks
@@ -54,7 +57,7 @@
 
 ## Integration
 
-<!-- <branch policy>: integration branch, per-task branch or worktree
+<!-- <branch policy>: integration branch, per-task branch and worktree
      naming, hotfix branch naming (from the latest release tag, merged back
      after the patch), merge method, who merges.
      <drift map>: spec sections to code, or "audit by reading".

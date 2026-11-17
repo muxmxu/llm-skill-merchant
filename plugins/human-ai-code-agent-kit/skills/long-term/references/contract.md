@@ -1,4 +1,4 @@
-# lifecycle contract interface (lifecycle v1)
+# long-term contract interface (lifecycle v1)
 
 This skill carries no environment facts. Every value below comes from one
 layer only, so overriding one file can never drop a key of another:
@@ -55,13 +55,14 @@ it. Extra sections are allowed.
 | `<system scope>` | Sources | Who uses the product and what it must defend against: users, trust boundaries, threat model; or the spec section that states it. Reviewers judge findings against it. | — |
 | `<protected standards>` | Sources | Files and sections only the human changes: requirement scope, acceptance criteria, protected spec sections, bundled standards. `LIFECYCLE.md`, the rules doc, and linter configuration are always included. | the always-included set |
 | `<roadmap>` | Sources | Where milestones or releases and their acceptance lists live; how an exit criterion is numbered. | — |
-| `<state dir>` | State and records | The run's state directory, relative to the repository root, and whether it is tracked. | — |
-| `<decision record>` | State and records | The tracked file that keeps product decisions (numbered, append-only), so they survive outside the state directory. | — |
+| `<state dir>` | State and records | The run's state directory, relative to the repository root. Untracked, machine-local. | — |
+| `<records dir>` | State and records | The directory for the run's records (worklog, plans, ledgers), relative to the repository root. Tracked, unless the project declares it untracked. | — |
+| `<decision record>` | State and records | The tracked file that keeps product decisions (numbered, append-only), so they survive outside the state directory. Integration tasks append to it; the controller writes decisions to `<records dir>` only (`long-run.md`, State and records directories). | — |
 | `<rules doc>` | Checks | The development-rules doc `impl` uses. | — |
 | `<check commands>` | Checks | The full regression: format, lint, type check, unit, end-to-end, and doc checks, each with what passing looks like. | — |
 | `<rule check>` | Checks | The command that runs the vendored `check_diff_rules.py` against a base ref. | — |
 | `<performance budget>` | Checks | The benchmark command and where the budget is defined, or "none". | — |
-| `<branch policy>` | Integration | Integration branch, per-task branch or worktree naming, hotfix branch naming (hotfix branches start from the latest release tag and merge back after the patch), merge method, and who merges. | — |
+| `<branch policy>` | Integration | Integration branch, per-task branch and worktree naming, hotfix branch naming (hotfix branches start from the latest release tag and merge back after the patch), merge method, and who merges. | — |
 | `<drift map>` | Integration | How spec sections map to code for the drift audit, or "audit by reading". | audit by reading |
 | `<docs to sync>` | Integration | Docs that must change with the code (README files, API docs, index files). | — |
 | `<version source>` | Delivery | Where the version lives and the versioning scheme. | — |
@@ -87,12 +88,13 @@ Read from the user-level contract directory only. The template is
 | `<human channel>` | How an unattended session sends a gate request or heads-up to the human. Answers do not come back through it; they follow the answer procedure (`long-run.md`, Human input). | ask at the terminal; unattended, record the request in HANDOFF and set `waiting-human` |
 | `<notify command>` | A command that sends a one-line notification, used by the driver. | none: the driver prints only |
 | `<node contract>` | The multi-node contract whose start-of-work and end-of-work routines wrap each session, or "none". | none |
+| `<personal vocabulary>` | The personal and machine words (names, host names, machine paths, account names) the records commit searches the staged diff for, in addition to the generic patterns (`long-run.md`, session protocol step 7). | none declared (generic patterns only) |
 | `<resource limits>` | CPU, memory, parallel builds, and other host limits every dispatch prompt must carry. | none declared (dispatch prompts say so) |
 | `<budgets>` | Caps per cycle on agent invocations or wall time, set by the human; reaching one opens the Budget gate (`stages.md`, Budget caps). Paid spending stays with the orchestration contract's boundary. | no cap: the contract's estimate only |
 | `<standing authorizations>` | Human-written rows: action, project, scope, conditions, date. The commit authorization (local commits, merges, tags on the run's branches) may live here or as an H<n> recorded at `init`. | empty: every gate asks |
 | `<driver settings>` | The `drive.py` options: `--max-stalled`, `--pause`, `--session-timeout`. The driver notifies on every stall and every stop. | 3 sessions; 600 s; 14400 s |
 | `<projects>` | One row per project for any value above that differs per project. | — |
 
-Fixed by the skill (S, not configurable): stage order, gate list, state
-directory layout, state line grammar, resume prompt, development rules,
+Fixed by the skill (S, not configurable): stage order, gate list, state and
+records directory layouts, state line grammar, resume prompt, development rules,
 recovery reads.

@@ -1,38 +1,56 @@
 # Long-run protocol
 
 A very long run is a chain of short sessions over durable files. No session
-remembers another; each one recovers from the state directory, does one step,
+remembers another; each one recovers from the state and records directories, does one step,
 writes the state back, and exits. The driver only decides whether to start
 the next session.
 
-## State directory
+## State and records directories
 
-`<state dir>` from `LIFECYCLE.md`. The three agent-workspace files keep their
-jobs as that skill defines them; when the agent-workspace skill is not
-installed, keep the same three files with the same split (record, current
-state, handoff). The run adds:
+Two directories from `LIFECYCLE.md`. `<state dir>` is untracked and
+machine-local: it holds what belongs to this machine or may carry personal
+facts. `<records dir>` is tracked: it holds the record of how the run decomposed
+and built the product, so git protects it. The three agent-workspace files keep
+their jobs as that skill defines them (worklog.md in `<records dir>`, STATUS.md
+and HANDOFF.md in `<state dir>`; its verbatim-quote rule applies to
+`human-inputs.md` here, not to the tracked worklog); when the agent-workspace
+skill is not installed, keep the same three files with the same split
+(record, current state, handoff). The run adds:
 
 ```
-<state dir>/
+<state dir>/                  untracked, machine-local
   STATUS.md          agent-workspace; carries the state line, cycle usage, "Preempted" during a hotfix
   HANDOFF.md         agent-workspace; "Waiting on the human" lists open gate requests
-  worklog.md         agent-workspace; human rulings verbatim, failures, own mistakes
+  human-inputs.md    every human message that steers the run, verbatim, id H<n>
   INBOX.md           written by the human only; the agent never edits it
   STOP               present = stop (any content)
-  human-inputs.md    every human message that steers the run, verbatim, id H<n>
+  driver.lock        held by the running driver (flock); the driver writes its pid in it
+  driver.log         session output appended by the driver
+  tmp/               worktrees (tmp/worktrees/, one per branch) and scratch files
+  local.md           instructions specific to this machine, and any content that carries personal or machine facts
+
+<records dir>/                tracked
+  worklog.md         agent-workspace; steps, failures, own mistakes; cites human input as H<n>, never verbatim
+  decisions.md       numbered decisions, append-only
   backlog.md         items B<n>: source (H<n>, health check, review), class, status, cycle
   decided.md         settled questions not to re-propose, each citing H<n> or a decision id
   cycles/C<n>/plan.md          cycle plan and its amendments
   cycles/C<n>/phase-<id>.md    phase plans
   cycles/C<n>/reports/         audit, review, drift, performance, install-smoke evidence
   cycles/C<n>/hotfix-<k>/      plans and reports of a hotfix cycle
-  driver.lock        pid of the running driver
-  driver.log         session output appended by the driver
 ```
 
-Product decisions go to the tracked `<decision record>` as well, because the
-state directory may be untracked and is not a backup. Acceptance reports go
-to `<acceptance reports>`. The human's own words stay in the state directory.
+The human's own words stay in `<state dir>`; tracked records cite them as
+H<n>. Records may name roles and model tiers, never personal or machine
+facts. The controller writes every decision to `<records dir>`/decisions.md
+only and edits no tracked file outside `<records dir>` in the main worktree.
+A decision that concerns the product reaches the tracked `<decision record>`
+through the next integration task on that decision's branch line: the task
+appends it in its worktree, and the controller lists the decision numbers in
+the dispatch. Acceptance reports go to `<acceptance reports>` the same way,
+written by the integration tasks. When the project declares `<records dir>`
+untracked (for example a private project that keeps it inside `<state dir>`),
+the records commit below is skipped.
 
 ## State line
 
@@ -43,7 +61,9 @@ lifecycle: state=<state> cycle=<n> stage=<stage> step=<step> last=<item>
 ```
 
 - `state`: `running` (work remains that needs no human), `waiting-human`
-  (every remaining item waits on a gate and the request was sent), `idle`
+  (every remaining item waits on a gate, and the request was sent through
+  `<human channel>` or, where no channel exists, recorded in HANDOFF "Waiting
+  on the human"), `idle`
   (backlog empty, health checks clean, no new inbox entry), `done` (the human
   closed the product, or `LIFECYCLE.md` declares no maintenance and the
   roadmap is delivered).
@@ -61,16 +81,17 @@ next step in STATUS.md.
 
 ## Session protocol (`run`)
 
-1. **Writer and stop check.** If a live process holds `driver.lock` (its pid
-   is in the file) and `LIFECYCLE_DRIVER_PID` is unset or names another pid,
+1. **Writer and stop check.** If a driver is running (`driver.lock` exists
+   and the pid in it is alive; no file means no driver, and a dead pid is a
+   harmless leftover) and `LIFECYCLE_DRIVER_PID` is unset or names another pid,
    this is a second session beside the driver: only `status` and `stop` are
    allowed, nothing else is written. STOP present: a driver-started session
    writes one worklog line and exits; an interactive session acts only on
    what the human asks in that session (record a gate answer, run a step).
-2. **Recover.** Read, in order: the state line and STATUS.md; HANDOFF.md; the
-   newest worklog entries (about 200 lines); `decided.md`; the open cycle
-   plan and phase plan; `LIFECYCLE.md`; the host contract; the orchestration
-   contract sections the step needs. Under a node contract, run its
+2. **Recover.** Read, in order: the state line and STATUS.md; HANDOFF.md;
+   `local.md` when present; the newest worklog entries (about 200 lines);
+   `decided.md`; the open cycle plan and phase plan; `LIFECYCLE.md`; the host
+   contract; the orchestration contract sections the step needs. Under a node contract, run its
    start-of-work routine first.
 3. **Verify the baseline.** Fetch when the repository has a remote; compare
    the branch heads with what STATUS records. For every dispatch STATUS lists
@@ -92,11 +113,24 @@ next step in STATUS.md.
    development rules.
 7. **Persist.** Update worklog, STATUS (state line, numbered next step, and
    agent invocations and wall time used in this cycle, for `<budgets>`),
-   HANDOFF, ledgers, decision record; commit only under the recorded commit
-   authorization. Under a node contract, run its end-of-work routine.
+   HANDOFF, ledgers, and decisions.md in `<records dir>` (a product decision
+   reaches `<decision record>` through its integration task). Then the records commit: stage only
+   `<records dir>`; search the staged diff for `<personal vocabulary>` and
+   for generic patterns (home-directory paths, email
+   addresses, non-loopback IP addresses); move any hit to `local.md` or
+   `human-inputs.md` and stage again; commit on the integration branch as
+   `records: <step>`. It is a local commit, so the Commit
+   authorization gate applies: until an authorization is recorded, records are
+   written and not committed. Code commits follow the same authorization.
+   Under a node contract, run its end-of-work routine.
 8. **Notify** through `<human channel>` when a release was delivered, a gate
    request was opened, or the state left `running`.
 9. **Exit**, even with context left. The next step starts fresh.
+
+The main worktree stays on the integration branch, so records commits never
+collide with a branch switch: every task and phase branch lives in a worktree
+under `<state dir>/tmp/worktrees/`. A phase integration squash commit holds the
+squash only, no records.
 
 A step that cannot finish in one session (context running out, a long
 dispatch) records a resume point in STATUS and exits without changing `last`.
@@ -107,7 +141,8 @@ the plan (an amendment) instead of retrying it as it is.
 
 `scripts/drive.py` is the outer loop. It is started by the human, or by the
 agent only under an authorization that names it; it never runs twice on one
-state directory (`driver.lock`).
+state directory: it holds an exclusive lock on `driver.lock` for as long as
+it runs, and a second driver exits at once with "another driver holds".
 
 ```
 python3 <skill>/scripts/drive.py --state-dir <state dir> \
@@ -143,8 +178,8 @@ session, the same way as the timeout (SIGTERM to its process group, SIGKILL
 after 30 s), before `driver.lock` is released; the next session's baseline
 check handles the interrupted work. A SIGHUP the driver was started to ignore
 (`nohup`) stays ignored. SIGKILL of the driver cannot be caught: the session
-may survive it and `driver.lock` keeps a dead pid, which the next driver
-removes as stale. So after a driver was killed, before answering a gate or
+may survive it, and `driver.lock` stays with a dead pid; the kernel has
+released the lock, so the next driver takes it without any cleanup. So after a driver was killed, before answering a gate or
 restarting the driver, the operator confirms that no session is running
 (the session command in the process listing, `driver.log` no longer growing).
 
@@ -164,10 +199,10 @@ found.
   1. the human runs `stop`, also when the state is already `waiting-human`
      and the driver has exited, so that no restart starts a session during
      the answer; a running step finishes first;
-  2. once `driver.lock` is gone (the driver releases it on exit), the human
-     answers in an interactive session in the repository;
-  3. that session quotes the answer as H<n> into `human-inputs.md` and the
-     worklog, closes the request under HANDOFF "Waiting on the human", and
+  2. once no driver runs (`driver.lock` is gone, or the pid in it is dead),
+     the human answers in an interactive session in the repository;
+  3. that session quotes the answer as H<n> into `human-inputs.md`, cites it as
+     H<n> in the worklog, closes the request under HANDOFF "Waiting on the human", and
      sets the state line back to `running`;
   4. the human removes STOP, if any, and restarts the driver.
   `<human channel>` carries requests and heads-ups out; it is not an answer

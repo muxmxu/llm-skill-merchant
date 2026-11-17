@@ -17,7 +17,7 @@ scripts, coding rules — lives in docs inside each project repo:
 | `eval` | `EVALUATION.md`   | strict (fixed H2 sections) |
 | `ops`  | `OPERATIONS.md`   | loose (capability checklist) |
 | `impl` | development-rules doc (e.g. `ProjectDevelopRule.md`) | loose (capability checklist) |
-| `lifecycle` | `LIFECYCLE.md` (+ user-level `LIFECYCLE-HOST.md`) | strict (fixed H2 sections) |
+| `long-term` | `LIFECYCLE.md` (+ user-level `LIFECYCLE-HOST.md`) | strict (fixed H2 sections) |
 
 A skill reads its doc at invocation time and executes "per the doc". When the
 project's procedures change, **update the doc, never the skill**. If the doc
@@ -33,7 +33,7 @@ Run the `init` subcommand in the new repo:
 /eval init     # same for EVALUATION.md
 /ops init      # only if the project has no operations runbook yet
 /impl init     # only if the project has no development-rules doc yet
-/lifecycle init  # before a long unattended lifecycle run
+/long-term init  # before a long unattended run
 ```
 
 `init` never overwrites an existing doc without explicit confirmation.
@@ -44,7 +44,7 @@ Run the `init` subcommand in the new repo:
 - **eval** — `init | run | compare | report`
 - **ops** — `init | start | connect | deploy | launch | watch | sync | release | incident | status | cost-check`
 - **impl** — `init | task | check`
-- **lifecycle** — `init | run | status | stop`: runs cycle planning →
+- **long-term** — `init | run | status | stop`: runs cycle planning →
   architecture → subtask design → implementation → integration → delivery →
   maintenance as a chain of fresh sessions (`scripts/drive.py`), with the
   development rules against over-defensive code adopted into the `impl` rules
@@ -57,7 +57,7 @@ references): explicit confirmation before launching runs, starting billing, or
 any state change; kill only PID-file-owned processes; never a billing-leaking
 VM stop; operators never modify numerical behavior. The skills are operators
 (exception: `impl`, which implements — under the project's rules doc; and
-`lifecycle`, which drives `impl` and stops at human gates for publication,
+`long-term`, which drives `impl` and stops at human gates for publication,
 spending, scope, and rule changes).
 Incidents are handled freeze-first: execute the runbook's playbook as written
 or freeze and report — never improvise recovery paths mid-incident.

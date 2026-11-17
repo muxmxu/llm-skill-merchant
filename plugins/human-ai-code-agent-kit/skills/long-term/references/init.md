@@ -1,9 +1,9 @@
-# lifecycle init — prepare a project for a long run
+# long-term init — prepare a project for a long run
 
 Goal: a contract-conforming `LIFECYCLE.md` at the repository root
 (`contract.md`; skeleton `../assets/LIFECYCLE.template.md`), the development
-rules adopted into the rules doc, the rule check vendored, the state
-directory created, the commit authorization recorded, and the host contract
+rules adopted into the rules doc, the rule check vendored, the state and
+records directories created, the commit authorization recorded, and the host contract
 located. Every write below needs the human's approval of the drafted
 content.
 
@@ -31,13 +31,15 @@ content.
    listed human-owned files as protected zones, and the linter configuration
    changes. Vendor `../scripts/check_diff_rules.py` to the path `<rule check>`
    names. Each is a Rules gate item; apply only what the human approves.
-6. **State directory.** Create `<state dir>` with the agent-workspace files,
-   an empty `INBOX.md` with a one-line note on its use, `human-inputs.md`
-   holding the human's initiating instruction verbatim as H1, `backlog.md`,
-   `decided.md`, and the state line
+6. **State and records directories.** Create `<state dir>` with STATUS.md and
+   HANDOFF.md, an empty `INBOX.md` with a one-line note on its use,
+   `human-inputs.md` holding the human's initiating instruction verbatim as H1,
+   and the state line
    `lifecycle: state=running cycle=1 stage=cycle-planning step=- last=init`.
-   If the project doc says the directory is untracked and git does not ignore
-   it, report that; do not edit `.gitignore` without approval.
+   Create `<records dir>` with `worklog.md`, `backlog.md`, and `decided.md`.
+   Git must ignore `<state dir>` and must not ignore `<records dir>` (unless
+   the project declares it untracked); if either is not the case, report it,
+   and do not edit `.gitignore` without approval.
 7. **Commit authorization.** Ask the human to approve local commits,
    merges, and tags on the run's branches as `<branch policy>` names them;
    pushing and publishing stay behind the Authorization boundary gate.

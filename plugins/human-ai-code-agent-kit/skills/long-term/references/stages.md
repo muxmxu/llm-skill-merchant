@@ -65,9 +65,11 @@ own phase plan and Plan Review come first.
   model, module boundaries, error behaviour at trust boundaries.
 - Tasks hunt undefined referents and open points in the spec ("the
   corresponding code", "the best attempt") and propose a resolution for each;
-  the controller records each as a numbered decision in `<decision record>`
-  with basis and what it forecloses, before any task cites it. A task never
-  makes a design decision implicitly.
+  the controller records each as a numbered decision in `<records dir>`/decisions.md
+  with basis and what it forecloses, before any task cites it; one that
+  concerns the product is appended to `<decision record>` by the next
+  integration task on that branch line, and the dispatch lists its number. A
+  task never makes a design decision implicitly.
 - Edit only the spec sections `<spec>` opens to the agent. A delta that
   touches a gated item (scope, principles, public API, runtime dependency,
   protected standard, linter exceptions) is written as a proposal and goes to
@@ -95,8 +97,8 @@ dispatch.
 
 ## Implementation
 
-- Each task runs as `impl task` on its own branch or worktree per
-  `<branch policy>`, under the development-rules doc.
+- Each task runs as `impl task` on its own branch in its own
+  worktree per `<branch policy>`, under the development-rules doc.
 - Mechanical audit: `<check commands>` for the touched area and
   `<rule check>` against the task's base. Every REVIEW line of the rule check
   gets a disposition in the audit report.

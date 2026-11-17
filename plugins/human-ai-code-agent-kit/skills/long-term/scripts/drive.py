@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Outer loop of a lifecycle run: start fresh agent sessions until the run stops.
+"""Outer loop of a long-term run: start fresh agent sessions until the run stops.
 
 Usage (from the repository root):
     drive.py --state-dir DIR [--max-stalled N] [--pause SECONDS]
@@ -11,6 +11,7 @@ on a state other than running (checked after the first session), on a missing
 state line, or after N stalled sessions in a row (unchanged state line,
 non-zero exit, or a session killed at the timeout). Ctrl-C, SIGTERM and
 SIGHUP end the running session's process group before the lock is released.
+Only one driver per state directory: it holds an flock on DIR/driver.lock.
 """
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import datetime
+import fcntl
 import os
 import shlex
 import shutil
@@ -28,7 +30,7 @@ import time
 from pathlib import Path
 
 RESUME_PROMPT = (
-    "Use the lifecycle skill to run one step for the project in the current "
+    "Use the long-term skill to run one step for the project in the current "
     "directory: recover from its state directory, advance at most one step, "
     "persist the state, and exit."
 )
@@ -58,24 +60,28 @@ def notify(command: str | None, message: str) -> None:
         subprocess.run(shlex.split(command) + [message], check=False)
 
 
-def acquire_lock(lock: Path) -> None:
-    try:
-        fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-    except FileExistsError:
-        pid = int(lock.read_text().strip())
+def acquire_lock(lock: Path) -> int:
+    """Take an exclusive flock on `lock` for the driver's whole life; return the fd.
+
+    The kernel drops the lock when the driver dies, so a file left behind by a
+    SIGKILLed driver blocks nobody. The pid written here is for people to read.
+    """
+    while True:
+        fd = os.open(lock, os.O_CREAT | os.O_WRONLY, 0o644)
         try:
-            os.kill(pid, 0)
-            alive = True
-        except ProcessLookupError:
-            alive = False
-        except PermissionError:
-            alive = True  # the process exists under another user
-        if alive:
-            sys.exit(f"another driver (pid {pid}) holds {lock}")
-        lock.unlink()  # stale lock from a dead driver
-        return acquire_lock(lock)
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            os.close(fd)
+            sys.exit(f"another driver holds {lock}")
+        try:
+            if os.path.samestat(os.fstat(fd), os.stat(lock)):
+                break
+        except FileNotFoundError:
+            pass
+        os.close(fd)  # the previous holder unlinked the file between our open and flock
+    os.ftruncate(fd, 0)
     os.write(fd, str(os.getpid()).encode())
-    os.close(fd)
+    return fd
 
 
 def end_session(proc: subprocess.Popen) -> None:
@@ -132,7 +138,7 @@ def drive(state_dir: Path, command: list[str], max_stalled: int, pause: float, t
             stalled += 1
             if stalled >= max_stalled:
                 return f"{stalled} stalled sessions in a row (last exit {code}): {after}"
-            notify(notify_cmd, f"lifecycle: session {session} stalled ({stalled}/{max_stalled}, exit {code}); pausing {pause:.0f}s")
+            notify(notify_cmd, f"long-term: session {session} stalled ({stalled}/{max_stalled}, exit {code}); pausing {pause:.0f}s")
             time.sleep(pause)
         else:
             stalled = 0
@@ -153,19 +159,21 @@ def main() -> None:
     if args.notify and not shutil.which(shlex.split(args.notify)[0]):
         parser.error(f"notify command not found: {args.notify}")
     if not args.state_dir.is_dir():
-        parser.error(f"{args.state_dir} is not a directory; run lifecycle init first")
+        parser.error(f"{args.state_dir} is not a directory; run long-term init first")
     lock = args.state_dir / "driver.lock"
-    acquire_lock(lock)
+    lock_fd = acquire_lock(lock)
     for sig in (signal.SIGTERM, signal.SIGHUP):
         # Turn the signal into SystemExit so the cleanup runs; keep a SIGHUP that
         # the driver was started to ignore (nohup) ignored.
         if signal.getsignal(sig) is not signal.SIG_IGN:
-            signal.signal(sig, lambda signum, _frame: sys.exit(f"lifecycle driver: {signal.Signals(signum).name} received"))
+            signal.signal(sig, lambda signum, _frame: sys.exit(f"long-term driver: {signal.Signals(signum).name} received"))
     try:
         reason = drive(args.state_dir, command, args.max_stalled, args.pause, args.session_timeout, args.notify)
     finally:
+        # Unlink before close: the lock must still be held while the path goes.
         lock.unlink()
-    notify(args.notify, f"lifecycle driver stopped: {reason}")
+        os.close(lock_fd)
+    notify(args.notify, f"long-term driver stopped: {reason}")
 
 
 if __name__ == "__main__":

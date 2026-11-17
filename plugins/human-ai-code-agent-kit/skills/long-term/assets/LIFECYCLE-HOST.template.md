@@ -1,6 +1,6 @@
 # LIFECYCLE-HOST
 
-> Template for the lifecycle host contract. Copy it into the user-level
+> Template for the long-term host contract. Copy it into the user-level
 > contract directory as `LIFECYCLE-HOST.md`, replace each TODO, and delete the
 > notes in italics. The human owns this file; the agent proposes changes and
 > does not rewrite it. Never copy it into a project repository.
@@ -22,6 +22,7 @@ part that needs it stops.*
 | `<human channel>` | TODO: how an unattended session sends a gate request or heads-up; answers follow the skill's answer procedure, not this channel |
 | `<notify command>` | TODO: a command that sends one line to the human, or "none" |
 | `<node contract>` | TODO: the multi-node contract and its start-of-work and end-of-work routines, or "none" |
+| `<personal vocabulary>` | TODO: the personal and machine words the records commit searches for, or "none" |
 | `<resource limits>` | TODO: limits every dispatch prompt carries (parallel builds, memory, CPU priority), or "none" |
 | `<budgets>` | TODO: caps per cycle on agent invocations or wall time, or "none" |
 | `<driver settings>` | TODO: `--max-stalled`, `--pause`, `--session-timeout` for drive.py; or "skill default" |

@@ -103,6 +103,7 @@ def test_driver(tmp: Path) -> None:
         "p.write_text(t)\n"
     )
     status.write_text(f"# STATUS\n{line}\n")
+    (state / "driver.lock").write_text("99999999")  # left by a dead driver: blocks nobody
     run = subprocess.run(
         [sys.executable, str(HERE / "drive.py"), "--state-dir", str(state), "--pause", "0", "--", sys.executable, "-c", session],
         capture_output=True, text=True,
@@ -161,6 +162,35 @@ def test_driver(tmp: Path) -> None:
             raise AssertionError(f"session survived {sig.name}")
         except ProcessLookupError:
             pass
+
+    # A second driver exits at once and leaves the first one running; SIGKILL of the
+    # first leaves the file, and the next driver takes the lock anyway.
+    pid_file.unlink(missing_ok=True)
+    status.write_text(f"# STATUS\n{line}\n")
+    first = subprocess.Popen(
+        [sys.executable, str(HERE / "drive.py"), "--state-dir", str(state), "--", sys.executable, "-c", wait],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+    for _ in range(100):
+        if pid_file.exists() and pid_file.read_text():
+            break
+        time.sleep(0.1)
+    second = subprocess.run(
+        [sys.executable, str(HERE / "drive.py"), "--state-dir", str(state), "--", sys.executable, "-c", "pass"],
+        capture_output=True, text=True, timeout=20,
+    )
+    assert second.returncode != 0 and "another driver holds" in second.stderr, second.stderr
+    assert first.poll() is None and (state / "driver.lock").read_text() == str(first.pid)
+    first.kill()
+    first.wait()
+    os.kill(int(pid_file.read_text()), signal.SIGKILL)  # the session may outlive a killed driver
+    assert (state / "driver.lock").exists()
+    run = subprocess.run(
+        [sys.executable, str(HERE / "drive.py"), "--state-dir", str(state), "--pause", "0", "--max-stalled", "1", "--", sys.executable, "-c", "pass"],
+        capture_output=True, text=True, timeout=20,
+    )
+    assert run.returncode == 0 and "1 stalled sessions in a row" in run.stdout, run.stdout + run.stderr
+    assert not (state / "driver.lock").exists()
 
     # STOP prevents any session.
     (state / "STOP").write_text("human stop\n")

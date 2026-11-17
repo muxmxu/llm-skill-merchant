@@ -1,9 +1,9 @@
 ---
-name: lifecycle
-description: "suit-for-code-agent: Run a product's whole lifecycle as a very long unattended run of fresh sessions under LIFECYCLE.md: cycle planning, architecture, subtask design, implementation, integration, delivery, maintenance. Use for lifecycle run, status, stop, or init."
+name: long-term
+description: "suit-for-code-agent: Run a product's whole lifecycle as a very long unattended run of fresh sessions under LIFECYCLE.md: cycle planning, architecture, subtask design, implementation, integration, delivery, maintenance. Use for long-term run, status, stop, or init."
 ---
 
-# lifecycle — long-run product lifecycle
+# long-term — long-run product lifecycle
 
 Role: AI Code Agent, orchestration layer over implementation mode (see
 `../../references/roles.md`; a project-local ROLE.txt overrides it). The skill
@@ -41,9 +41,9 @@ gates, never tiers.
 
 | Layer | File | Holds |
 |---|---|---|
-| Skill | this skill | Stage order, gates, the state directory layout, the state line, the session protocol, the driver, the development rules, the resume prompt. No project or environment fact. |
-| Project doc | `LIFECYCLE.md` at the repository root | The project's own process: requirements, spec and roadmap locations, protected standards, state directory, check commands, branch and merge policy, release mechanics, health checks, project gates. Tracked; holds no personal or machine fact. |
-| Host contract | `LIFECYCLE-HOST.md` in the user-level contract directory | The person and machines running the loop: session command per host, hosting, human channel, notify command, node contract, resource limits, budgets, standing authorizations, driver settings. |
+| Skill | this skill | Stage order, gates, the state and records directory layouts, the state line, the session protocol, the driver, the development rules, the resume prompt. No project or environment fact. |
+| Project doc | `LIFECYCLE.md` at the repository root | The project's own process: requirements, spec and roadmap locations, protected standards, state and records directories, check commands, branch and merge policy, release mechanics, health checks, project gates. Tracked; holds no personal or machine fact. |
+| Host contract | `LIFECYCLE-HOST.md` in the user-level contract directory | The person and machines running the loop: session command per host, hosting, human channel, notify command, node contract, personal vocabulary, resource limits, budgets, standing authorizations, driver settings. |
 | Existing components | the orchestration contract (`ORCHESTRATION.md`), `impl` and its `code-orchestration-mode.md`, the project's development-rules doc, the agent-workspace skill, the node contract | Used as they are and cited by name; this skill restates none of them. |
 
 Precedence: an authenticated human instruction, then the orchestration
@@ -73,9 +73,10 @@ Full protocol: `references/long-run.md`. The rules that bind every session:
    (intake plus one of: the cycle plan, one phase plan with its Plan Review,
    one dispatch round of a phase, one maintenance pass), writes the state, and
    exits. Context renewal is the next session, not a compaction.
-2. **State lives in files.** The state directory declared by `LIFECYCLE.md`
-   holds the agent-workspace files plus the run ledgers (`references/long-run.md`,
-   State directory). Never in auto-memory: another host does not read it.
+2. **State lives in files.** The untracked `<state dir>` and the tracked
+   `<records dir>` declared by `LIFECYCLE.md` hold the agent-workspace files
+   plus the run ledgers (`references/long-run.md`, State and records
+   directories). Never in auto-memory: another host does not read it.
 3. **The state line.** STATUS.md carries one machine-readable line,
    `lifecycle: state=<running|waiting-human|idle|done> cycle=<n>
    stage=<stage> step=<step> last=<last completed item>`. Only the main
@@ -110,7 +111,7 @@ checks, or writes release files itself.
 | Cycle planning | controller, overall plan | Chooses the release content from the roadmap and backlog; writes the phases above with exit criteria, risk, budget, and the target version | The orchestration contract's requirements for an overall plan; Scope gate if the plan changes the roadmap's scope |
 | Architecture design | phase `arch` | Workers write spec deltas; open design points become numbered decisions before any task cites them | Phase exit criteria met with independent review; Scope or Rules gate when the delta touches a gated item |
 | Subtask design | start of every phase | Phase plan: tasks with one deliverable and one runnable check each, bound facts, disjoint file sets, input-to-expected tables for numeric units | Plan Review per the orchestration contract |
-| Implementation | tasks of an implementation phase | Each task on its own branch or worktree via `impl task`; mechanical audit (checks plus rule check) and semantic review by seats other than the writer | Every task merged with current independent evidence, or reported BLOCKED |
+| Implementation | tasks of an implementation phase | Each task on its own branch in its own worktree via `impl task`; mechanical audit (checks plus rule check) and semantic review by seats other than the writer | Every task merged with current independent evidence, or reported BLOCKED |
 | Phase integration | last task of each implementation phase | Merges the phase; full regression including earlier acceptance tests; phase acceptance report | Every exit criterion has evidence from this run |
 | Cycle integration | first tasks of phase `release` | Full regression; spec-to-code drift audit; docs sync; performance against budget and previous release | No open drift, regression, or budget breach without a recorded decision |
 | Delivery | last tasks of phase `release` | Version, changelog, acceptance report, clean-environment install smoke test, local tag; the controller notifies | Release recorded; publishing waits for its gate |
@@ -127,7 +128,7 @@ fix changes the spec.
 ## Human gates
 
 The run stops for the human only here; everything else is decided, recorded
-in the decision record, and carried forward.
+in `decisions.md` of `<records dir>`, and carried forward.
 
 | Gate | Arises when |
 |---|---|
@@ -149,8 +150,8 @@ prompt are requests within the authorized run and grant no authority.
 
 Driver sessions are non-interactive, so an answer never goes into one. To
 answer: always `stop` the run first, also when it already reached
-`waiting-human`, and wait for the current step to finish; once `driver.lock`
-is gone, answer in an interactive session, which records the answer as H<n>
+`waiting-human`, and wait for the current step to finish; once no driver runs (`driver.lock`
+is gone, or the pid in it is dead), answer in an interactive session, which records the answer as H<n>
 (`references/long-run.md`, Human input) and sets the state back to
 `running`; then the human removes STOP and restarts the driver. A scheduled
 restart starts the driver only when the state is `idle`.
@@ -172,9 +173,10 @@ for every session and every dispatched writer:
    rather than comment it out; comments say why.
 3. No inline lint or type suppression. An exception lives in the linter
    configuration with a recorded reason and passes the Rules gate.
-4. Never loosen a tolerance, weaken or delete an assertion, add skip or
-   xfail, or mock the unit under test to get green. Report BLOCKED with the
-   failing output instead. A bug fix starts with a test that fails on the old
+4. Never loosen a tolerance, weaken or delete an assertion, add an
+   unconditional skip, xfail, or only, or mock the unit under test to get
+   green; a conditional skip states its condition and reason. Report BLOCKED
+   with the failing output instead. A bug fix starts with a test that fails on the old
    code.
 5. Finish in-scope work without asking; a plan, stub, or TODO is not an
    implementation. "Done" means the checks ran in this task on the final
@@ -186,9 +188,9 @@ loss, security, resource cleanup.
 ## Red lines (non-negotiable)
 
 1. One writer per state directory and per worktree. Never start a second
-   driver. While a live process holds `driver.lock`, a session whose
-   `LIFECYCLE_DRIVER_PID` does not name that process may only run `status`
-   and `stop`.
+   driver. While a driver runs (`driver.lock` exists and the pid in it is
+   alive), a session whose `LIFECYCLE_DRIVER_PID` does not name that process
+   may only run `status` and `stop`.
 2. No publication, paid action, or destructive action without its gate;
    integration ownership grants no commit or push authority (`impl` red line
    5). Commit, merge, and tag only under the recorded commit authorization.
@@ -198,9 +200,11 @@ loss, security, resource cleanup.
    them only with the human's approval of the drafted content.
 4. Never relabel FAIL or NOT RUN as PASS, never declare a phase done on
    coverage alone, and never script or pre-write a human confirmation.
-5. Never write a personal or machine fact into a tracked project file;
-   verbatim human words stay in the untracked state directory unless the
-   project doc says otherwise.
+5. Never write a personal or machine fact into a tracked project file,
+   `<records dir>` included (roles and model tier names are allowed there);
+   verbatim human words stay in `human-inputs.md` in the untracked state
+   directory and tracked records cite them as H<n>, unless the project doc says
+   otherwise.
 
 ## Subcommands
 
@@ -215,12 +219,12 @@ driver's resume prompt invokes exactly this.
 ### status
 Read-only: the state line, cycle and stage, last completed item, gate
 requests waiting, pending inbox entries, whether STOP exists, whether a
-driver lock is held and by a live process.
+driver is running (`driver.lock` exists and its pid is alive).
 
 ### stop
 Create `STOP` in the state directory with the reason and time. A running
 session finishes its current step and exits; the driver starts no new
-session and releases `driver.lock`. Only the human removes STOP.
+session, then exits and removes `driver.lock`. Only the human removes STOP.
 
 ### init
 Follow `references/init.md` with `assets/LIFECYCLE.template.md` and
