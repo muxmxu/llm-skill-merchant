@@ -7,7 +7,7 @@ description: "suit-for-ai-research-assistant: Conduct file-based debate when the
 
 ## 目的
 
-多个 AI agent（Claude / DeepSeek / Codex 等）与人类围绕一个 topic 进行多轮结构化讨论。通过迭代辩论、互相质疑、补充盲点，让想法越来越清晰，最终收敛为经过压力测试的共识方案。
+多个 AI agent（Claude / DeepSeek / Codex 等）与人类围绕一个 topic 进行多轮结构化讨论。通过迭代辩论、互相质疑、补充盲点，让想法越来越清晰，最终得出一致结论，形成经过压力测试的共识方案。
 
 **核心理念**：真理越辩越明，想法越迭代越清晰。
 
@@ -26,7 +26,7 @@ agents-human-discussion/
     claude_said.md          # Claude 的发言
     ds_said.md              # DeepSeek 的发言
     codex_said.md           # Codex 的发言
-    final.md                # 讨论收敛后的 summary（人类指示下撰写）
+    final.md                # 讨论得出一致结论后的 summary（人类指示下撰写）
 ```
 
 ### 读写规则
@@ -62,13 +62,13 @@ agents-human-discussion/
    **约束：第一轮（Round 1）每个 agent 不回应任何其他 agent 的发言，应当直面人类提出的议题独立阐述自己的意见。** 这确保每个 agent 的初始观点是独立的，不被最先发言的 agent 的框架带偏。
 3. 人类路由：让某个 agent 去读另一个 agent 的发言并回应
    （具体路由方式由人类掌握——可以是直接转述、可以是让 agent 自己去读文件）
-4. 多轮迭代，直到收敛或人类判断够了
+4. 多轮迭代，直到得出一致结论或人类判断够了
 5. 人类指示某个 agent（或自己）撰写 final.md
 ```
 
 ### Final Summary（`final.md`）
 
-讨论收敛后，在人类的指示下撰写。包含：
+讨论得出一致结论后，在人类的指示下撰写。包含：
 
 ```markdown
 # {Topic} — Discussion Summary
